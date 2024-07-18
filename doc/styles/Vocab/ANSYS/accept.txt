@@ -1,0 +1,10 @@
+Granta MI
+PyGranta
+JobQueue
+API
+Makefile
+jupytext
+(?i)ansys
+AsyncJob
+AsyncJobs
+mypy
