@@ -37,7 +37,8 @@
 
 # ## Additional notes
 
-# This script can be used alongside Data Flow to generate new `dataflow_data` payloads for testing.
+# This script can be used alongside Data Flow to generate new Data Flow payloads for testing. Simply add this script
+# to an existing Data Flow job, run the workflow, and the payload will be uploaded to the workflow record.
 
 # +
 import json
@@ -55,7 +56,7 @@ def main():
     try:
         step_logic(df.mi_session, df.df_data)
         exit_code = 0
-    except Exception as e:
+    except Exception:
         exit_code = 1
     df.resume_bookmark(exit_code)
 
@@ -70,7 +71,7 @@ def testing():
         service_layer_url="http://localhost/mi_servicelayer",
         autologon=True,
     )
-    dataflow_data = {
+    dataflow_payload = {
         "WorkflowId": "806eacd2-3d9a-4a10-b1c1-acd5f7b36b30",
         "WorkflowDefinitionId": "test8; Version=1.0.0.0",
         "TransitionName": "Python_6e407a8b-f8ec-41fc-8879-618bd7c40cda",
@@ -91,24 +92,24 @@ def testing():
         "CustomValues": {},
     }
 
-    step_logic(session, dataflow_data)
+    step_logic(session, dataflow_payload)
 
 
-def step_logic(mi_session, dataflow_data):
+def step_logic(mi_session, dataflow_payload):
     """Contains the business logic to be executed as part of the workflow.
 
     In this example, identify the record that is the subject of the
     workflow operation, and upload the Data Flow payload to that record.
     """
 
-    db_key = dataflow_data["Record"]["Database"]
+    db_key = dataflow_payload["Record"]["Database"]
     db = mi_session.get_db(db_key=db_key)
-    record_hguid = dataflow_data["Record"]["RecordHistoryGuid"]
+    record_hguid = dataflow_payload["Record"]["RecordHistoryGuid"]
     rec = db.get_record_by_id(hguid=record_hguid)
 
     # Write the json received from the dataflow API to the attribute
     # "Additional Processing Notes"
-    data = json.dumps(dataflow_data, indent=4)
+    data = json.dumps(dataflow_payload, indent=4)
     rec.attributes["Additional Processing Notes"].value = data
     rec.set_attributes([rec.attributes["Additional Processing Notes"]])
 

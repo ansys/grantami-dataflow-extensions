@@ -51,7 +51,7 @@ def main():
     try:
         step_logic(df.mi_session, df.df_data)
         exit_code = 0
-    except Exception as e:
+    except Exception:
         exit_code = 1
     df.resume_bookmark(exit_code)
 
@@ -59,7 +59,7 @@ def main():
 def testing():
     """Contains a static copy of a Data Flow data payload for testing purposes"""
     
-    dataflow_data = {
+    dataflow_payload = {
         "WorkflowId": "806eacd2-3d9a-4a10-b1c1-acd5f7b36b30",
         "WorkflowDefinitionId": "test8; Version=1.0.0.0",
         "TransitionName": "Python_6e407a8b-f8ec-41fc-8879-618bd7c40cda",
@@ -80,14 +80,14 @@ def testing():
         "CustomValues": {},
     }
 
-    step_logic(dataflow_data)
+    step_logic(dataflow_payload)
 
 
-def step_logic(dataflow_data):
+def step_logic(dataflow_payload):
     """Contains the business logic to be executed as part of the workflow."""
     
-    db_key = dataflow_data["Record"]["Database"]
-    record_history_guid = dataflow_data["Record"]["Database"]
+    db_key = dataflow_payload["Record"]["Database"]
+    record_history_guid = dataflow_payload["Record"]["Database"]
     print(
         f"A workflow operating on record '{record_history_guid}'"
         f"in database '{db_key}' has triggered this script"
