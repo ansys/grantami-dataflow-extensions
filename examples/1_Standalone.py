@@ -35,6 +35,12 @@
 # `testing()` function whenever executed outside of Data Flow, but switched to `main()` when added to the workflow
 # definition in Data Flow Designer.
 
+# ## Additional notes
+
+# This script can be used to generate new Data Flow payloads for testing. Add this script to an existing Data Flow job,
+# run the workflow, and the payload will be output to the Data Flow log file. Then copy the payload into a local copy
+# of the script, and use that payload when adding functionality to the `step_logic()` function.
+
 # +
 import json
 
@@ -86,12 +92,8 @@ def testing():
 def step_logic(dataflow_payload):
     """Contains the business logic to be executed as part of the workflow."""
     
-    db_key = dataflow_payload["Record"]["Database"]
-    record_history_guid = dataflow_payload["Record"]["Database"]
-    print(
-        f"A workflow operating on record '{record_history_guid}'"
-        f"in database '{db_key}' has triggered this script"
-    )
+    data = json.dumps(dataflow_payload, indent=4)
+    print(data)
 
 
 if __name__ == "__main__":

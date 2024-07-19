@@ -17,6 +17,14 @@
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
 # Toolkit as part of a Data Flow operation.
 
+# <div class="alert alert-info">
+#
+# **Info:**
+#
+# Running this notebook requires the Granta MI Scripting Toolkit package. If you do not have access to the Scripting
+# Toolkit, consult your ACE representative.
+# </div>
+
 # ## Script Overview
 
 # The cell below contains an example script that uploads the data payload received by Data Flow to the workflow record.
@@ -37,8 +45,9 @@
 
 # ## Additional notes
 
-# This script can be used alongside Data Flow to generate new Data Flow payloads for testing. Simply add this script
-# to an existing Data Flow job, run the workflow, and the payload will be uploaded to the workflow record.
+# This script can be used to generate new Data Flow payloads for testing. Add this script to an existing Data Flow job,
+# run the workflow, and the payload will be uploaded to the workflow record. Then copy the payload into a local copy
+# of the script, and use that payload when adding functionality to the `step_logic()` function.
 
 # +
 import json

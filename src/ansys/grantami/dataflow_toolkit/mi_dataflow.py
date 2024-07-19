@@ -24,8 +24,7 @@
 MI Data Flow Toolkit module.
 
 Provides generic functionality for parsing step information provided by Data Flow.
-Allows direct access to this data, or supports spawning a Scripting Toolkit or
-PyGranta session.
+Allows direct access to this data or supports spawning a Scripting Toolkit session.
 """
 
 import base64
@@ -123,7 +122,8 @@ class MIDataflowIntegration:
 
         # Get data from workflow
         self.logger.debug("Getting data from dataflow API...")
-        self.df_data = self._get_standard_input()
+        # self.df_data = self._get_standard_input()
+        self.df_data = {"WorkflowUrl": "http://localhost/mi_dataflow", "ClientCredentialType": "Windows"}
         self.logger.debug(f"Workflow data received: {json.dumps(self.df_data)}")
 
         # Parse url
@@ -136,18 +136,31 @@ class MIDataflowIntegration:
         # TODO: Add support for PyGranta sessions
 
     @property
-    def mi_session(self) -> "mpy.Session | None":
+    def mi_session(self) -> "mpy.Session":
+        """
+        An MI Scripting Toolkit session which can be used to interact with Granta MI.
+
+        Requires a supported version of MI Scripting Toolkit to be installed.
+
+        Raises
+        ------
+        MissingClientModule
+            If Scripting Toolkit cannot be imported.
+        """
         if self._mi_session is not None:
             return self._mi_session
         try:
             self._mi_session = self._start_stk_session_from_dataflow_credentials()
-        except AttributeError:
-            pass
+        except NameError as e:
+            raise MissingClientModule(
+                "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed "
+                "and try again."
+            ) from e
         return self._mi_session
 
     def _start_stk_session_from_dataflow_credentials(self) -> "mpy.Session":
         """
-        Create a Scripting Toolkit session.
+        Create a Scripting Toolkit session based on the Data Flow authentication.
 
         The credentials provided by Data Flow are re-used, and so explicit credentials are
         not required.
@@ -267,3 +280,7 @@ class MIDataflowIntegration:
                 verify=verify_argument,
             )
         response.raise_for_status()
+
+
+class MissingClientModule(ImportError):
+    pass
