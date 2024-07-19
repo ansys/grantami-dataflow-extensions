@@ -32,5 +32,5 @@ To verify that you can import the PyGranta Data Flow Toolkit in Python, run this
 
 If you see a version number, you have successfully installed PyGranta Data Flow Toolkit. For
 best practice around developing scripts that interact with Data Flow, see :ref:`ref_user_guide`.
-For examples, see :ref:`ref_examples`. For comprehensive information on the API, see
-:ref:`ref_grantami_dataflow_toolkit_api_reference`.
+For examples, see :ref:`ref_grantami_dataflow_toolkit_examples`. For comprehensive information
+on the API, see :ref:`ref_grantami_dataflow_toolkit_api_reference`.
