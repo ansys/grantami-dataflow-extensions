@@ -42,10 +42,10 @@ from requests_negotiate_sspi import HttpNegotiateAuth  # type: ignore[import-unt
 try:
     from GRANTA_MIScriptingToolkit import granta as mpy  # type: ignore
 except ImportError:
-    mpy = None
+    pass
 
 
-def get_data_flow_logger(logger_level: int) -> logging.Logger:
+def _get_data_flow_logger(logger_level: int) -> logging.Logger:
     r"""
     Return a logger with an attached StreamHandler.
 
@@ -102,9 +102,10 @@ class MIDataflowIntegration:
         # Define properties:
         self._logging_level = logging_level
         self._certificate_filename = certificate_filename
+        self._mi_session: mpy.Session | None = None
 
         # Logger
-        self.logger = get_data_flow_logger(self._logging_level)
+        self.logger = _get_data_flow_logger(self._logging_level)
 
         self.logger.debug("")
         self.logger.debug("---------- NEW RUN ----------")
@@ -126,12 +127,19 @@ class MIDataflowIntegration:
         self.service_layer_url = f"{parsed_url.scheme}://{parsed_url.netloc}/mi_servicelayer/"
         self.logger.debug(f"Service layer url: {self.service_layer_url}")
 
-        # TODO: Handle case where STK is not installed
-        self.mi_session = self._start_stk_session_from_dataflow_credentials()
-
         # TODO: Add support for PyGranta sessions
 
-    def _start_stk_session_from_dataflow_credentials(self) -> mpy.Session:
+    @property
+    def mi_session(self) -> "mpy.Session | None":
+        if self._mi_session is not None:
+            return self._mi_session
+        try:
+            self._mi_session = self._start_stk_session_from_dataflow_credentials()
+        except AttributeError:
+            pass
+        return self._mi_session
+
+    def _start_stk_session_from_dataflow_credentials(self) -> "mpy.Session":
         """
         Create a Scripting Toolkit session.
 

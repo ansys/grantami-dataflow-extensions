@@ -18,19 +18,6 @@ records and use user-provided information in the business logic script.
 
 Switch at the bottom between calling main() or testing() to trigger the step_logic function in production or debugging
 respectively.
-
--------------------------------------------------Logs-------------------------------------------------------------------
-Log files can be found by browsing to MI Data Flow logs page:
-MI 2023R2   http://my.server.name/mi_dataflow/api/logs
-MI 2023R1   http://my.server.name/mi_workflow_2/api/logs
-
-At the server:
-
-MI 2023R2   %LOCALAPPDATA%\Granta Design\MI\logs\MIDataFlowDesigner.log
-MI 2023R1   C:\ProgramData\Granta\GRANTA MI\Workflow 2\logs
-
--------------------------------------------------Troubleshooting--------------------------------------------------------
-A working directory is created at the server in: C:\windows\TEMP\ with files __stderr__ and __stdout__ that should contain Python's error tracing and prints to console that can be useful
 """
 
 
