@@ -80,7 +80,7 @@ administrator::
 
    There are three options to address this issue:
 
-   - Re-run the command above as a user with administrator priveleges. This will ensure the package is installed
+   - Re-run the command above as a user with administrator privileges. This will ensure the package is installed
      system-wide.
    - Run the command ``python -m pip install --user ansys-grantami-dataflow-toolkit`` as the same user that runs MI Data
      Flow. This will install the package such that the Data Flow user can access it, and will suppress the user

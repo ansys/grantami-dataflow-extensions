@@ -75,7 +75,7 @@ def testing():
 
     # This import is only needed when testing
     from GRANTA_MIScriptingToolkit import granta as mpy
-    
+
     session = mpy.connect(
         service_layer_url="http://localhost/mi_servicelayer",
         autologon=True,
@@ -93,9 +93,7 @@ def testing():
         "AuthorizationHeader": "",
         "ClientCredentialType": "Windows",
         "Attributes": {
-            "Record": {
-                "Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]
-            },
+            "Record": {"Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]},
             "TransitionId": {"Value": "93076607-081e-422b-b819-f15fe833a6e3"},
         },
         "CustomValues": {},
@@ -130,4 +128,3 @@ def step_logic(mi_session, dataflow_payload):
 if __name__ == "__main__":
     # main()
     testing()
-

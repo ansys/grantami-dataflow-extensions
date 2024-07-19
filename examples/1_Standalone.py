@@ -52,7 +52,7 @@ def main():
     Initializes the Data Flow integration module, runs the business logic,
     and cleans up once execution has completed.
     """
-    
+
     df = MIDataflowIntegration()
     try:
         step_logic(df.mi_session, df.df_data)
@@ -64,7 +64,7 @@ def main():
 
 def testing():
     """Contains a static copy of a Data Flow data payload for testing purposes"""
-    
+
     dataflow_payload = {
         "WorkflowId": "806eacd2-3d9a-4a10-b1c1-acd5f7b36b30",
         "WorkflowDefinitionId": "test8; Version=1.0.0.0",
@@ -78,9 +78,7 @@ def testing():
         "AuthorizationHeader": "",
         "ClientCredentialType": "Windows",
         "Attributes": {
-            "Record": {
-                "Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]
-            },
+            "Record": {"Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]},
             "TransitionId": {"Value": "93076607-081e-422b-b819-f15fe833a6e3"},
         },
         "CustomValues": {},
@@ -91,7 +89,7 @@ def testing():
 
 def step_logic(dataflow_payload):
     """Contains the business logic to be executed as part of the workflow."""
-    
+
     data = json.dumps(dataflow_payload, indent=4)
     print(data)
 
@@ -99,4 +97,3 @@ def step_logic(dataflow_payload):
 if __name__ == "__main__":
     # main()  # Used when running the script as part of a workflow
     testing()  # Used when running the script manually
-

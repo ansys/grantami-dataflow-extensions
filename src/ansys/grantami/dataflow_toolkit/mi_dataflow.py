@@ -123,7 +123,10 @@ class MIDataflowIntegration:
         # Get data from workflow
         self.logger.debug("Getting data from dataflow API...")
         # self.df_data = self._get_standard_input()
-        self.df_data = {"WorkflowUrl": "http://localhost/mi_dataflow", "ClientCredentialType": "Windows"}
+        self.df_data = {
+            "WorkflowUrl": "http://localhost/mi_dataflow",
+            "ClientCredentialType": "Windows",
+        }
         self.logger.debug(f"Workflow data received: {json.dumps(self.df_data)}")
 
         # Parse url
@@ -141,6 +144,11 @@ class MIDataflowIntegration:
         An MI Scripting Toolkit session which can be used to interact with Granta MI.
 
         Requires a supported version of MI Scripting Toolkit to be installed.
+
+        Returns
+        -------
+        mpy.Session
+            MI Scripting Toolkit session.
 
         Raises
         ------
@@ -283,4 +291,6 @@ class MIDataflowIntegration:
 
 
 class MissingClientModule(ImportError):
+    """Raised when a client API module is expected but could not be imported."""
+
     pass
