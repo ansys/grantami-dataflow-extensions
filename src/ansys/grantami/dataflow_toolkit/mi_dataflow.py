@@ -86,7 +86,8 @@ class MIDataflowIntegration:
     """
     Represents a MI Data Flow session.
 
-    Allows to get data from MI Data Flow, the scripting toolkit session and to resume the workflow.
+    When this class is instantiated, it parses the data provided by Data Flow, enabling Granta MI API client sessions
+    to be created.
 
     Parameters
     ----------
@@ -95,6 +96,11 @@ class MIDataflowIntegration:
     certificate_filename : str
         The filename of the CA certificate file. Generally required for HTTPS connections to
         internal resources.
+
+    Notes
+    -----
+    When a workflow is configured to call a Python script, the workflow execution will be suspended whilst the Python
+    script executes. To enable the workflow to continue, call the ``resume_bookmark`` method.
     """
 
     def __init__(self, logging_level: int = logging.DEBUG, certificate_filename: str = "") -> None:
