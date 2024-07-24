@@ -36,7 +36,11 @@ from typing import Any, Literal, cast
 from urllib.parse import urlparse
 
 import requests  # type: ignore[import-untyped]
-from requests_negotiate_sspi import HttpNegotiateAuth  # type: ignore[import-untyped]
+
+try:
+    from requests_negotiate_sspi import HttpNegotiateAuth  # type: ignore[import-untyped]
+except ImportError:
+    pass
 
 try:
     from GRANTA_MIScriptingToolkit import granta as mpy  # type: ignore
@@ -179,7 +183,10 @@ class MIDataflowIntegration:
             A Scripting Toolkit session object.
         """
         self.logger.debug("Starting MI STK session...")
-        if self.df_data["ClientCredentialType"] == "Basic":
+
+        client_credential_type = self.df_data["ClientCredentialType"]
+
+        if client_credential_type == "Basic":
             # MI server setup: Basic authentication
             self.logger.debug("Basic auth selected...")
             auth_header = self.df_data["AuthorizationHeader"]
@@ -192,17 +199,21 @@ class MIDataflowIntegration:
                 "",
             )
 
-        elif self.df_data["ClientCredentialType"] == "None":
+        elif client_credential_type == "None":
             # MI server setup: OIDC authentication
             self.logger.debug("OIDC auth selected...")
             auth_header = self.df_data["AuthorizationHeader"]
             access_token = auth_header[7:]
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
 
-        else:
+        elif client_credential_type == "Windows" and sys.platform == "win32":
             # MI server setup: Windows authentication
             self.logger.debug("Windows auth selected...")
             session = mpy.connect(self.service_layer_url, autologon=True)
+        elif client_credential_type == "Windows" and sys.platform != "win32":
+            raise NotImplementedError("Windows auth available on Windows only")
+        else:
+            raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
 
         return session
 
