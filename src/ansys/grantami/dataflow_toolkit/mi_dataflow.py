@@ -38,7 +38,7 @@ from urllib.parse import urlparse
 import requests  # type: ignore[import-untyped]
 
 try:
-    from requests_negotiate_sspi import HttpNegotiateAuth  # type: ignore[import-untyped]
+    from requests_negotiate_sspi import HttpNegotiateAuth  # type: ignore
 except ImportError:
     pass
 
