@@ -156,7 +156,7 @@ class MIDataflowIntegration:
 
         Raises
         ------
-        MissingClientModule
+        MissingClientModuleException
             If Scripting Toolkit cannot be imported.
         """
         if self._mi_session is not None:
