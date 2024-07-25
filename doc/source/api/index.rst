@@ -5,3 +5,5 @@ API reference
 
 .. autoclass:: ansys.grantami.dataflow_toolkit.MIDataflowIntegration
    :members:
+
+.. autoclass:: ansys.grantami.dataflow_toolkit.MissingClientModuleException

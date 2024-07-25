@@ -24,9 +24,10 @@
 
 import importlib.metadata as importlib_metadata
 
-from .mi_dataflow import MIDataflowIntegration
+from .mi_dataflow import MIDataflowIntegration, MissingClientModuleException
 
 __all__ = [
     "MIDataflowIntegration",
+    "MissingClientModuleException",
 ]
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))

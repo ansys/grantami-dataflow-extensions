@@ -164,7 +164,7 @@ class MIDataflowIntegration:
         try:
             self._mi_session = self._start_stk_session_from_dataflow_credentials()
         except NameError as e:
-            raise MissingClientModule(
+            raise MissingClientModuleException(
                 "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed "
                 "and try again."
             ) from e
@@ -301,7 +301,7 @@ class MIDataflowIntegration:
         response.raise_for_status()
 
 
-class MissingClientModule(ImportError):
+class MissingClientModuleException(ImportError):
     """Raised when a client API module is expected but could not be imported."""
 
     pass
