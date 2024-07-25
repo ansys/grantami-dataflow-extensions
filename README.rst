@@ -85,7 +85,7 @@ administrator::
    - Run the command ``python -m pip install --user ansys-grantami-dataflow-toolkit`` as the same user that runs MI Data
      Flow. This will install the package such that the Data Flow user can access it, and will suppress the user
      installation warning.
-   - Follow the instructions in :ref:`ref_installation_venv` to use a virtual environment.
+   - Follow the instructions in the User Guide to use a virtual environment.
 
 
 Alternatively, to install the latest release from the
