@@ -96,7 +96,7 @@ Alternatively, to install the latest release from the
 To install a local *development* version with Git and Poetry, run these commands::
 
     git clone https://github.com/ansys/grantami-dataflow-toolkit
-    cd grantami-grantami-dataflow-toolkit
+    cd grantami-dataflow-toolkit
     poetry install
 
 The preceding commands install the package in development mode so that you can modify
