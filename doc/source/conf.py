@@ -155,7 +155,6 @@ def _copy_examples_and_convert_to_notebooks(source_dir, output_dir):
         output_dir.mkdir(parents=True)
 
     for file_source_path in source_dir.rglob("*"):
-        print(file_source_path)
         if not file_source_path.is_file():
             continue
 
