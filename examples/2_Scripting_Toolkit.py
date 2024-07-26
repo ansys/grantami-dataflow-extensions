@@ -43,6 +43,16 @@
 # `testing()` function whenever executed outside of Data Flow, but switched to `main()` when added to the workflow
 # definition in Data Flow Designer.
 
+# <div class="alert alert-warning">
+#
+# **Warning:**
+#
+# The `step_logic()` function removes authentication information from the Data Flow payload before writing it to
+# stdout. If you are using Basic or OIDC Authentication, you should inject these credentials into the `testing()`
+# function directly, for example via an environment variable. Then modify the `mpy.Session()` call to use these
+# credentials to create a Scripting Toolkit session.
+# </div>
+
 # ## Additional notes
 
 # This script can be used to generate new Data Flow payloads for testing. Add this script to an existing Data Flow job,
@@ -72,14 +82,6 @@ def main():
 
 def testing():
     """Contains a static copy of a Data Flow data payload for testing purposes"""
-
-    # This import is only needed when testing
-    from GRANTA_MIScriptingToolkit import granta as mpy
-
-    session = mpy.connect(
-        service_layer_url="http://localhost/mi_servicelayer",
-        autologon=True,
-    )
     dataflow_payload = {
         "WorkflowId": "806eacd2-3d9a-4a10-b1c1-acd5f7b36b30",
         "WorkflowDefinitionId": "test8; Version=1.0.0.0",
@@ -99,6 +101,16 @@ def testing():
         "CustomValues": {},
     }
 
+    # This import is only needed when testing
+    from GRANTA_MIScriptingToolkit import granta as mpy
+
+    # Replace this code with the appropriate authentication method for your
+    # Granta MI installation
+    session = mpy.connect(
+        service_layer_url="http://localhost/mi_servicelayer",
+        autologon=True,
+    )
+
     step_logic(session, dataflow_payload)
 
 
@@ -107,12 +119,18 @@ def step_logic(mi_session, dataflow_payload):
 
     In this example, identify the record that is the subject of the
     workflow operation, and upload the Data Flow payload to that record.
+
+    Replace the code in this module with your custom business logic.
     """
 
     db_key = dataflow_payload["Record"]["Database"]
     db = mi_session.get_db(db_key=db_key)
     record_hguid = dataflow_payload["Record"]["RecordHistoryGuid"]
     rec = db.get_record_by_id(hguid=record_hguid)
+
+    # Remove credentials if they are present in the payload
+    if dataflow_payload["AuthorizationHeader"]:
+        dataflow_payload["AuthorizationHeader"] = "<scrubbed>"
 
     # Write the json received from the dataflow API to the attribute
     # "Additional Processing Notes"

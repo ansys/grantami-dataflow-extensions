@@ -18,7 +18,7 @@
 # as part of a Data Flow operation.
 
 # The cell below contains an example script that simply prints the record identifying information which is received from
-# Data Flow. However, this could be replaced with any other business logic which can make use of the data proided by
+# Data Flow. However, this could be replaced with any other business logic which can make use of the data provided by
 # Data Flow. To perform operations that rely on additional information from Granta MI, see the other examples in this
 # package.
 
@@ -34,6 +34,15 @@
 # Finally, the `if __name__ == "__main__":` block is the entry point for the script. It should be set to call the
 # `testing()` function whenever executed outside of Data Flow, but switched to `main()` when added to the workflow
 # definition in Data Flow Designer.
+
+# <div class="alert alert-warning">
+#
+# **Warning:**
+#
+# The `step_logic()` function removes authentication information from the Data Flow payload before writing it to
+# stdout. If you are using Basic or OIDC Authentication and require these credentials for your business logic, you
+# should inject these credentials into the `testing()` function directly, for example via an environment variable.
+# </div>
 
 # ## Additional notes
 
@@ -88,7 +97,13 @@ def testing():
 
 
 def step_logic(dataflow_payload):
-    """Contains the business logic to be executed as part of the workflow."""
+    """Contains the business logic to be executed as part of the workflow.
+
+    Replace the code in this module with your custom business logic."""
+
+    # Remove credentials if they are present in the payload
+    if dataflow_payload["AuthorizationHeader"]:
+        dataflow_payload["AuthorizationHeader"] = "<scrubbed>"
 
     data = json.dumps(dataflow_payload, indent=4)
     print(data)

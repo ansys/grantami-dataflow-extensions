@@ -8,7 +8,6 @@ import shutil
 
 from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
 import jupytext
-from sphinx.errors import NoUri
 
 from ansys.grantami.dataflow_toolkit import __version__
 
@@ -55,6 +54,9 @@ extensions = [
     "enum_tools.autoenum",
 ]
 
+nitpick_ignore_regex = {
+    ("py:.*", r"mpy\.Session"),
+}
 
 # numpydoc configuration
 numpydoc_show_class_members = False
@@ -215,18 +217,3 @@ Download this example as a :download:`Jupyter notebook </{{ env.docname }}.ipynb
 
 ----
 """
-
-
-OPTIONAL_MODULE_NAMES = ["mpy"]
-
-
-def suppress_missing_module_xrefs(app, env, node, contnode):
-    ref_target = node.attributes["reftarget"]
-    if any(ref_target.startswith(f"{mod}.") for mod in OPTIONAL_MODULE_NAMES):
-        ref_doc = node.attributes["refdoc"]
-        print(f"Suppressing warning for missing example script xref from {ref_doc} to {ref_target}")
-        raise NoUri
-
-
-def setup(app):
-    app.connect("missing-reference", suppress_missing_module_xrefs)
