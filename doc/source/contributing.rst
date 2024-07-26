@@ -50,26 +50,6 @@ encouraged to install this tool with this command:
 
     python -m pip install pre-commit && pre-commit install
 
-.. _ref_tox:
-
-Tox
-~~~
-Tests can be run using `tox`_. The project defines the tox environments in the ``tox.ini``
-file. The following tox environments are provided:
-
-.. vale off
-
-- ``tox -e style``: Checks for coding style quality.
-- ``tox -e tests``: Runs all tests and checks code coverage. (For requirements, see :ref:`ref_serveraccess`.)
-- ``tox -e doc``: Checks the documentation-building process.
-
-.. vale on
-
-Optionally, add the ``-- -m "not integration"`` suffix to the commands above to skip integration
-tests. For example, this command only runs tests that do not require a Granta MI instance::
-
-     tox -e tests -- -m "not integration"
-
 .. _ref_serveraccess:
 
 Server access
