@@ -1,0 +1,8 @@
+Granta MI
+PyGranta
+Data Flow Toolkit
+API
+Makefile
+jupytext
+(?i)ansys
+mypy
