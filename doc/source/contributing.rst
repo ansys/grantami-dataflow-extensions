@@ -50,6 +50,12 @@ encouraged to install this tool with this command:
 
     python -m pip install pre-commit && pre-commit install
 
+.. _ref_tox:
+
+Tox
+~~~
+TODO
+
 .. _ref_serveraccess:
 
 Server access
