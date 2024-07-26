@@ -38,7 +38,7 @@ jobs:
           vale-version: "2.29.6"
 
   doc-build:
-    name: Documentation Build (mock examples)
+    name: Documentation Build
     runs-on: ubuntu-latest
     steps:
     - name: "Run Ansys documentation building action"

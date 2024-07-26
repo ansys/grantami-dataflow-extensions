@@ -3,7 +3,6 @@
 import datetime
 import os
 from pathlib import Path
-import re
 import shutil
 
 from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
@@ -120,7 +119,7 @@ autosectionlabel_maxdepth = 4
 
 
 # -- Examples configuration --------------------------------------------------
-def _copy_examples_and_convert_to_notebooks(source_dir, output_dir, ignored_files_regex=None):
+def _copy_examples_and_convert_to_notebooks(source_dir, output_dir):
     """
     Recursively copies all files from the source directory to the output directory.
 
@@ -133,9 +132,6 @@ def _copy_examples_and_convert_to_notebooks(source_dir, output_dir, ignored_file
         The source directory to copy files from.
     output_dir : Path
         The output directory to copy files to and convert Python scripts.
-    ignored_files_regex : str, optional
-        A regular expression pattern to match ignored files. Files whose names match
-        the pattern will be skipped. If None (default), no files are ignored.
 
     Raises
     ------
@@ -150,7 +146,7 @@ def _copy_examples_and_convert_to_notebooks(source_dir, output_dir, ignored_file
 
     Examples
     --------
-    >>> _copy_examples_and_convert_to_notebooks("my_project/examples", "docs/notebooks", ignored_files_regex=r"^test.*")
+    >>> _copy_examples_and_convert_to_notebooks("my_project/examples", "docs/notebooks")
 
     """
     if not source_dir.exists():
@@ -158,18 +154,9 @@ def _copy_examples_and_convert_to_notebooks(source_dir, output_dir, ignored_file
     if not output_dir.exists():
         output_dir.mkdir(parents=True)
 
-    ignored_files_re = re.compile(ignored_files_regex) if ignored_files_regex else None
-
     for file_source_path in source_dir.rglob("*"):
+        print(file_source_path)
         if not file_source_path.is_file():
-            continue
-
-        matches_regex = ignored_files_re and ignored_files_re.match(file_source_path.name)
-        is_rst_file = file_source_path.name.endswith(".rst")
-
-        if matches_regex and not is_rst_file:
-            print(f"Ignoring {file_source_path.name}")
-            exclude_patterns.append(str(file_source_path.relative_to(source_dir)))
             continue
 
         rel_path = file_source_path.relative_to(source_dir)
@@ -187,28 +174,14 @@ def _copy_examples_and_convert_to_notebooks(source_dir, output_dir, ignored_file
                 raise RuntimeError(f"Failed to convert {file_source_path} to notebook: {e}")
 
 
-exclude_patterns = []
-
 EXAMPLES_SOURCE_DIR = Path(__file__).parent.parent.parent.absolute() / "examples"
 EXAMPLES_OUTPUT_DIR = Path(__file__).parent.absolute() / "examples"
-BUILD_EXAMPLES = True if os.environ.get("BUILD_EXAMPLES", "false") == "true" else False
-if BUILD_EXAMPLES:
-    ipython_dir = Path("../../.ipython").absolute()
-    os.environ["IPYTHONDIR"] = str(ipython_dir)
-
-ignore_example_files = r"test.*" if BUILD_EXAMPLES else r"^(?!test)"
-
-# Properly configure the table of contents for the examples/index.rst file
-jinja_contexts = {
-    "examples": {
-        "build_examples": BUILD_EXAMPLES,
-    }
-}
+ipython_dir = Path("../../.ipython").absolute()
+os.environ["IPYTHONDIR"] = str(ipython_dir)
 
 _copy_examples_and_convert_to_notebooks(
     EXAMPLES_SOURCE_DIR,
     EXAMPLES_OUTPUT_DIR,
-    ignore_example_files,
 )
 
 nbsphinx_prolog = """

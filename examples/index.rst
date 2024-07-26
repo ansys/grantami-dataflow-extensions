@@ -11,21 +11,8 @@ To run these examples, install dependencies with this command:
 
    pip install ansys-grantami-dataflow-toolkit[examples]
 
-.. jinja:: examples
+.. toctree::
+   :maxdepth: 2
 
-    {% if build_examples %}
-
-    .. toctree::
-       :maxdepth: 2
-
-       1_Standalone
-       2_Scripting_Toolkit
-
-    {% else %}
-
-    .. toctree::
-       :maxdepth: 2
-
-       test_example
-
-    {% endif %}
+   1_Standalone
+   2_Scripting_Toolkit
