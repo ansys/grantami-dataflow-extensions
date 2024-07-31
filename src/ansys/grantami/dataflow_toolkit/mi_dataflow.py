@@ -210,12 +210,12 @@ class MIDataflowIntegration:
 
         return session
 
-    def create_pygranta_client(
+    def configure_pygranta_connection(
         self,
         pygranta_connection_class: Type[PyGranta_Connection_Class],
     ) -> PyGranta_Connection_Class:
         """
-        Create a client object to interact with Granta MI via a PyGranta client library.
+        Configure a PyGranta connection object with credentials provided by Data Flow.
 
         Parameters
         ----------
@@ -240,7 +240,8 @@ class MIDataflowIntegration:
         --------
         >>> from ansys.grantami.jobqueue import Connection
         >>> data_flow = MIDataflowIntegration()
-        >>> client = data_flow.create_pygranta_client(Connection).connect()
+        >>> connection = data_flow.configure_pygranta_connection(Connection)
+        >>> client = connection.connect()
         >>> client
         <JobQueueApiClient: url: http://my_mi_server/mi_servicelayer>
         """

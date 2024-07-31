@@ -53,7 +53,8 @@ def main():
 
     df = MIDataflowIntegration()
     try:
-        client = df.create_pygranta_client(RecordListsConnection).connect()
+        connection = df.configure_pygranta_connection(RecordListsConnection)
+        client = connection.connect()
         step_logic(client, df.df_data)
         exit_code = 0
     except Exception:
