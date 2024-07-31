@@ -55,6 +55,7 @@ extensions = [
 
 nitpick_ignore_regex = {
     ("py:.*", r"mpy\.Session"),
+    ("py:obj", "PyGranta_Connection_Class"),
 }
 
 # numpydoc configuration

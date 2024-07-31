@@ -16,3 +16,4 @@ To run these examples, install dependencies with this command:
 
    1_Standalone
    2_Scripting_Toolkit
+   3_RecordLists

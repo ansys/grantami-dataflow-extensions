@@ -32,9 +32,10 @@ import json
 import logging
 from pathlib import Path
 import sys
-from typing import Any, Literal, cast
+from typing import Any, Literal, Tuple, Type, TypeVar, cast
 from urllib.parse import urlparse
 
+from ansys.openapi.common import ApiClientFactory, SessionConfiguration
 import requests  # type: ignore[import-untyped]
 
 try:
@@ -83,6 +84,9 @@ def _get_data_flow_logger(logger_level: int) -> logging.Logger:
         ch.setStream(sys.stdout)
         logger.addHandler(ch)
     return logger
+
+
+PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClientFactory)
 
 
 class MIDataflowIntegration:
@@ -140,8 +144,6 @@ class MIDataflowIntegration:
         self.service_layer_url = f"{parsed_url.scheme}://{parsed_url.netloc}/mi_servicelayer/"
         self.logger.debug(f"Service layer url: {self.service_layer_url}")
 
-        # TODO: Add support for PyGranta sessions
-
     @property
     def mi_session(self) -> "mpy.Session":
         """
@@ -187,35 +189,121 @@ class MIDataflowIntegration:
         client_credential_type = self.df_data["ClientCredentialType"]
 
         if client_credential_type == "Basic":
-            # MI server setup: Basic authentication
             self.logger.debug("Basic auth selected...")
-            auth_header = self.df_data["AuthorizationHeader"]
-            decoded = base64.b64decode(auth_header[6:])
-            index = decoded.find(b":")
-            session = mpy.connect(
-                self.service_layer_url,
-                decoded[:index].decode(encoding="utf-8"),
-                decoded[index + 1 :].decode(encoding="utf-8"),
-                "",
-            )
+            username, password = self._get_basic_creds()
+            session = mpy.connect(self.service_layer_url, user_name=username, password=password)
 
         elif client_credential_type == "None":
-            # MI server setup: OIDC authentication
             self.logger.debug("OIDC auth selected...")
-            auth_header = self.df_data["AuthorizationHeader"]
-            access_token = auth_header[7:]
+            access_token = self._get_oidc_token()
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
 
         elif client_credential_type == "Windows" and sys.platform == "win32":
-            # MI server setup: Windows authentication
             self.logger.debug("Windows auth selected...")
             session = mpy.connect(self.service_layer_url, autologon=True)
+
         elif client_credential_type == "Windows" and sys.platform != "win32":
             raise NotImplementedError("Windows auth available on Windows only")
+
         else:
             raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
 
         return session
+
+    def create_pygranta_client(
+        self,
+        pygranta_connection_class: Type[PyGranta_Connection_Class],
+    ) -> PyGranta_Connection_Class:
+        """
+        Create a client object to interact with Granta MI via a PyGranta client library.
+
+        Parameters
+        ----------
+        pygranta_connection_class : Type[PyGranta_Connection_Class]
+            The Connection class to use to create the client object. Must be a **class**, not an
+            instance of a class. Must be a PyGranta connection class, which is defined as a subclass
+            of the base :class:`~ansys.openapi.common.ApiClientFactory` class.
+
+        Returns
+        -------
+        PyGranta_Connection_Class
+            A configured Connection object corresponding to the provided class. Call the ``.connect()``
+            method to finalize the connection.
+
+        Raises
+        ------
+        TypeError
+            If the class provided to this method is not a subclass of
+            :class:`~ansys.openapi.common.SessionConfiguration`.
+
+        Examples
+        --------
+        >>> from ansys.grantami.jobqueue import Connection
+        >>> data_flow = MIDataflowIntegration()
+        >>> client = data_flow.create_pygranta_client(Connection).connect()
+        >>> client
+        <JobQueueApiClient: url: http://my_mi_server/mi_servicelayer>
+        """
+        if not issubclass(pygranta_connection_class, ApiClientFactory):
+            raise TypeError(
+                '"pygranta_connection_class" must be a subclass of ansys.openapi.common.ApiClientFactory'
+            )
+
+        config = SessionConfiguration(cert_store_path=self._certificate_filename)
+        builder = pygranta_connection_class(
+            api_url=self.service_layer_url, session_configuration=config
+        )
+
+        client_credential_type = self.df_data["ClientCredentialType"]
+
+        if client_credential_type == "Basic":
+            self.logger.debug("Basic auth selected...")
+            username, password = self._get_basic_creds()
+            return builder.with_credentials(username=username, password=password)
+
+        elif client_credential_type == "None":
+            self.logger.debug("OIDC auth selected...")
+            access_token = self._get_oidc_token()
+            return builder.with_oidc().with_token(access_token)  # type: ignore[return-value]
+
+        elif client_credential_type == "Windows" and sys.platform == "win32":
+            self.logger.debug("Windows auth selected...")
+            return builder.with_autologon()
+
+        elif client_credential_type == "Windows" and sys.platform != "win32":
+            raise NotImplementedError("Windows auth available on Windows only")
+
+        else:
+            raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
+
+    def _get_basic_creds(self) -> Tuple[str, str]:
+        """
+        Extract the username and password from the basic authorization header.
+
+        Returns
+        -------
+        Tuple[str, str]
+            A 2-tuple of the username and password.
+        """
+        auth_header = self.df_data["AuthorizationHeader"]
+        decoded = base64.b64decode(auth_header[6:])
+        index = decoded.find(b":")
+        username = decoded[:index].decode(encoding="utf-8")
+        password = decoded[index + 1 :].decode(encoding="utf-8")
+        return username, password
+
+    def _get_oidc_token(self) -> str:
+        """
+        Extract the OIDC access token from the authorizartion header.
+
+        Returns
+        -------
+        str
+            The OIDC access token.
+        """
+        auth_header = self.df_data["AuthorizationHeader"]
+        access_token = auth_header[7:]
+        return access_token
 
     def _get_standard_input(self) -> dict[str, Any]:
         """

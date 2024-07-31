@@ -12,7 +12,7 @@
 #     name: python3
 # ---
 
-# # Scripting Toolkit Script Example
+# # Scripting Toolkit Example
 
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
 # Toolkit as part of a Data Flow operation.
@@ -35,7 +35,7 @@
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
 # * `testing()`: Includes a static payload which can be provided to the business logic in place of real data for testing
-#   purposes
+#   purposes.
 # * `step_logic()`: Contains the actual business logic for the step. Uses the data provided by Data Flow (or defined
 #   statically).
 #
@@ -84,7 +84,7 @@ def testing():
     """Contains a static copy of a Data Flow data payload for testing purposes"""
     dataflow_payload = {
         "WorkflowId": "806eacd2-3d9a-4a10-b1c1-acd5f7b36b30",
-        "WorkflowDefinitionId": "test8; Version=1.0.0.0",
+        "WorkflowDefinitionId": "example; Version=1.0.0.0",
         "TransitionName": "Python_6e407a8b-f8ec-41fc-8879-618bd7c40cda",
         "Record": {
             "Database": "MI_Training",
@@ -107,7 +107,7 @@ def testing():
     # Replace this code with the appropriate authentication method for your
     # Granta MI installation
     session = mpy.connect(
-        service_layer_url="http://localhost/mi_servicelayer",
+        service_layer_url="http://my_server_name/mi_servicelayer",
         autologon=True,
     )
 
@@ -144,5 +144,5 @@ def step_logic(mi_session, dataflow_payload):
 
 
 if __name__ == "__main__":
-    # main()
-    testing()
+    # main()  # Used when running the script as part of a workflow
+    testing()  # Used when testing the script manually
