@@ -54,14 +54,14 @@ extensions = [
 ]
 
 nitpick_ignore_regex = {
-    ("py:.*", r"mpy\.Session"),
+    ("py:.*", r"(mi|mpy)\.Session"),
     ("py:obj", "PyGranta_Connection_Class"),
 }
 
 # numpydoc configuration
 numpydoc_show_class_members = False
 numpydoc_xref_param_type = True
-numpydoc_xref_ignore = {"of", "optional", "or"}
+numpydoc_xref_ignore = {"of", "optional", "or", "default"}
 
 # Consider enabling numpydoc validation. See:
 # https://numpydoc.readthedocs.io/en/latest/validation.html#

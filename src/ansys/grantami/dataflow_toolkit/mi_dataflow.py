@@ -100,7 +100,7 @@ class MIDataflowIntegration:
 
     Parameters
     ----------
-    logging_level : int, default: :cls:`logging.DEBUG`
+    logging_level : int, default: :obj:`logging.DEBUG`
         The logging level to apply to the logger.
     use_https : bool, default ``True``
         Whether to use HTTPS if supported by the Granta MI server.
