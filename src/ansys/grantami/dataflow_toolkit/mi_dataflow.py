@@ -288,7 +288,7 @@ class MIDataflowIntegration:
         mpy.Session
             A Scripting Toolkit session object.
         """
-        self.logger.debug("Starting MI STK session...")
+        self.logger.debug("Starting MI Scripting Toolkit session...")
 
         client_credential_type = self.df_data["ClientCredentialType"]
 
