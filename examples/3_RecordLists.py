@@ -93,9 +93,9 @@ def testing():
 
     # Call MIDataflowIntegration constructor with "dataflow_payload" argument
     # instead of reading data from Data Flow.
-    df = MIDataflowIntegration(
-        use_https=False,
+    df = MIDataflowIntegration.from_static_payload(
         dataflow_payload=dataflow_payload,
+        use_https=False,
     )
     client = df.configure_pygranta_connection(RecordListsConnection).connect()
     step_logic(client, dataflow_payload)

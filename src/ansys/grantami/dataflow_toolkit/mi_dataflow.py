@@ -28,6 +28,7 @@ Allows direct access to this data or supports spawning a Scripting Toolkit sessi
 """
 
 import base64
+from io import StringIO
 import json
 import logging
 from pathlib import Path
@@ -109,10 +110,6 @@ class MIDataflowIntegration:
     certificate_filename : str | None, optional
         The filename of the CA certificate file. Default is ``None``, which means the certifi public CA store will be
         used. Has no effect if ``use_https`` is set to ``False``.
-    dataflow_payload : Dict[str, Any] | None, optional
-        A dictionary containing a static copy of a payload previously provided by Data Flow via stdin. Used for testing
-        purposes to validate business logic without having to provide the input via stdin. Default is ``None``, which
-        means the input will be read from stdin.
 
     Warns
     -----
@@ -142,7 +139,6 @@ class MIDataflowIntegration:
         use_https: bool = True,
         verify_ssl: bool = True,
         certificate_filename: str | None = None,
-        dataflow_payload: Dict[str, Any] | None = None,
     ) -> None:
 
         # Define properties
@@ -157,13 +153,9 @@ class MIDataflowIntegration:
         self.logger.debug("---------- NEW RUN ----------")
 
         # Get data from data flow
-        if dataflow_payload:
-            self.logger.debug('Using data provided in "dataflow_payload"')
-            self.df_data = dataflow_payload
-        else:
-            self.logger.debug("Using data provided in by MI Data Flow")
-            self.df_data = self._get_standard_input()
-            self.logger.debug(f"Dataflow data received: {json.dumps(self.df_data)}")
+        self.logger.debug("Using data provided in by MI Data Flow")
+        self.df_data = self._get_standard_input()
+        self.logger.debug(f"Dataflow data received: {json.dumps(self.df_data)}")
 
         # Parse url
         self.logger.debug("Parsing Data Flow URL")
@@ -211,6 +203,36 @@ class MIDataflowIntegration:
             self.logger.debug(
                 "No CA certificate provided. Using public CAs to verify certificates."
             )
+
+    @classmethod
+    def from_static_payload(
+        cls,
+        dataflow_payload: Dict[str, Any],
+        **kwargs: Any,
+    ) -> "MIDataflowIntegration":
+        """
+        Instantiate an MIDataflowIntegration object with a static payload.
+
+        Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
+        Instead, first use a Python script to capture the payload provided by Data Flow, deserialize the JSON, and
+        then use this method to instantiate the ``MIDataflowIntegration`` object.
+
+        Parameters
+        ----------
+        dataflow_payload : Dict[str, Any]
+            A static copy of a Data Flow data payload used for testing purposes.
+        **kwargs
+            The keyword arguments are passed to the MIDataflowIntegration constructor.
+
+        Returns
+        -------
+        MIDataflowIntegration
+            The instantiated class.
+        """
+        data = json.dumps(dataflow_payload)
+        sys.stdin = StringIO(data)
+        df = cls(**kwargs)
+        return df
 
     @property
     def service_layer_url(self) -> str:
