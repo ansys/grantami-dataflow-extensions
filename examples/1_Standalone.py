@@ -52,6 +52,7 @@
 
 # +
 import json
+import traceback
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 
@@ -62,11 +63,17 @@ def main():
     and cleans up once execution has completed.
     """
 
-    df = MIDataflowIntegration()
+    # It is strongly recommended to use HTTPS in production
+    # If you are using an internal certificate, you should specify the
+    # CA certificate with certificate_filename=my_cert_file.crt and add the
+    # certificate to the workflow as a supporting file.
+    df = MIDataflowIntegration(use_https=False)
+
     try:
-        step_logic(df.mi_session, df.df_data)
+        step_logic(df.df_data)
         exit_code = 0
     except Exception:
+        traceback.print_exc()
         exit_code = 1
     df.resume_bookmark(exit_code)
 
@@ -75,20 +82,20 @@ def testing():
     """Contains a static copy of a Data Flow data payload for testing purposes"""
 
     dataflow_payload = {
-        "WorkflowId": "806eacd2-3d9a-4a10-b1c1-acd5f7b36b30",
-        "WorkflowDefinitionId": "example; Version=1.0.0.0",
-        "TransitionName": "Python_6e407a8b-f8ec-41fc-8879-618bd7c40cda",
+        "WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83",
+        "WorkflowDefinitionId": "Example; Version=1.0.0.0",
+        "TransitionName": "Python_83e51914-3752-40d0-8350-c096674873e2",
         "Record": {
             "Database": "MI_Training",
             "Table": "Metals Pedigree",
             "RecordHistoryGuid": "d2f51a3d-c274-4a1e-b7c9-8ba2976202cc",
         },
-        "WorkflowUrl": "http://localhost/mi_workflow_2",
+        "WorkflowUrl": "http://my_server_name/mi_dataflow",
         "AuthorizationHeader": "",
         "ClientCredentialType": "Windows",
         "Attributes": {
             "Record": {"Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]},
-            "TransitionId": {"Value": "93076607-081e-422b-b819-f15fe833a6e3"},
+            "TransitionId": {"Value": "9f1bf6e7-0b05-4cd3-ac61-1d2d11a1d351"},
         },
         "CustomValues": {},
     }
