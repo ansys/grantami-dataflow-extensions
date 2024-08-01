@@ -108,7 +108,7 @@ class MIDataflowIntegration:
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
     certificate_filename : str | None, default ``None``
         The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. Has no effect
-        if ``use_https`` is set to ``False``.
+        if ``use_https`` or ``verify_ssl`` are set to ``False``.
 
     Warns
     -----
@@ -120,16 +120,27 @@ class MIDataflowIntegration:
     When a workflow is configured to call a Python script, the workflow execution will be suspended whilst the Python
     script executes. To enable the workflow to continue, call the ``resume_bookmark`` method.
 
-    The following sets of parameters are recommended for common Granta MI deployment configurations:
+    Examples
+    --------
+    If HTTPS **is not** configured on the server, disable HTTPS.
 
-    * If HTTPS **is not** configured on the server, specify ``use_https = False``.
-    * If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate
-      **is not** available, specify ``use_https = False`` or ``use_https = True`` (default) and ``verify_ssl = False``.
-    * If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate **is**
-      available, specify ``use_https = True`` (default), ``verify_ssl = True`` (default), and
-      ``certificate_filename = "certificate_filename.crt"``.
-    * If HTTPS **is** configured on the server with a **public certificate**, specify ``use_https = True`` (default),
-      ``verify_ssl = True`` (default), and ``certificate_filename = None`` (default).
+    >>> data_flow = MIDataflowIntegration(use_https=False)
+
+    If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate
+    **is not** available, either disable HTTPS or disable certificate verification.
+
+    >>> data_flow = MIDataflowIntegration(use_https=False)
+    >>> data_flow = MIDataflowIntegration(use_https=True, verify_ssl=False)
+
+    If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate **is**
+    available, provide the private CA certificate to use this certificate for verification.
+
+    >>> data_flow = MIDataflowIntegration(certificate_filename="my_cert.crt")
+
+    If HTTPS **is** configured on the server with a **public certificate**, use the default configuration to enable
+    HTTPS and certificate verification against public CAs.
+
+    >>> data_flow = MIDataflowIntegration()
     """
 
     def __init__(
@@ -210,11 +221,11 @@ class MIDataflowIntegration:
         **kwargs: Any,
     ) -> "MIDataflowIntegration":
         """
-        Instantiate an MIDataflowIntegration object with a static payload.
+        Instantiate an :class:`~MIDataflowIntegration` object with a static payload.
 
         Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
         Instead, first use a Python script to capture the payload provided by Data Flow, deserialize the JSON, and
-        then use this method to instantiate the ``MIDataflowIntegration`` object.
+        then use this method to instantiate the :class:`~MIDataflowIntegration` object.
 
         Parameters
         ----------
@@ -227,6 +238,16 @@ class MIDataflowIntegration:
         -------
         MIDataflowIntegration
             The instantiated class.
+
+        Examples
+        --------
+        >>> dataflow_payload = {"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}
+        >>> df = MIDataflowIntegration.from_static_payload(dataflow_payload)
+
+        Additional parameters are passed through to the :class:`~MIDataflowIntegration` constructor
+
+        >>> dataflow_payload = {"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}
+        >>> df = MIDataflowIntegration.from_static_payload(dataflow_payload, verify_ssl=False)
         """
         data = json.dumps(dataflow_payload)
         sys.stdin = StringIO(data)

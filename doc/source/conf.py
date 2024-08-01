@@ -54,7 +54,8 @@ extensions = [
 ]
 
 nitpick_ignore_regex = {
-    ("py:.*", r"(mi|mpy)\.Session"),
+    ("py:.*", r"mi\.Session"),
+    ("py:.*", r"mpy\.Session"),
     ("py:obj", "PyGranta_Connection_Class"),
 }
 
