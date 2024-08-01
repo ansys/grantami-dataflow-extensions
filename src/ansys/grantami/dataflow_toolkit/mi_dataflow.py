@@ -100,16 +100,15 @@ class MIDataflowIntegration:
 
     Parameters
     ----------
-    logging_level : int
+    logging_level : int, default: :cls:`logging.DEBUG`
         The logging level to apply to the logger.
-    use_https : bool, optional
-        Whether to use HTTPS if supported by the Granta MI server. Default is ``True``.
-    verify_ssl : bool, optional
-        Whether to verify the SSL certificate CA. Default is ``True``. Has no effect if ``use_https`` is set to
-        ``False``.
-    certificate_filename : str | None, optional
-        The filename of the CA certificate file. Default is ``None``, which means the certifi public CA store will be
-        used. Has no effect if ``use_https`` is set to ``False``.
+    use_https : bool, default ``True``
+        Whether to use HTTPS if supported by the Granta MI server.
+    verify_ssl : bool, default ``True``
+        Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
+    certificate_filename : str | None, default ``None``
+        The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. Has no effect
+        if ``use_https`` is set to ``False``.
 
     Warns
     -----
