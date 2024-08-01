@@ -35,7 +35,7 @@
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
 # * `testing()`: Includes a static payload which can be provided to the `MIDataflowIntegration` constructor in place of
-# real data for testing purposes.
+#   real data for testing purposes.
 # * `step_logic()`: Contains the actual business logic for the step. Uses the data provided by Data Flow (or defined
 #   statically).
 #
