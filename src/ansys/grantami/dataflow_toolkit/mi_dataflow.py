@@ -295,7 +295,7 @@ class MIDataflowIntegration:
 
     def _get_oidc_token(self) -> str:
         """
-        Extract the OIDC access token from the authorizartion header.
+        Extract the OIDC access token from the authorization header.
 
         Returns
         -------
