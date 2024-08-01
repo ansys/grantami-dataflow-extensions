@@ -288,26 +288,26 @@ class MIDataflowIntegration:
         mpy.Session
             A Scripting Toolkit session object.
         """
-        self.logger.debug("Starting MI Scripting Toolkit session...")
+        self.logger.debug("Creating MI Scripting Toolkit session.")
 
         client_credential_type = self.df_data["ClientCredentialType"]
 
         if client_credential_type == "Basic":
-            self.logger.debug("Basic auth selected...")
+            self.logger.debug("Using Basic authentication.")
             username, password = self._get_basic_creds()
             session = mpy.connect(self.service_layer_url, user_name=username, password=password)
 
         elif client_credential_type == "None":
-            self.logger.debug("OIDC auth selected...")
+            self.logger.debug("Using OIDC authentication.")
             access_token = self._get_oidc_token()
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
 
         elif client_credential_type == "Windows" and sys.platform == "win32":
-            self.logger.debug("Windows auth selected...")
+            self.logger.debug("Using Windows authentication.")
             session = mpy.connect(self.service_layer_url, autologon=True)
 
         elif client_credential_type == "Windows" and sys.platform != "win32":
-            raise NotImplementedError("Windows auth available on Windows only")
+            raise NotImplementedError("Windows auth available on Windows only.")
 
         else:
             raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
@@ -349,6 +349,8 @@ class MIDataflowIntegration:
         >>> client
         <JobQueueApiClient: url: http://my_mi_server/mi_servicelayer>
         """
+        self.logger.debug("Creating PyGranta client.")
+
         if not issubclass(pygranta_connection_class, ApiClientFactory):
             raise TypeError(
                 '"pygranta_connection_class" must be a subclass of ansys.openapi.common.ApiClientFactory'
@@ -365,24 +367,24 @@ class MIDataflowIntegration:
         client_credential_type = self.df_data["ClientCredentialType"]
 
         if client_credential_type == "Basic":
-            self.logger.debug("Basic auth selected...")
+            self.logger.debug("Using Basic authentication.")
             username, password = self._get_basic_creds()
             return builder.with_credentials(username=username, password=password)
 
         elif client_credential_type == "None":
-            self.logger.debug("OIDC auth selected...")
+            self.logger.debug("Using OIDC authentication.")
             access_token = self._get_oidc_token()
             return builder.with_oidc().with_token(access_token)  # type: ignore[return-value]
 
         elif client_credential_type == "Windows" and sys.platform == "win32":
-            self.logger.debug("Windows auth selected...")
+            self.logger.debug("Using Windows authentication.")
             return builder.with_autologon()
 
         elif client_credential_type == "Windows" and sys.platform != "win32":
-            raise NotImplementedError("Windows auth available on Windows only")
+            raise NotImplementedError("Windows auth available on Windows only.")
 
         else:
-            raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
+            raise NotImplementedError(f'Unknown credentials type "{client_credential_type}".')
 
     def _get_basic_creds(self) -> Tuple[str, str]:
         """
@@ -449,7 +451,7 @@ class MIDataflowIntegration:
         exit_code : str | int
             An exit code to inform Data Flow of success or otherwise of the business logic script.
         """
-        self.logger.debug(f"Returning control to MI Data Flow with exit code:{exit_code}")
+        self.logger.debug(f"Returning control to MI Data Flow with exit code {exit_code}")
         headers = {"Content-Type": "application/json"}
         response_data = json.dumps(
             {

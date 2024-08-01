@@ -29,8 +29,8 @@
 #
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
-# * `testing()`: Includes a static payload which can be provided to the business logic in place of real data for testing
-#   purposes.
+# * `testing()`: Includes a static payload which can be provided to the `MIDataflowIntegration` constructor in place of
+# real data for testing purposes.
 # * `step_logic()`: Contains the actual business logic for the step. Uses the data provided by Data Flow (or defined
 #   statically).
 #
@@ -92,7 +92,7 @@ def testing():
     }
 
     # Call MIDataflowIntegration constructor with "dataflow_payload" argument
-    # instead of reading data from stdin.
+    # instead of reading data from Data Flow.
     df = MIDataflowIntegration(
         use_https=False,
         dataflow_payload=dataflow_payload,
@@ -131,6 +131,7 @@ def step_logic(client, dataflow_payload):
         record_history_guid=dataflow_payload["Record"]["RecordHistoryGuid"],
     )
     client.add_items_to_list(record_list=record_list, items=[new_item])
+    print("Added item to list")  # This output will be visible in the api/logs page
 
 
 if __name__ == "__main__":
