@@ -184,10 +184,12 @@ class MIDataflowIntegration:
                 'specify "use_https=False" in the constructor for this class, or ensure that https is properly '
                 "configured on the Granta MI server."
             )
-        self._https_enabled = use_https and server_supports_https
 
-        self._verify_ssl = verify_ssl
-        self._ca_path = None
+        self._https_enabled = use_https and server_supports_https
+        self._verify_ssl = (
+            self._https_enabled
+        )  # Verify if HTTPS is enabled unless explicitly disabled
+        self._ca_path = None  # Use public certs by default
 
         # HTTPS is disabled. Nothing to configure.
         if not self._https_enabled:
@@ -195,6 +197,7 @@ class MIDataflowIntegration:
 
         # HTTPS is enabled, but verification is disabled.
         elif not verify_ssl:
+            self._verify_ssl = False
             self.logger.debug("Certificate verification is disabled.")
 
         # HTTPS is enabled, verification is enabled, and a CA certificate has been provided
@@ -286,9 +289,9 @@ class MIDataflowIntegration:
             URL to Granta MI Data Flow.
         """
         if self._https_enabled:
-            return f"https://{self._hostname}/{self._dataflow_path}"
+            return f"https://{self._hostname}{self._dataflow_path}"
         else:
-            return f"http://{self._hostname}/{self._dataflow_path}"
+            return f"http://{self._hostname}{self._dataflow_path}"
 
     @property
     def mi_session(self) -> "mpy.Session":
@@ -344,12 +347,9 @@ class MIDataflowIntegration:
             access_token = self._get_oidc_token()
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
 
-        elif client_credential_type == "Windows" and sys.platform == "win32":
+        elif client_credential_type == "Windows":
             self.logger.debug("Using Windows authentication.")
             session = mpy.connect(self.service_layer_url, autologon=True)
-
-        elif client_credential_type == "Windows" and sys.platform != "win32":
-            raise NotImplementedError("Windows auth available on Windows only.")
 
         else:
             raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
@@ -418,12 +418,9 @@ class MIDataflowIntegration:
             access_token = self._get_oidc_token()
             return builder.with_oidc().with_token(access_token)  # type: ignore[return-value]
 
-        elif client_credential_type == "Windows" and sys.platform == "win32":
+        elif client_credential_type == "Windows":
             self.logger.debug("Using Windows authentication.")
             return builder.with_autologon()
-
-        elif client_credential_type == "Windows" and sys.platform != "win32":
-            raise NotImplementedError("Windows auth available on Windows only.")
 
         else:
             raise NotImplementedError(f'Unknown credentials type "{client_credential_type}".')
