@@ -45,7 +45,6 @@ from mocks.scripting_toolkit import mpy as mpy_mock
 
 # TODO: Test logging
 # TODO: Test OIDC
-# TODO: Test resume bookmark
 
 
 class TestInstantiation:
