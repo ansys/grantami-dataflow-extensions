@@ -50,11 +50,10 @@ jobs:
 
   smoke-tests:
     name: "Build wheelhouse for latest Python versions"
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     needs: code-style
     strategy:
        matrix:
-           os: windows-latest
            python-version: ['3.10', '3.11', '3.12']
     steps:
       - uses: ansys/actions/build-wheelhouse@v6
@@ -63,10 +62,24 @@ jobs:
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
 
+  unit-tests:
+    name: "Run unit tests"
+    runs-on: windows-latest
+    needs: smoke-tests
+    strategy:
+       matrix:
+           python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: ansys/actions/tests-pytest@v6
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          operating-system: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+
   build-library:
     name: "Build library"
     runs-on: windows-latest
-    needs: [ smoke-tests, doc-build ]
+    needs: [ unit-tests, doc-build ]
     steps:
       - uses: ansys/actions/build-library@v6
         with:
