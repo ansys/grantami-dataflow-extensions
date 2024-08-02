@@ -72,8 +72,6 @@ jobs:
     steps:
       - uses: ansys/actions/tests-pytest@v6
         with:
-          library-name: ${{ env.LIBRARY_NAME }}
-          operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
 
   build-library:
