@@ -62,7 +62,7 @@ def connect(*args, **kwargs):
     return session
 
 
-mpy.connect = Mock(spec=connect)
+mpy.connect = Mock(wraps=connect)
 scripting_toolkit.granta = mpy
 
 import sys
