@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 from pathlib import Path
+import sys
 from typing import Literal
 from unittest.mock import patch
 
@@ -319,3 +320,11 @@ class TestResumeBookmark:
         assert data["Values"]["ExitCode"] == return_code
         assert data["WorkflowDefinitionName"] == WORKFLOW_DEFINITION_ID
         assert data["TransitionName"] == TRANSITION_NAME
+
+
+@pytest.mark.parametrize(
+    "fixture_name", ["basic_http", "basic_https", "windows_http", "windows_https"]
+)
+def test_supporting_files(fixture_name, request):
+    df = request.getfixturevalue(fixture_name)
+    assert df.supporting_files_dir == Path(sys.path[0])

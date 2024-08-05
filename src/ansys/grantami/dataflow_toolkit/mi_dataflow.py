@@ -107,7 +107,8 @@ class MIDataflowIntegration:
     verify_ssl : bool, default ``True``
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
     certificate_filename : str | None, default ``None``
-        The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. Has no effect
+        The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. If specified,
+        the certificate must be added to the workflow definition file in Data Flow Designer. Has no effect
         if ``use_https`` or ``verify_ssl`` are set to ``False``.
 
     Warns
@@ -133,7 +134,8 @@ class MIDataflowIntegration:
     >>> data_flow = MIDataflowIntegration(use_https=True, verify_ssl=False)
 
     If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate **is**
-    available, provide the private CA certificate to use this certificate for verification.
+    available, provide the private CA certificate to use this certificate for verification. The certificate must be
+    added to the workflow definition file in Data Flow Designer.
 
     >>> data_flow = MIDataflowIntegration(certificate_filename="my_cert.crt")
 
@@ -153,6 +155,7 @@ class MIDataflowIntegration:
 
         # Define properties
         self._logging_level = logging_level
+        self._supporting_files_dir = Path(sys.path[0])
 
         self._mi_session: mpy.Session | None = None
 
@@ -202,8 +205,10 @@ class MIDataflowIntegration:
 
         # HTTPS is enabled, verification is enabled, and a CA certificate has been provided
         elif certificate_filename:
-            self.logger.debug(f"CA certificate '{certificate_filename}' provided.")
-            self._ca_path = Path().cwd() / certificate_filename
+            self.logger.debug(f'CA certificate filename "{certificate_filename}" provided.')
+
+            self._ca_path = self.supporting_files_dir / certificate_filename
+            print(self._ca_path)
             if not self._ca_path.is_file():
                 raise FileNotFoundError(
                     f'CA certificate "{certificate_filename}" not found. Ensure the filename is '
@@ -320,6 +325,21 @@ class MIDataflowIntegration:
                 "and try again."
             ) from e
         return self._mi_session
+
+    @property
+    def supporting_files_dir(self) -> Path:
+        """
+        The directory containing the supporting files added to the workflow definition.
+
+        Will always include the script executed by the workflow, but may contain additional scripts,
+        CA certificates, and any other files as required by the business logic.
+
+        Returns
+        -------
+        Path
+            The directory containing supporting files added to the workflow definition.
+        """
+        return self._supporting_files_dir
 
     def _start_stk_session_from_dataflow_credentials(self) -> "mpy.Session":
         """
