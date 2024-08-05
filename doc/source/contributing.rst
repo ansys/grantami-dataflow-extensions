@@ -50,30 +50,6 @@ encouraged to install this tool with this command:
 
     python -m pip install pre-commit && pre-commit install
 
-.. _ref_tox:
-
-Tox
-~~~
-TODO
-
-.. _ref_serveraccess:
-
-Server access
---------------
-
-As indicated in :ref:`ref_software_requirements`, running integration tests and building the examples
-requires access to a valid Granta MI instance.
-
-External contributors may not have an instance of Granta MI at their disposal. Prior to creating a
-pull request with the desired changes, they should make sure that unit tests pass (:ref:`ref_tox`),
-static code validation and styling pass (:ref:`pre-commit <ref_precommit>`), and that the
-documentation can be generated successfully without the examples
-(:ref:`Documenting <ref_documenting>`).
-
-Continuous Integration (CI) on GitHub is configured to run the integration tests and generate the
-full documentation on creation and updates of pull requests. CI is not configured to run for pull
-requests from forks. External contributions require approval from a maintainer for checks to run.
-
 
 Code formatting and styling
 ===========================
@@ -141,7 +117,6 @@ the previous paragraph.
 
 .. _Poetry: https://python-poetry.org/
 .. _pre-commit: https://pre-commit.com/
-.. _tox: https://tox.wiki/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 .. _jupytext: https://jupytext.readthedocs.io/en/latest/
 .. _nb-convert: https://nbconvert.readthedocs.io/en/latest/
