@@ -12,7 +12,8 @@ To run these examples, install dependencies with this command:
    pip install ansys-grantami-dataflow-toolkit[examples]
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    1_Standalone
    2_Scripting_Toolkit
+   3_RecordLists

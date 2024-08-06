@@ -30,6 +30,7 @@ packages = [
 python = ">=3.10,<4.0"
 requests = "^2.23"
 requests-negotiate-sspi = { version = "^0.5.2", markers = "sys_platform == 'win32'"}
+ansys-openapi-common = "^2.0"
 
 # Optional documentation dependencies
 [tool.poetry.group.doc]
@@ -49,6 +50,7 @@ sphinx-toolbox = "^3.5.0"
 sphinx-design = "^0.6.0"
 sphinx-autoapi = "^3.1.0a2"
 sphinxcontrib-napoleon = "^0.7.0"
+ansys-grantami-recordlists = "^1.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"
