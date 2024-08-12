@@ -37,7 +37,7 @@ ansys-openapi-common = "^2.0"
 optional = true
 
 [tool.poetry.group.doc.dependencies]
-sphinx = "^7.0.1"
+sphinx = "^8.0.2"
 numpydoc = "^1.4.0"
 ansys-sphinx-theme = "^0.16.0"
 sphinx-copybutton = "^0.5.0"
