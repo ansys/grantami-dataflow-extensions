@@ -59,6 +59,7 @@ requests-mock = "^1.10.0"
 pre-commit = "^3.2.2"
 mypy = "^1.8.0"
 ansys-grantami-recordlists = "^1.2"
+ansys-openapi-common = { version = "*", extras=["oidc"] }
 
 [tool.black]
 line-length = 100

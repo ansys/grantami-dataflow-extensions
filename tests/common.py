@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 from base64 import b64encode
+from pathlib import Path
 from types import SimpleNamespace
 
 payloads = SimpleNamespace()
@@ -86,7 +87,10 @@ payloads.basic_https = payloads.basic_http.copy()
 payloads.basic_https["WorkflowUrl"] = HTTPS_URL
 
 payloads.digest_http = payloads.windows_http.copy()
-payloads.digest_http["ClientCredentialType"] = "digest"
+payloads.digest_http["ClientCredentialType"] = "Digest"
 
 payloads.digest_https = payloads.digest_http.copy()
 payloads.digest_https["WorkflowUrl"] = HTTPS_URL
+
+CERT_FILE = "test_cert.crt"
+CERT_PATH = Path(__file__).parent / CERT_FILE

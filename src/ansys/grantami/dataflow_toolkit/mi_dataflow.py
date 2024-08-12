@@ -166,7 +166,6 @@ class MIDataflowIntegration:
         self.logger.debug("---------- NEW RUN ----------")
 
         # Get data from data flow
-        self.logger.debug("Using data provided in by MI Data Flow")
         self.df_data = self._get_standard_input()
         self.logger.debug(f"Dataflow data received: {json.dumps(self.df_data)}")
 
@@ -176,6 +175,8 @@ class MIDataflowIntegration:
         parsed_url = urlparse(url)
         self._hostname = parsed_url.netloc
         self._dataflow_path = parsed_url.path
+        self.logger.debug(f'Data Flow hostname: "{self._hostname}"')
+        self.logger.debug(f'Data Flow path: "{self._dataflow_path}"')
 
         # Configure HTTPS
         server_supports_https = parsed_url.scheme == "https"
@@ -187,7 +188,6 @@ class MIDataflowIntegration:
                 'specify "use_https=False" in the constructor for this class, or ensure that https is properly '
                 "configured on the Granta MI server."
             )
-
         self._https_enabled = use_https and server_supports_https
         self._verify_ssl = (
             self._https_enabled
@@ -208,8 +208,9 @@ class MIDataflowIntegration:
             self.logger.debug(f'CA certificate filename "{certificate_filename}" provided.')
 
             self._ca_path = self.supporting_files_dir / certificate_filename
-            print(self._ca_path)
-            if not self._ca_path.is_file():
+            if self._ca_path.is_file():
+                self.logger.debug(f'Successfully resolved file "{self._ca_path}"')
+            else:
                 raise FileNotFoundError(
                     f'CA certificate "{certificate_filename}" not found. Ensure the filename is '
                     "correct and that the certificate was included in the Workflow definition "
@@ -419,7 +420,7 @@ class MIDataflowIntegration:
             )
 
         config = SessionConfiguration(
-            cert_store_path=str(self._ca_path),
+            cert_store_path=str(self._ca_path) if self._ca_path is not None else None,
             verify_ssl=self._verify_ssl,
         )
         # We rename the first argument from 'api_url' to 'servicelayer_url', so use a positional
@@ -436,7 +437,7 @@ class MIDataflowIntegration:
         elif client_credential_type == "None":
             self.logger.debug("Using OIDC authentication.")
             access_token = self._get_oidc_token()
-            return builder.with_oidc().with_token(access_token)  # type: ignore[return-value]
+            return builder.with_oidc(idp_session_configuration=config).with_token(access_token)  # type: ignore[return-value]
 
         elif client_credential_type == "Windows":
             self.logger.debug("Using Windows authentication.")
