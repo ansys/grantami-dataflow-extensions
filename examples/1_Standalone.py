@@ -17,7 +17,7 @@
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with a non-Granta MI resource
 # as part of a Data Flow operation.
 
-# The cell below contains an example script that simply prints the record identifying information which is received from
+# The cell below contains an example script that simply logs the record identifying information which is received from
 # Data Flow. However, this could be replaced with any other business logic which can make use of the data provided by
 # Data Flow. To perform operations that rely on additional information from Granta MI, see the other examples in this
 # package.

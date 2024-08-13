@@ -88,6 +88,20 @@ follow the steps listed below:
 
 Repeat steps 8 to 10 as required.
 
+
+Logging
+-------
+
+It is recommended to use the ``MIDataFlowIntegration`` logger when using this package. You can create the appropriate
+``logger`` object with the following code::
+
+    import logging
+    logger = logging.getLogger("MIDataFlowIntegration")
+
+This will ensure the logs are written to stdout, which will then be collected by MI Data Flow and included in the
+central Data Flow log.
+
+
 Troubleshooting
 ---------------
 
