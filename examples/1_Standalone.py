@@ -39,9 +39,11 @@
 #
 # **Warning:**
 #
-# The `step_logic()` function removes authentication information from the Data Flow payload before writing it to
-# stdout. If you are using Basic or OIDC Authentication and require these credentials for your business logic, you
-# should inject these credentials into the `testing()` function directly, for example via an environment variable.
+# The `step_logic()` function generates the dataflow payload, and explicitly calls the `get_payload_as_str()` method
+# with `include_credentials=False` to avoid logging credentials to the Data Flow log. If you are using Basic or OIDC
+# Authentication and require these credentials for your business logic, you should inject these credentials into the
+# `dataflow_payload["AuthorizationHeader"]` value in the `testing()` function directly, for example via an environment
+# variable.
 # </div>
 
 # ## Additional notes
@@ -53,7 +55,6 @@
 # ## Example script
 
 # +
-import json
 import traceback
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
@@ -69,15 +70,14 @@ def main():
     # If you are using an internal certificate, you should specify the
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file.
-    df = MIDataflowIntegration(use_https=False)
-
+    dataflow_integration = MIDataflowIntegration(use_https=False)
     try:
-        step_logic(df.df_data)
+        step_logic(dataflow_integration)
         exit_code = 0
     except Exception:
         traceback.print_exc()
         exit_code = 1
-    df.resume_bookmark(exit_code)
+    dataflow_integration.resume_bookmark(exit_code)
 
 
 def testing():
@@ -102,20 +102,29 @@ def testing():
         "CustomValues": {},
     }
 
-    step_logic(dataflow_payload)
+    # Call MIDataflowIntegration constructor with "dataflow_payload" argument
+    # instead of reading data from Data Flow.
+    dataflow_integration = MIDataflowIntegration.from_dict_payload(
+        dataflow_payload=dataflow_payload,
+        use_https=False,
+    )
+    step_logic(dataflow_integration)
 
 
-def step_logic(dataflow_payload):
+def step_logic(dataflow_integration):
     """Contains the business logic to be executed as part of the workflow.
 
     Replace the code in this module with your custom business logic."""
 
-    # Remove credentials if they are present in the payload
-    if dataflow_payload["AuthorizationHeader"]:
-        dataflow_payload["AuthorizationHeader"] = "<scrubbed>"
+    # Get the poayload from the integration option. Enable indenting
+    # to make the result easier to read.
+    payload = dataflow_integration.get_payload_as_str(
+        indent=True,
+        include_credentials=False,
+    )
 
-    data = json.dumps(dataflow_payload, indent=4)
-    print(data)
+    # Print the payload. This will appear in the Data Flow log.
+    print(payload)
 
 
 if __name__ == "__main__":

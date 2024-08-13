@@ -93,7 +93,7 @@ PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClient
 
 class MIDataflowIntegration:
     """
-    Represents a MI Data Flow session.
+    Represents a MI Data Flow step at the point at which the Python script is triggered.
 
     When this class is instantiated, it parses the data provided by Data Flow, enabling Granta MI API client sessions
     to be created.
@@ -110,6 +110,13 @@ class MIDataflowIntegration:
         The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. If specified,
         the certificate must be added to the workflow definition file in Data Flow Designer. Has no effect
         if ``use_https`` or ``verify_ssl`` are set to ``False``.
+
+    Raises
+    ------
+    json.JSONDecodeError
+        If the string read from stdin is invalid JSON.
+    KeyError
+        If the JSON read from stdin does not conform to the correct data structure.
 
     Warns
     -----
@@ -166,12 +173,17 @@ class MIDataflowIntegration:
         self.logger.debug("---------- NEW RUN ----------")
 
         # Get data from data flow
-        self.df_data = self._get_standard_input()
-        self.logger.debug(f"Dataflow data received: {json.dumps(self.df_data)}")
+        self._df_data = self._get_standard_input()
+        self.logger.debug(f"Dataflow data received: {json.dumps(self._df_data)}")
 
         # Parse url
         self.logger.debug("Parsing Data Flow URL")
-        url = self.df_data["WorkflowUrl"]
+        try:
+            url = self._df_data["WorkflowUrl"]
+        except KeyError as e:
+            raise KeyError(
+                'Key "WorkflowUrl" not found in provided payload. Ensure the payload is correct and try again.'
+            ) from e
         parsed_url = urlparse(url)
         self._hostname = parsed_url.netloc
         self._dataflow_path = parsed_url.path
@@ -224,24 +236,73 @@ class MIDataflowIntegration:
             )
 
     @classmethod
-    def from_static_payload(
+    def from_string_payload(
+        cls,
+        dataflow_payload: str,
+        **kwargs: Any,
+    ) -> "MIDataflowIntegration":
+        """
+        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a JSON formatted string.
+
+        Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
+        See :meth:`~.MIDataflowIntegration.get_payload_as_str` for information on generating a suitable payload.
+
+        Parameters
+        ----------
+        dataflow_payload : str
+            A JSON-formatted static copy of a Data Flow data payload used for testing purposes.
+        **kwargs
+            Additional keyword arguments are passed to the MIDataflowIntegration constructor.
+
+        Returns
+        -------
+        MIDataflowIntegration
+            The instantiated class.
+
+        Raises
+        ------
+        ValueError
+            If the ``dataflow_payload`` argument is not valid JSON.
+
+        Examples
+        --------
+        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
+        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload)
+
+        Additional parameters are passed through to the :class:`~MIDataflowIntegration` constructor
+
+        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
+        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload, verify_ssl=False)
+        """
+        try:
+            json.loads(dataflow_payload)
+        except json.JSONDecodeError as e:
+            raise ValueError(
+                "'dataflow_payload' is not valid JSON. Ensure the dataflow_payload argument contains a valid JSON "
+                "string and try again."
+            ) from e
+        sys.stdin = StringIO(dataflow_payload)
+        df = cls(**kwargs)
+        return df
+
+    @classmethod
+    def from_dict_payload(
         cls,
         dataflow_payload: Dict[str, Any],
         **kwargs: Any,
     ) -> "MIDataflowIntegration":
         """
-        Instantiate an :class:`~MIDataflowIntegration` object with a static payload.
+        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a Python dictionary.
 
         Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
-        Instead, first use a Python script to capture the payload provided by Data Flow, deserialize the JSON, and
-        then use this method to instantiate the :class:`~MIDataflowIntegration` object.
+        See :meth:`~.MIDataflowIntegration.get_payload_as_dict` for information on generating a suitable payload.
 
         Parameters
         ----------
         dataflow_payload : Dict[str, Any]
-            A static copy of a Data Flow data payload used for testing purposes.
+            A Python dictionary containing a copy of a Data Flow data payload used for testing purposes.
         **kwargs
-            The keyword arguments are passed to the MIDataflowIntegration constructor.
+            Additional keyword arguments are passed to the :class:`~.MIDataflowIntegration` constructor.
 
         Returns
         -------
@@ -251,17 +312,94 @@ class MIDataflowIntegration:
         Examples
         --------
         >>> dataflow_payload = {"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}
-        >>> df = MIDataflowIntegration.from_static_payload(dataflow_payload)
+        >>> df = MIDataflowIntegration.from_dict_payload(dataflow_payload)
 
         Additional parameters are passed through to the :class:`~MIDataflowIntegration` constructor
 
         >>> dataflow_payload = {"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}
-        >>> df = MIDataflowIntegration.from_static_payload(dataflow_payload, verify_ssl=False)
+        >>> df = MIDataflowIntegration.from_dict_payload(dataflow_payload, verify_ssl=False)
         """
-        data = json.dumps(dataflow_payload)
-        sys.stdin = StringIO(data)
+        serialized_payload = json.dumps(dataflow_payload)
+        sys.stdin = StringIO(serialized_payload)
         df = cls(**kwargs)
         return df
+
+    def get_payload_as_str(self, indent: bool = False, include_credentials: bool = False) -> str:
+        """
+        Get the payload used to instantiate this class as serialized JSON.
+
+        This can be stored and provided to the :meth:`~.MIDataflowIntegration.from_string_payload` method to test
+        independently of MI Data Flow.
+
+        Parameters
+        ----------
+        indent : bool, default ``False``
+            Whether to indent the JSON representation of the payload. Useful if displaying the result.
+        include_credentials : bool, default ``False``
+            Whether to include the Basic or OIDC token header in the result.
+
+        Returns
+        -------
+        str
+            A static copy of a Data Flow data payload used for testing purposes.
+
+        Notes
+        -----
+        By default the basic and OIDC authentication header ``AuthorizationHeader`` is replaced with the string
+        ``"<HeaderRemoved>"`` to avoid leaking credentials. To construct the appropriate header manually:
+
+        * For basic authentication, combine the username and password with a colon (``:``), Base64 encode the resulting
+          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and password
+          ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to ``"QWxpY2U6czNjcjN0"``, which
+          gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
+        * For OIDC authentication, generate a valid access token and prepend with ``"Bearer "``. For example, for the
+          token ``gaUDsgUrOiJSUzI``, the final ``AuthorizationHeader`` value would be ``"Bearer gaUDsgUrOiJSUzI"``.
+
+        Alternatively, you can invoke this method with ``include_credentials=True``, however you **must** ensure that
+        the result is stored securely to avoid leaking credentials.
+        """
+        data = self.get_payload_as_dict(include_credentials=include_credentials)
+        if indent:
+            return json.dumps(data, indent=4)
+        else:
+            return json.dumps(data)
+
+    def get_payload_as_dict(self, include_credentials: bool = False) -> Dict[str, Any]:
+        """
+        Get the payload used to instantiate this class as a Python dictionary.
+
+        This can be stored and provided to the :meth:`~.MIDataflowIntegration.from_dict_payload` method to test
+        independently of MI Data Flow.
+
+        Parameters
+        ----------
+        include_credentials : bool, default ``False``
+            Whether to include the Basic or OIDC token header in the result.
+
+        Returns
+        -------
+        str
+            A static copy of a Data Flow data payload used for testing purposes.
+
+        Notes
+        -----
+        By default the basic and OIDC authentication header ``AuthorizationHeader`` is replaced with the string
+        ``"<HeaderRemoved>"`` to avoid leaking credentials. To construct the appropriate header manually:
+
+        * For basic authentication, combine the username and password with a colon (``:``), Base64 encode the resulting
+          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and password
+          ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to ``"QWxpY2U6czNjcjN0"``, which
+          gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
+        * For OIDC authentication, generate a valid access token and prepend with ``"Bearer "``. For example, for the
+          token ``gaUDsgUrOiJSUzI``, the final ``AuthorizationHeader`` value would be ``"Bearer gaUDsgUrOiJSUzI"``.
+
+        Alternatively, you can invoke this method with ``include_credentials=True``, however you **must** ensure that
+        the result is stored securely to avoid leaking credentials.
+        """
+        data = self._df_data.copy()
+        if not include_credentials and data["AuthorizationHeader"]:
+            data["AuthorizationHeader"] = "<HeaderRemoved>"
+        return data
 
     @property
     def service_layer_url(self) -> str:
@@ -337,7 +475,7 @@ class MIDataflowIntegration:
 
         Returns
         -------
-        Path
+        pathlib.Path
             The directory containing supporting files added to the workflow definition.
         """
         return self._supporting_files_dir
@@ -356,7 +494,7 @@ class MIDataflowIntegration:
         """
         self.logger.debug("Creating MI Scripting Toolkit session.")
 
-        client_credential_type = self.df_data["ClientCredentialType"]
+        client_credential_type = self._df_data["ClientCredentialType"]
 
         if client_credential_type == "Basic":
             self.logger.debug("Using Basic authentication.")
@@ -427,7 +565,7 @@ class MIDataflowIntegration:
         # argument to avoid type errors.
         builder = pygranta_connection_class(self.service_layer_url, session_configuration=config)
 
-        client_credential_type = self.df_data["ClientCredentialType"]
+        client_credential_type = self._df_data["ClientCredentialType"]
 
         if client_credential_type == "Basic":
             self.logger.debug("Using Basic authentication.")
@@ -455,7 +593,7 @@ class MIDataflowIntegration:
         Tuple[str, str]
             A 2-tuple of the username and password.
         """
-        auth_header = self.df_data["AuthorizationHeader"]
+        auth_header = self._df_data["AuthorizationHeader"]
         decoded = base64.b64decode(auth_header[6:])
         index = decoded.find(b":")
         username = decoded[:index].decode(encoding="utf-8")
@@ -471,7 +609,7 @@ class MIDataflowIntegration:
         str
             The OIDC access token.
         """
-        auth_header = cast(str, self.df_data["AuthorizationHeader"])
+        auth_header = cast(str, self._df_data["AuthorizationHeader"])
         access_token = auth_header[7:]
         return access_token
 
@@ -516,18 +654,18 @@ class MIDataflowIntegration:
         response_data = json.dumps(
             {
                 "Values": {"ExitCode": exit_code},
-                "WorkflowDefinitionName": self.df_data["WorkflowDefinitionId"],
-                "TransitionName": self.df_data["TransitionName"],
+                "WorkflowDefinitionName": self._df_data["WorkflowDefinitionId"],
+                "TransitionName": self._df_data["TransitionName"],
             }
         ).encode("utf-8")
 
         verify_argument = self._verify_ssl if self._ca_path is None else self._ca_path
         self.logger.debug(f"Resuming bookmark using URL {self._dataflow_url}")
 
-        request_url = f"{self._dataflow_url}/api/workflows/{self._get_workflow_id(self.df_data)}"
-        if self.df_data["ClientCredentialType"] in ["Basic", "None"]:
+        request_url = f"{self._dataflow_url}/api/workflows/{self._get_workflow_id(self._df_data)}"
+        if self._df_data["ClientCredentialType"] in ["Basic", "None"]:
             # MI server setup: Basic authentication or OIDC authentication
-            headers["Authorization"] = self.df_data["AuthorizationHeader"]
+            headers["Authorization"] = self._df_data["AuthorizationHeader"]
             response = requests.post(
                 url=request_url,
                 data=response_data,
