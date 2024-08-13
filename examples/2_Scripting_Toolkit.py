@@ -12,7 +12,7 @@
 #     name: python3
 # ---
 
-# # Scripting Toolkit Example
+# # Scripting Toolkit example
 
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
 # Toolkit as part of a Data Flow operation.

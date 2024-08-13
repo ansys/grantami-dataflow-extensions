@@ -12,7 +12,7 @@
 #     name: python3
 # ---
 
-# # PyGranta RecordLists Example
+# # PyGranta RecordLists example
 
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact a Granta MI Record List as
 # part of a Data Flow step. For more information on how to use the PyGranta RecordLists package, see the
