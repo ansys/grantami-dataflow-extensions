@@ -89,8 +89,8 @@ follow the steps listed below:
 Repeat steps 8 to 10 as required.
 
 
-Logging
--------
+Logging and debugging
+---------------------
 
 It is recommended to use the ``MIDataFlowIntegration`` logger when using this package. You can create the appropriate
 ``logger`` object with the following code::
@@ -98,18 +98,24 @@ It is recommended to use the ``MIDataFlowIntegration`` logger when using this pa
     import logging
     logger = logging.getLogger("MIDataFlowIntegration")
 
-This will ensure the logs are written to stdout, which will then be collected by MI Data Flow and included in the
-central Data Flow log.
-
-
-Troubleshooting
----------------
-
-This package logs to the MI Data Flow logs page available in either of the URLs below:
+This logger has an associated :class:`logging.StreamHandler`. Using this logger will ensure that all logs are
+written to stdout, collected by MI Data Flow, and included in the central Data Flow log. These logs are available
+in either of the URLs below:
 
 - MI 2023 R2 or later: ``http://my.server.name/mi_dataflow/api/logs``
 - MI 2023 R1 or earlier: ``http://my.server.name/mi_workflow_2/api/logs``
 
-A working directory is created at the server in ``C:\windows\TEMP\`` which contains the two files ``__stderr__`` and
-``__stdout__``. These contain Python's console outputs that are useful when investigating Python failures during
-workflow execution.
+Additionally, Data Flow creates a working directory on the server in ``C:\windows\TEMP\{workflow id}_{8.3}``, where
+``{workflow_id}`` is the workflow ID provided in Data Flow Designer when uploading the workflow, and ``{8.3}`` is a
+random set of 8 alphanumeric characters, a period, and 3 alphanumeric characters. This can be found by right-clicking
+the active workflow in Data Flow Manager and selecting 'View Log'.
+
+This directory includes the two files ``__stderr__`` and ``__stdout__``, which contain the Python stdout and stderr
+streams and are useful when investigating Python failures during workflow execution before the logger has been
+initialized.
+
+It is **strongly recommended** to not attach a :class:`logging.FileHandler` to this logger, or to any other logger in a
+script executed by MI Data Flow. This is because in certain authentication modes, the script will be executed as
+different users, potentially concurrently. This can cause permissions issues with the log files depending on the
+server configuration. Using the logger above with the default :class:`logging.StreamHandler` avoids this issue by
+writing logs to the central Data Flow log only.
