@@ -55,9 +55,13 @@
 # ## Example script
 
 # +
+import json
+import logging
 import traceback
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+
+logger = logging.getLogger("MIDataFlowIntegration")
 
 
 def main():
@@ -124,7 +128,9 @@ def step_logic(dataflow_integration):
     )
 
     # Print the payload. This will appear in the Data Flow log.
-    print(payload)
+    data = json.dumps(payload, indent=4)
+    logger.info("Writing dataflow payload.")  # This output will be visible in the api/logs page
+    logger.info(data)
 
 
 if __name__ == "__main__":
