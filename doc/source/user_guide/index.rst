@@ -98,15 +98,15 @@ It is recommended to use the ``MIDataFlowIntegration`` logger when using this pa
     import logging
     logger = logging.getLogger("MIDataFlowIntegration")
 
-This logger has an associated :class:`logging.StreamHandler`. Using this logger will ensure that all logs are
+This logger has an associated :class:`logging.StreamHandler`. Using this logger ensures that all logs are
 written to stdout, collected by MI Data Flow, and included in the central Data Flow log. These logs are available
 in either of the URLs below:
 
 - MI 2023 R2 or later: ``http://my.server.name/mi_dataflow/api/logs``
 - MI 2023 R1 or earlier: ``http://my.server.name/mi_workflow_2/api/logs``
 
-Additionally, Data Flow creates a working directory on the server in ``C:\windows\TEMP\{workflow id}_{8.3}``, where
-``{workflow_id}`` is the workflow ID provided in Data Flow Designer when uploading the workflow, and ``{8.3}`` is a
+Additionally, Data Flow creates a working directory on the server in ``C:\windows\TEMP\{workflow id}_{hash}``, where
+``{workflow_id}`` is the workflow ID provided in Data Flow Designer when uploading the workflow, and ``{hash}`` is a
 random set of 8 alphanumeric characters, a period, and 3 alphanumeric characters. This can be found by right-clicking
 the active workflow in Data Flow Manager and selecting 'View Log'.
 
@@ -115,7 +115,7 @@ streams and are useful when investigating Python failures during workflow execut
 initialized.
 
 It is **strongly recommended** to not attach a :class:`logging.FileHandler` to this logger, or to any other logger in a
-script executed by MI Data Flow. This is because in certain authentication modes, the script will be executed as
-different users, potentially concurrently. This can cause permissions issues with the log files depending on the
-server configuration. Using the logger above with the default :class:`logging.StreamHandler` avoids this issue by
-writing logs to the central Data Flow log only.
+script executed by MI Data Flow. This is because in certain authentication modes the script executes as the active Data
+Flow user, and so multiple users could be running the same script concurrently. This can cause permissions issues with
+the log files depending on the server configuration. Using the logger above with the default
+:class:`logging.StreamHandler` avoids this issue by writing logs to the central Data Flow log only.
