@@ -89,6 +89,9 @@ follow the steps listed below:
 Repeat steps 8 to 10 as required.
 
 
+.. currentmodule:: logging
+
+
 Logging and debugging
 ---------------------
 
@@ -99,13 +102,9 @@ It is recommended to use the ``MIDataFlowIntegration`` logger when using this pa
     logger = logging.getLogger("MIDataFlowIntegration")
 
 
-.. vale off
-
-This logger has an associated :class:`logging.StreamHandler`. Using this logger ensures that all logs are
+This logger has an associated :class:`StreamHandler`. Using this logger ensures that all logs are
 written to stdout, collected by MI Data Flow, and included in the central Data Flow log. These logs are available
 at either of the URLs below:
-
-.. vale on
 
 - MI 2023 R2 or later: ``http://my.server.name/mi_dataflow/api/logs``
 - MI 2023 R1 or earlier: ``http://my.server.name/mi_workflow_2/api/logs``
@@ -119,12 +118,8 @@ This directory includes the two files ``__stderr__`` and ``__stdout__``, which c
 streams and are useful when investigating Python failures during workflow execution before the logger has been
 initialized.
 
-.. vale off
-
-It is **strongly recommended** to not attach a :class:`logging.FileHandler` to this logger, or to any other logger in a
+It is **strongly recommended** to not attach a :class:`FileHandler` to this logger, or to any other logger in a
 script executed by MI Data Flow. This is because in certain authentication modes the script executes as the active Data
 Flow user, and so multiple users could be running the same script concurrently. This can cause permissions issues with
 the log files depending on the server configuration. Using the ``MIDataFlowIntegration`` logger with the default
-:class:`logging.StreamHandler` avoids this issue by writing logs to the central Data Flow log only.
-
-.. vale on
+:class:`StreamHandler` avoids this issue by writing logs to the central Data Flow log only.
