@@ -142,12 +142,12 @@ class MIDataflowIntegration:
         self._mi_session: mpy.Session | None = None
 
         # Logger
-        logger.debug("")
-        logger.debug("---------- NEW RUN ----------")
+        logger.info("")
+        logger.info("---------- NEW RUN ----------")
 
         # Get data from data flow
         self._df_data = self._get_standard_input()
-        logger.debug(f"Dataflow data received: {json.dumps(self._df_data)}")
+        logger.debug(f"Dataflow data received: {self.get_payload_as_string(indent=False)}")
 
         # Parse url
         logger.debug("Parsing Data Flow URL")
