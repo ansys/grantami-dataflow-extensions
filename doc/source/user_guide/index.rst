@@ -167,14 +167,14 @@ script. These use cases apply to this package as well, but because the script is
 recommended best practices are different to those of a conventional Python script.
 
 A very simple approach to logging the output of a script is to use the ``print()`` function to write text to the
-terminal. This approach can be used with this package, and any printed messages will be visible in the central Data Flow
+terminal. This approach can be used with this package, and any printed messages are visible in the central Data Flow
 log, available at one of the URLs below depending on your Granta MI version:
 
 * MI 2023 R2 or later: ``http://my.server.name/mi_dataflow/api/logs``
 * MI 2023 R1 or earlier: ``http://my.server.name/mi_workflow_2/api/logs``
 
-However, using the ``print()`` function offers limited configurability in terms of controlling log level and log format.
-Instead, the recommended approach is to use the Python logging module. See the provided links for the Python
+However, using the ``print()`` function offers limited control around log format, and message filtering. Instead, the
+recommended approach is to use the Python logging module. See the provided links for the Python
 `logging API documentation`_ and `Logging HOWTO`_.
 
 The internal operations of this package are logged to a logger with the name ``ansys.grantami.dataflow_toolkit``. By
@@ -186,13 +186,13 @@ messages, you should:
 
 The following sub-sections provide simple best practice for logging with this package. However, Python logging is
 extremely versatile and it is possible to construct complex logging implementations for your use case. Consult the
-Python API documentation and user guides referenced above for a more complete review of the capabilities of Python
-logging.
+Python API documentation and user guides referenced earlier in this section for a more complete review of the
+capabilities of Python logging.
 
 Create a logger
 ~~~~~~~~~~~~~~~
 
-Pything ``logger`` objects are hierarchical, and messages are passed from lower level ``logger`` objects to higher level
+Python ``logger`` objects are hierarchical, and messages are passed from lower level ``logger`` objects to higher level
 ones. The root of the logger hierarchy is the *root logger*, and contains all messages logged by all loggers in a Python
 instance.
 
@@ -207,7 +207,7 @@ You can then add log statements to the logger at a certain log level as follows:
    logger.debug("This is a debug message")
    logger.info("This is an info message")
 
-Note that until a log handler is attached, no log messages will be emitted.
+Note that until a log handler is attached, no log messages are emitted.
 
 
 Attach a handler
@@ -265,7 +265,8 @@ use the following code::
    import os
    working_dir = os.getcwd()
 
-However, note that once the workflow is successfully resumed, this folder and all its contents will be deleted.
+However, note that once the workflow is successfully resumed, this folder and all its contents are deleted. They are
+only persisted if the workflow is manually cancelled in Data Flow Manager.
 
 .. _logging API documentation: https://docs.python.org/3/library/logging.html
 .. _Logging HOWTO: https://docs.python.org/3/howto/logging.html
