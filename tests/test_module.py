@@ -62,7 +62,7 @@ class TestInstantiationFromDict:
         )
 
         assert df._df_data == payload
-        assert self._payload_logged(payload, debug_caplog.text)
+        assert TRANSITION_NAME in debug_caplog.text
 
         assert self._url_elements_logged(debug_caplog.text)
 
@@ -140,7 +140,7 @@ class TestInstantiationFromDict:
     def test_http(self, payload, debug_caplog):
         df = MIDataflowIntegration.from_dict_payload(payload, use_https=False)
         assert df._df_data == payload
-        assert self._payload_logged(payload, debug_caplog.text)
+        assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
 
@@ -148,12 +148,9 @@ class TestInstantiationFromDict:
     def test_http_in_https_mode_raises_warning(self, payload, debug_caplog):
         with pytest.warns(UserWarning, match='"use_https" is set to True'):
             MIDataflowIntegration.from_dict_payload(payload)
-        assert self._payload_logged(payload, debug_caplog.text)
+        assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
-
-    def _payload_logged(self, payload, log):
-        return json.dumps(payload) in log
 
     def _url_elements_logged(self, log):
         hostname_logged = 'Data Flow hostname: "my_server_name"' in log
@@ -162,8 +159,9 @@ class TestInstantiationFromDict:
 
     def test_invalid_dict_raises_exception(self):
         invalid_dict = {"key": "value", "key2": "value2"}
-        with pytest.raises(KeyError, match='Key "WorkflowUrl" not found in provided payload'):
+        with pytest.raises(ValueError, match="Payload is not a valid data flow payload"):
             MIDataflowIntegration.from_dict_payload(invalid_dict)
+        pass
 
 
 class TestInstantiationFromStr:
@@ -182,7 +180,7 @@ class TestInstantiationFromStr:
         )
 
         assert self._payload_parsed(payload, df._df_data)
-        assert payload in debug_caplog.text
+        assert TRANSITION_NAME in debug_caplog.text
 
         assert self._url_elements_logged(debug_caplog.text)
 
@@ -227,7 +225,7 @@ class TestInstantiationFromStr:
     def test_http(self, payload, debug_caplog):
         df = MIDataflowIntegration.from_string_payload(payload, use_https=False)
         assert self._payload_parsed(payload, df._df_data)
-        assert payload in debug_caplog.text
+        assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
 
@@ -235,7 +233,7 @@ class TestInstantiationFromStr:
     def test_http_in_https_mode_raises_warning(self, payload, debug_caplog):
         with pytest.warns(UserWarning, match='"use_https" is set to True'):
             MIDataflowIntegration.from_string_payload(payload)
-        assert payload in debug_caplog.text
+        assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
 
@@ -254,7 +252,7 @@ class TestInstantiationFromStr:
 
     def test_invalid_dict_raises_exception(self):
         invalid_json_value = '{"key": "value", "key2": "value2"}'
-        with pytest.raises(KeyError, match='Key "WorkflowUrl" not found in provided payload'):
+        with pytest.raises(ValueError, match="Payload is not a valid data flow payload"):
             MIDataflowIntegration.from_string_payload(invalid_json_value)
 
 

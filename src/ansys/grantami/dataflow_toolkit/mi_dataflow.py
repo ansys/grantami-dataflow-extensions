@@ -28,6 +28,7 @@ Allows direct access to this data or supports spawning a Scripting Toolkit sessi
 """
 
 import base64
+import copy
 from io import StringIO
 import json
 from pathlib import Path
@@ -86,7 +87,7 @@ class MIDataflowIntegration:
     ------
     json.JSONDecodeError
         If the string read from stdin is invalid JSON.
-    KeyError
+    ValueError
         If the JSON read from stdin does not conform to the correct data structure.
 
     Warns
@@ -145,9 +146,14 @@ class MIDataflowIntegration:
         logger.info("")
         logger.info("---------- NEW RUN ----------")
 
-        # Get data from data flow
+        # Get data from data flow. Getting the payload as a santizied string performs a basic check that we have
+        # an expected data structure.
         self._df_data = self._get_standard_input()
-        logger.debug(f"Dataflow data received: {self.get_payload_as_string(indent=False)}")
+        try:
+            sanitized_payload = self.get_payload_as_string(indent=False)
+        except KeyError as e:
+            raise ValueError("Payload is not a valid data flow payload.") from e
+        logger.debug(f"Dataflow data received: {sanitized_payload}")
 
         # Parse url
         logger.debug("Parsing Data Flow URL")
@@ -350,7 +356,7 @@ class MIDataflowIntegration:
         Alternatively, you can invoke this method with ``include_credentials=True``, however you **must** ensure that
         the result is stored securely to avoid leaking credentials.
         """
-        data = self._df_data.copy()
+        data = copy.deepcopy(self._df_data)
         if not include_credentials and data["AuthorizationHeader"]:
             data["AuthorizationHeader"] = "<HeaderRemoved>"
         return data
