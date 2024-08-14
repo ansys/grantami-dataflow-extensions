@@ -30,7 +30,8 @@ import pytest
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 from common import (
     CERT_FILE,
-    CERT_PATH,
+    CERT_PATH_ABSOLUTE,
+    CERT_PATH_RELATIVE,
     HTTP_SL_URL,
     HTTP_URL,
     HTTPS_SL_URL,
@@ -49,13 +50,15 @@ class TestInstantiation:
     @pytest.mark.parametrize("payload", [payloads.basic_https, payloads.windows_https])
     @pytest.mark.parametrize("use_https", [True, False])
     @pytest.mark.parametrize("verify_ssl", [True, False])
-    @pytest.mark.parametrize("certificate_filename", [None, CERT_FILE])
+    @pytest.mark.parametrize(
+        "certificate_filename", [None, CERT_FILE, CERT_PATH_ABSOLUTE, CERT_PATH_RELATIVE]
+    )
     def test_https(self, payload, use_https, verify_ssl, certificate_filename, caplog):
         df = MIDataflowIntegration.from_static_payload(
             payload,
             use_https=use_https,
             verify_ssl=verify_ssl,
-            certificate_filename=certificate_filename,
+            certificate_file=certificate_filename,
         )
 
         assert df.df_data == payload
@@ -74,20 +77,62 @@ class TestInstantiation:
             assert "Certificate verification is disabled" in caplog.text
 
         if use_https and verify_ssl and certificate_filename:
-            assert df._ca_path == CERT_PATH
-            assert f'CA certificate filename "{CERT_FILE}" provided.' in caplog.text
-            assert f'Successfully resolved file "{CERT_PATH}"' in caplog.text
+            assert df._ca_path == CERT_PATH_ABSOLUTE
+            if isinstance(certificate_filename, Path) and certificate_filename.is_absolute():
+                assert (
+                    f'CA certificate absolute file path "{CERT_PATH_ABSOLUTE}" provided.'
+                    in caplog.text
+                )
+            elif isinstance(certificate_filename, Path) and not certificate_filename.is_absolute():
+                assert (
+                    f'CA certificate relative file path "{CERT_PATH_RELATIVE}" provided.'
+                    in caplog.text
+                )
+            else:
+                assert f'CA certificate filename "{CERT_FILE}" provided.' in caplog.text
+            assert f'Successfully resolved file "{CERT_PATH_ABSOLUTE}"' in caplog.text
         else:
             assert df._ca_path is None
 
     @pytest.mark.parametrize("payload", [payloads.basic_https, payloads.windows_https])
-    def test_https_missing_cert_raises_error(self, payload, caplog):
-        with pytest.raises(FileNotFoundError, match='"my_missing_cert.crt"'):
+    def test_https_missing_cert_str_raises_error(self, payload, caplog):
+        with pytest.raises(FileNotFoundError, match=r'"my_missing_cert.crt"'):
             MIDataflowIntegration.from_static_payload(
                 payload,
-                certificate_filename="my_missing_cert.crt",
+                certificate_file="my_missing_cert.crt",
             )
         assert 'CA certificate filename "my_missing_cert.crt" provided.' in caplog.text
+
+    @pytest.mark.parametrize("payload", [payloads.basic_https, payloads.windows_https])
+    def test_https_missing_cert_relative_path_raises_error(self, payload, caplog):
+        with pytest.raises(FileNotFoundError, match=r'"my_missing_cert.crt"'):
+            MIDataflowIntegration.from_static_payload(
+                payload,
+                certificate_file=Path("my_missing_cert.crt"),
+            )
+        assert 'CA certificate relative file path "my_missing_cert.crt" provided.' in caplog.text
+
+    @pytest.mark.parametrize("payload", [payloads.basic_https, payloads.windows_https])
+    def test_https_missing_cert_absolute_path_raises_error(self, payload, caplog):
+        path = Path(__file__) / "my_missing_cert.crt"
+        with pytest.raises(FileNotFoundError) as e:
+            MIDataflowIntegration.from_static_payload(
+                payload,
+                certificate_file=path,
+            )
+        assert str(path) in str(e.value)
+        assert f'CA certificate absolute file path "{path}" provided.' in caplog.text
+
+    @pytest.mark.parametrize("payload", [payloads.basic_https, payloads.windows_https])
+    def test_incorrect_cert_type(self, payload):
+        with pytest.raises(
+            TypeError,
+            match=r'Argument "certificate_file" must be of type pathlib.Path or str.*float',
+        ):
+            MIDataflowIntegration.from_static_payload(
+                payload,
+                certificate_file=123.456,
+            )
 
     @pytest.mark.parametrize("payload", [payloads.basic_http, payloads.windows_http])
     def test_http(self, payload, caplog):
@@ -169,14 +214,14 @@ class TestResumeBookmark:
 
     def test_windows_https_custom_cert(self, requests_mock, return_code, caplog):
         df = MIDataflowIntegration.from_static_payload(
-            payloads.windows_https, certificate_filename=__file__
+            payloads.windows_https, certificate_file=CERT_FILE
         )
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
         df.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
-        self._verify_request(request, return_code, verify=Path(__file__))
+        self._verify_request(request, return_code, verify=CERT_PATH_ABSOLUTE)
         assert self._resume_bookmark_logged(caplog.text, return_code)
 
     def test_windows_http(self, requests_mock, windows_http, return_code, caplog):
@@ -219,14 +264,14 @@ class TestResumeBookmark:
 
     def test_basic_https_custom_cert(self, requests_mock, return_code, caplog):
         df = MIDataflowIntegration.from_static_payload(
-            payloads.basic_https, certificate_filename=__file__
+            payloads.basic_https, certificate_file=CERT_FILE
         )
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
         df.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
-        self._verify_request(request, return_code, verify=Path(__file__), auth="basic")
+        self._verify_request(request, return_code, verify=CERT_PATH_ABSOLUTE, auth="basic")
         assert self._resume_bookmark_logged(caplog.text, return_code)
 
     def test_basic_http(self, requests_mock, basic_http, return_code, caplog):

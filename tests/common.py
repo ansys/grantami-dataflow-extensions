@@ -93,4 +93,5 @@ payloads.digest_https = payloads.digest_http.copy()
 payloads.digest_https["WorkflowUrl"] = HTTPS_URL
 
 CERT_FILE = "test_cert.crt"
-CERT_PATH = Path(__file__).parent / CERT_FILE
+CERT_PATH_ABSOLUTE = Path(__file__).parent / CERT_FILE
+CERT_PATH_RELATIVE = Path(CERT_FILE)
