@@ -30,7 +30,6 @@ Allows direct access to this data or supports spawning a Scripting Toolkit sessi
 import base64
 from io import StringIO
 import json
-import logging
 from pathlib import Path
 import sys
 from typing import Any, Dict, Tuple, Type, TypeVar, cast
@@ -50,43 +49,7 @@ try:
 except ImportError:
     pass
 
-
-def _get_dataflow_logger(logger_level: int) -> logging.Logger:
-    r"""
-    Return a logger with an attached StreamHandler.
-
-    Parameters
-    ----------
-    logger_level : int
-        The level to use for the logger. See the documentation in the Python logging
-        module for more details.
-
-    Returns
-    -------
-    logging.Logger
-        The logger with attached StreamHandler.
-
-    Notes
-    -----
-    The StreamHandler is selected because it outputs the log to stdout. This means the
-    log can be accessed in the following locations:
-
-    - The console, when running in a testing mode
-    - The Data Flow server: C:\windows\TEMP\{}\__stdout__
-    - The Data Flow API, at http://my.server.name/mi_dataflow/api/logs (MI 2023R2+) or
-       http://my.server.name/mi_workflow_2/api/logs (MI 2023R1 or earlier)
-    """
-    logger = logging.getLogger("MIDataFlowIntegration")
-    logger.level = logger_level
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    if not bool(logger.handlers):
-        ch = logging.StreamHandler()
-        ch.setLevel(logger_level)
-        ch.setFormatter(formatter)
-        ch.setStream(sys.stdout)
-        logger.addHandler(ch)
-    return logger
-
+from ._logger import logger
 
 PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClientFactory)
 
@@ -100,8 +63,6 @@ class MIDataflowIntegration:
 
     Parameters
     ----------
-    logging_level : int, default: :obj:`logging.DEBUG`
-        The logging level to apply to the logger.
     use_https : bool, default ``True``
         Whether to use HTTPS if supported by the Granta MI server.
     verify_ssl : bool, default ``True``
@@ -170,30 +131,26 @@ class MIDataflowIntegration:
 
     def __init__(
         self,
-        logging_level: int = logging.DEBUG,
         use_https: bool = True,
         verify_ssl: bool = True,
         certificate_file: str | Path | None = None,
     ) -> None:
 
         # Define properties
-        self._logging_level = logging_level
         self._supporting_files_dir = Path(sys.path[0])
 
         self._mi_session: mpy.Session | None = None
 
         # Logger
-        self._logger = _get_dataflow_logger(self._logging_level)
-
-        self._logger.debug("")
-        self._logger.debug("---------- NEW RUN ----------")
+        logger.debug("")
+        logger.debug("---------- NEW RUN ----------")
 
         # Get data from data flow
         self._df_data = self._get_standard_input()
-        self._logger.debug(f"Dataflow data received: {json.dumps(self._df_data)}")
+        logger.debug(f"Dataflow data received: {json.dumps(self._df_data)}")
 
         # Parse url
-        self._logger.debug("Parsing Data Flow URL")
+        logger.debug("Parsing Data Flow URL")
         try:
             url = self._df_data["WorkflowUrl"]
         except KeyError as e:
@@ -203,8 +160,8 @@ class MIDataflowIntegration:
         parsed_url = urlparse(url)
         self._hostname = parsed_url.netloc
         self._dataflow_path = parsed_url.path
-        self._logger.debug(f'Data Flow hostname: "{self._hostname}"')
-        self._logger.debug(f'Data Flow path: "{self._dataflow_path}"')
+        logger.debug(f'Data Flow hostname: "{self._hostname}"')
+        logger.debug(f'Data Flow path: "{self._dataflow_path}"')
 
         # Configure HTTPS
         server_supports_https = parsed_url.scheme == "https"
@@ -230,20 +187,20 @@ class MIDataflowIntegration:
 
         # HTTPS is disabled. Nothing to configure.
         if not self._https_enabled:
-            self._logger.debug("HTTPS is not enabled. Using plain HTTP.")
+            logger.debug("HTTPS is not enabled. Using plain HTTP.")
 
         # HTTPS is enabled, but verification is disabled.
         elif not verify_ssl:
             self._verify_ssl = False
-            self._logger.debug("Certificate verification is disabled.")
+            logger.debug("Certificate verification is disabled.")
 
         # HTTPS is enabled, verification is enabled, and a CA certificate has been provided as an absolute Path
         elif isinstance(certificate_file, Path) and certificate_file.is_absolute():
-            self._logger.debug(f'CA certificate absolute file path "{certificate_file}" provided.')
+            logger.debug(f'CA certificate absolute file path "{certificate_file}" provided.')
 
             self._ca_path = certificate_file
             if self._ca_path.is_file():
-                self._logger.debug(f'Successfully resolved file "{self._ca_path}"')
+                logger.debug(f'Successfully resolved file "{self._ca_path}"')
             else:
                 raise FileNotFoundError(
                     f'CA certificate "{certificate_file}" not found. Ensure the path refers to a file on disk '
@@ -257,10 +214,10 @@ class MIDataflowIntegration:
             else:
                 value_type = "relative file path"
 
-            self._logger.debug(f'CA certificate {value_type} "{certificate_file}" provided.')
+            logger.debug(f'CA certificate {value_type} "{certificate_file}" provided.')
             self._ca_path = self.supporting_files_dir / certificate_file
             if self._ca_path.is_file():
-                self._logger.debug(f'Successfully resolved file "{self._ca_path}"')
+                logger.debug(f'Successfully resolved file "{self._ca_path}"')
             else:
                 raise FileNotFoundError(
                     f'CA certificate "{certificate_file}" not found. Ensure the {value_type} is '
@@ -270,9 +227,7 @@ class MIDataflowIntegration:
 
         # HTTPS is enabled, verification is enabled, and no CA certificate has been provided
         else:
-            self._logger.debug(
-                "No CA certificate provided. Using public CAs to verify certificates."
-            )
+            logger.debug("No CA certificate provided. Using public CAs to verify certificates.")
 
     @classmethod
     def from_dict_payload(
@@ -520,22 +475,22 @@ class MIDataflowIntegration:
         mpy.Session
             A Scripting Toolkit session object.
         """
-        self._logger.debug("Creating MI Scripting Toolkit session.")
+        logger.debug("Creating MI Scripting Toolkit session.")
 
         client_credential_type = self._df_data["ClientCredentialType"]
 
         if client_credential_type == "Basic":
-            self._logger.debug("Using Basic authentication.")
+            logger.debug("Using Basic authentication.")
             username, password = self._get_basic_creds()
             session = mpy.connect(self.service_layer_url, user_name=username, password=password)
 
         elif client_credential_type == "None":
-            self._logger.debug("Using OIDC authentication.")
+            logger.debug("Using OIDC authentication.")
             access_token = self._get_oidc_token()
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
 
         elif client_credential_type == "Windows":
-            self._logger.debug("Using Windows authentication.")
+            logger.debug("Using Windows authentication.")
             session = mpy.connect(self.service_layer_url, autologon=True)
 
         else:
@@ -578,7 +533,7 @@ class MIDataflowIntegration:
         >>> client
         <JobQueueApiClient: url: http://my_mi_server/mi_servicelayer>
         """
-        self._logger.debug("Creating PyGranta client.")
+        logger.debug("Creating PyGranta client.")
 
         if not issubclass(pygranta_connection_class, ApiClientFactory):
             raise TypeError(
@@ -596,17 +551,17 @@ class MIDataflowIntegration:
         client_credential_type = self._df_data["ClientCredentialType"]
 
         if client_credential_type == "Basic":
-            self._logger.debug("Using Basic authentication.")
+            logger.debug("Using Basic authentication.")
             username, password = self._get_basic_creds()
             return builder.with_credentials(username=username, password=password)
 
         elif client_credential_type == "None":
-            self._logger.debug("Using OIDC authentication.")
+            logger.debug("Using OIDC authentication.")
             access_token = self._get_oidc_token()
             return builder.with_oidc(idp_session_configuration=config).with_token(access_token)  # type: ignore[return-value]
 
         elif client_credential_type == "Windows":
-            self._logger.debug("Using Windows authentication.")
+            logger.debug("Using Windows authentication.")
             return builder.with_autologon()
 
         else:
@@ -677,7 +632,7 @@ class MIDataflowIntegration:
         exit_code : str | int
             An exit code to inform Data Flow of success or otherwise of the business logic script.
         """
-        self._logger.debug(f"Returning control to MI Data Flow with exit code {exit_code}")
+        logger.debug(f"Returning control to MI Data Flow with exit code {exit_code}")
         headers = {"Content-Type": "application/json"}
         response_data = json.dumps(
             {
@@ -688,7 +643,7 @@ class MIDataflowIntegration:
         ).encode("utf-8")
 
         verify_argument = self._verify_ssl if self._ca_path is None else self._ca_path
-        self._logger.debug(f"Resuming bookmark using URL {self._dataflow_url}")
+        logger.debug(f"Resuming bookmark using URL {self._dataflow_url}")
 
         request_url = f"{self._dataflow_url}/api/workflows/{self._get_workflow_id(self._df_data)}"
         if self._df_data["ClientCredentialType"] in ["Basic", "None"]:
