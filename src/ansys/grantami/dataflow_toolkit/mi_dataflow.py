@@ -275,56 +275,6 @@ class MIDataflowIntegration:
             )
 
     @classmethod
-    def from_string_payload(
-        cls,
-        dataflow_payload: str,
-        **kwargs: Any,
-    ) -> "MIDataflowIntegration":
-        """
-        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a JSON formatted string.
-
-        Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
-        See :meth:`~.MIDataflowIntegration.get_payload_as_string` for information on generating a suitable payload.
-
-        Parameters
-        ----------
-        dataflow_payload : str
-            A JSON-formatted static copy of a Data Flow data payload used for testing purposes.
-        **kwargs
-            Additional keyword arguments are passed to the MIDataflowIntegration constructor.
-
-        Returns
-        -------
-        MIDataflowIntegration
-            The instantiated class.
-
-        Raises
-        ------
-        ValueError
-            If the ``dataflow_payload`` argument is not valid JSON.
-
-        Examples
-        --------
-        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
-        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload)
-
-        Additional parameters are passed through to the :class:`~MIDataflowIntegration` constructor
-
-        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
-        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload, verify_ssl=False)
-        """
-        try:
-            json.loads(dataflow_payload)
-        except json.JSONDecodeError as e:
-            raise ValueError(
-                "'dataflow_payload' is not valid JSON. Ensure the dataflow_payload argument contains a valid JSON "
-                "string and try again."
-            ) from e
-        sys.stdin = StringIO(dataflow_payload)
-        df = cls(**kwargs)
-        return df
-
-    @classmethod
     def from_dict_payload(
         cls,
         dataflow_payload: Dict[str, Any],
@@ -363,45 +313,55 @@ class MIDataflowIntegration:
         df = cls(**kwargs)
         return df
 
-    def get_payload_as_string(self, indent: bool = False, include_credentials: bool = False) -> str:
+    @classmethod
+    def from_string_payload(
+        cls,
+        dataflow_payload: str,
+        **kwargs: Any,
+    ) -> "MIDataflowIntegration":
         """
-        Get the payload used to instantiate this class as serialized JSON.
+        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a JSON formatted string.
 
-        This can be stored and provided to the :meth:`~.MIDataflowIntegration.from_string_payload` method to test
-        independently of MI Data Flow.
+        Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
+        See :meth:`~.MIDataflowIntegration.get_payload_as_string` for information on generating a suitable payload.
 
         Parameters
         ----------
-        indent : bool, default ``False``
-            Whether to indent the JSON representation of the payload. Useful if displaying the result.
-        include_credentials : bool, default ``False``
-            Whether to include the Basic or OIDC token header in the result.
+        dataflow_payload : str
+            A JSON-formatted static copy of a Data Flow data payload used for testing purposes.
+        **kwargs
+            Additional keyword arguments are passed to the :class:`~.MIDataflowIntegration` constructor.
 
         Returns
         -------
-        str
-            A static copy of a Data Flow data payload used for testing purposes.
+        MIDataflowIntegration
+            The instantiated class.
 
-        Notes
-        -----
-        By default the basic and OIDC authentication header ``AuthorizationHeader`` is replaced with the string
-        ``"<HeaderRemoved>"`` to avoid leaking credentials. To construct the appropriate header manually:
+        Raises
+        ------
+        ValueError
+            If the ``dataflow_payload`` argument is not valid JSON.
 
-        * For basic authentication, combine the username and password with a colon (``:``), Base64 encode the resulting
-          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and password
-          ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to ``"QWxpY2U6czNjcjN0"``, which
-          gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
-        * For OIDC authentication, generate a valid access token and prepend with ``"Bearer "``. For example, for the
-          token ``gaUDsgUrOiJSUzI``, the final ``AuthorizationHeader`` value would be ``"Bearer gaUDsgUrOiJSUzI"``.
+        Examples
+        --------
+        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
+        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload)
 
-        Alternatively, you can invoke this method with ``include_credentials=True``, however you **must** ensure that
-        the result is stored securely to avoid leaking credentials.
+        Additional parameters are passed through to the :class:`~MIDataflowIntegration` constructor
+
+        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
+        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload, verify_ssl=False)
         """
-        data = self.get_payload_as_dict(include_credentials=include_credentials)
-        if indent:
-            return json.dumps(data, indent=4)
-        else:
-            return json.dumps(data)
+        try:
+            json.loads(dataflow_payload)
+        except json.JSONDecodeError as e:
+            raise ValueError(
+                "'dataflow_payload' is not valid JSON. Ensure the dataflow_payload argument contains a valid JSON "
+                "string and try again."
+            ) from e
+        sys.stdin = StringIO(dataflow_payload)
+        df = cls(**kwargs)
+        return df
 
     def get_payload_as_dict(self, include_credentials: bool = False) -> Dict[str, Any]:
         """
@@ -439,6 +399,35 @@ class MIDataflowIntegration:
         if not include_credentials and data["AuthorizationHeader"]:
             data["AuthorizationHeader"] = "<HeaderRemoved>"
         return data
+
+    def get_payload_as_string(self, indent: bool = False, **kwargs: Any) -> str:
+        """
+        Get the payload used to instantiate this class and serialize to a JSON string.
+
+        This can be stored and provided to the :meth:`~.MIDataflowIntegration.from_string_payload` method to test
+        independently of MI Data Flow.
+
+        This method uses the :meth:`.MIDataflowIntegration.get_payload_as_dict` method to prepare the dictionary. See
+        the :meth:`.MIDataflowIntegration.get_payload_as_dict` documentation for more details and additional keyword
+        arguments.
+
+        Parameters
+        ----------
+        indent : bool, default ``False``
+            Whether to indent the JSON representation of the payload. Useful if displaying the result.
+        **kwargs
+            Additional keyword arguments are passed to the :meth:`.MIDataflowIntegration.get_payload_as_dict` method.
+
+        Returns
+        -------
+        str
+            A static copy of a Data Flow data payload used for testing purposes.
+        """
+        data = self.get_payload_as_dict(**kwargs)
+        if indent:
+            return json.dumps(data, indent=4)
+        else:
+            return json.dumps(data)
 
     @property
     def service_layer_url(self) -> str:
