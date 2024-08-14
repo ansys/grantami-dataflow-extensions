@@ -73,11 +73,16 @@ can be added to the workflow definition in Data Flow Designer. There are pros an
 Store files externally
 ~~~~~~~~~~~~~~~~~~~~~~
 
+.. currentmodule:: pathlib
+
 If the file is stored externally (for example in a folder C:\DataflowFiles), then you should use the
-:class:`pathlib.Path` class to ensure you are using an absolute path, which is independent of the Python working
+:class:`Path` class to ensure you are using an absolute path, which is independent of the Python working
 directory. For example::
 
    my_path = pathlib.Path("C:\DataflowFiles\my_data.csv")
+
+
+.. currentmodule:: ansys.grantami.dataflow_toolkit
 
 Or in the case of providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor::
 
@@ -86,13 +91,13 @@ Or in the case of providing a custom CA certificate to the :class:`~.MIDataflowI
 
 The advantage of this approach is that files can easily be shared across workflow definitions, and do not need to be
 uploaded to each one separately. However, the disadvantage is that the files are stored outside of the workflow
-definition, and so will not automatically be uploaded to/downloaded from the server when using Data Flow Manager.
+definition, and so does not automatically upload/download these files from the server when using Data Flow Manager.
 
 
 Store files within the workflow definition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the file is stored within the workflow definition, then Data Flow will ensure these files are available on disk at
+If the file is stored within the workflow definition, then Data Flow makes these files are available on disk at
 script runtime in a Data Flow-managed location. To access files in this location, use the
 :attr:`~.MIDataflowIntegration.supporting_files_dir` property. For example, to access a CSV file which was uploaded as a
 supporting file to Data Flow::
@@ -102,7 +107,7 @@ supporting file to Data Flow::
 
 
 In the case of providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor, the filename can
-be provided as a string, and the Data Flow Toolkit will automatically look for the file in this location::
+be provided as a string, and the Data Flow Toolkit automatically looks for the file in this location::
 
   my_cert = "my_cert.crt"
   dataflow = MIDataflowIntegration(certificate_file=my_cert)
@@ -113,7 +118,7 @@ that each workflow definition tracks the supporting files separately, and so eve
 separately if a commonly used supporting file is changed.
 
 .. warning::
-   This functionality depends on the use of the ``sys.path`` property, specifically that ``sys.path[0]`` refers
+   This property depends on the use of the ``sys.path`` property, specifically that ``sys.path[0]`` refers
    to the location of the executing script. If you intend to use supporting files with your Python scripts, you must
    not prepend additional paths to the ``sys.path`` property.
 
