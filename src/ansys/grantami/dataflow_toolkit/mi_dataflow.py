@@ -92,7 +92,7 @@ PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClient
 
 
 class MIDataflowIntegration:
-    """
+    r"""
     Represents a MI Data Flow step at the point at which the Python script is triggered.
 
     When this class is instantiated, it parses the data provided by Data Flow, enabling Granta MI API client sessions
@@ -106,10 +106,20 @@ class MIDataflowIntegration:
         Whether to use HTTPS if supported by the Granta MI server.
     verify_ssl : bool, default ``True``
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
-    certificate_filename : str | None, default ``None``
-        The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. If specified,
-        the certificate must be added to the workflow definition file in Data Flow Designer. Has no effect
-        if ``use_https`` or ``verify_ssl`` are set to ``False``.
+    certificate_file : str | pathlib.Path | None, default ``None``
+        The CA certificate file, provided as either a string or pathlib.Path object. This paraemter can be provided
+        in the following ways:
+
+        *  The filename of the certificate provided as a string. In this case, the certificate must be added to the
+           workflow definition as a supporting file.
+        *  The filename or relative path of the certificate provided as a pathlib.Path object. In this case, the
+           certificate must be added to the workflow definition as a supporting file.
+        *  The absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it
+           is recommended to store it in a location that will not be modified between workflows.
+        *  ``None``. In this case, the certifi public CA store will be used.
+
+        If specified, the certificate will be used to verify PyGranta and Data Flow requests. Has no effect if
+        ``use_https`` or ``verify_ssl`` are set to ``False``.
 
     Raises
     ------
@@ -141,10 +151,16 @@ class MIDataflowIntegration:
     >>> data_flow = MIDataflowIntegration(use_https=True, verify_ssl=False)
 
     If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate **is**
-    available, provide the private CA certificate to use this certificate for verification. The certificate must be
-    added to the workflow definition file in Data Flow Designer.
+    available, provide the private CA certificate to use this certificate for verification. If the filename only is
+    provided, then the certificate must be added to the workflow definition file in Data Flow Designer.
 
-    >>> data_flow = MIDataflowIntegration(certificate_filename="my_cert.crt")
+    >>> data_flow = MIDataflowIntegration(certificate_file="my_cert.crt")
+
+    If the certificate is stored somewhere else on disk, it can be specified by using a pathlib.Path object. In this
+    case, the certificate should not be added to the workflow definition file in Data Flow Designer.
+
+    >>> cert = pathlib.Path(r"C:\dataflow_files\certificates\my_cert.crt")
+    >>> data_flow = MIDataflowIntegration(certificate_file=cert)
 
     If HTTPS **is** configured on the server with a **public certificate**, use the default configuration to enable
     HTTPS and certificate verification against public CAs.
@@ -157,7 +173,7 @@ class MIDataflowIntegration:
         logging_level: int = logging.DEBUG,
         use_https: bool = True,
         verify_ssl: bool = True,
-        certificate_filename: str | None = None,
+        certificate_file: str | Path | None = None,
     ) -> None:
 
         # Define properties
@@ -206,6 +222,12 @@ class MIDataflowIntegration:
         )  # Verify if HTTPS is enabled unless explicitly disabled
         self._ca_path = None  # Use public certs by default
 
+        if certificate_file is not None and not isinstance(certificate_file, (Path, str)):
+            raise TypeError(
+                f'Argument "certificate_file" must be of type pathlib.Path or str. '
+                f"Value provided was of type {type(certificate_file)}."
+            )
+
         # HTTPS is disabled. Nothing to configure.
         if not self._https_enabled:
             self.logger.debug("HTTPS is not enabled. Using plain HTTP.")
@@ -215,18 +237,35 @@ class MIDataflowIntegration:
             self._verify_ssl = False
             self.logger.debug("Certificate verification is disabled.")
 
-        # HTTPS is enabled, verification is enabled, and a CA certificate has been provided
-        elif certificate_filename:
-            self.logger.debug(f'CA certificate filename "{certificate_filename}" provided.')
+        # HTTPS is enabled, verification is enabled, and a CA certificate has been provided as an absolute Path
+        elif isinstance(certificate_file, Path) and certificate_file.is_absolute():
+            self.logger.debug(f'CA certificate absolute file path "{certificate_file}" provided.')
 
-            self._ca_path = self.supporting_files_dir / certificate_filename
+            self._ca_path = certificate_file
             if self._ca_path.is_file():
                 self.logger.debug(f'Successfully resolved file "{self._ca_path}"')
             else:
                 raise FileNotFoundError(
-                    f'CA certificate "{certificate_filename}" not found. Ensure the filename is '
-                    "correct and that the certificate was included in the Workflow definition "
+                    f'CA certificate "{certificate_file}" not found. Ensure the path refers to a file on disk '
                     "and try again."
+                )
+
+        # A CA certificate has been provided as a string or a relative Path
+        elif certificate_file is not None:
+            if isinstance(certificate_file, str):
+                value_type = "filename"
+            else:
+                value_type = "relative file path"
+
+            self.logger.debug(f'CA certificate {value_type} "{certificate_file}" provided.')
+            self._ca_path = self.supporting_files_dir / certificate_file
+            if self._ca_path.is_file():
+                self.logger.debug(f'Successfully resolved file "{self._ca_path}"')
+            else:
+                raise FileNotFoundError(
+                    f'CA certificate "{certificate_file}" not found. Ensure the {value_type} is '
+                    "correct, that the certificate was included in the Workflow definition, and that "
+                    "the sys.path search path has not been modified."
                 )
 
         # HTTPS is enabled, verification is enabled, and no CA certificate has been provided
