@@ -19,15 +19,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+# This import must happen before dataflow_toolkit is imported to correct mock these libraries
+from mocks import record_lists, scripting_toolkit  # isort:skip  # noqa: F401
+
 import logging
 
 import pytest
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 from common import CERT_FILE, payloads
-
-# This import must happen before dataflow_toolkit is imported to correct mock these libraries
-from mocks import record_lists, scripting_toolkit  # isort:skip  # noqa: F401
 
 
 @pytest.fixture(scope="function")
