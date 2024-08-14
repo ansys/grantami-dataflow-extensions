@@ -137,7 +137,7 @@ def step_logic(dataflow_integration):
 
     # Write the json received from the dataflow API to the attribute
     # "Additional Processing Notes"
-    data = dataflow_integration.get_payload_as_str(indent=True)
+    data = dataflow_integration.get_payload_as_string(indent=True)
     rec.attributes["Additional Processing Notes"].value = data
     rec.set_attributes([rec.attributes["Additional Processing Notes"]])
 

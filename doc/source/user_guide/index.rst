@@ -78,7 +78,7 @@ follow the steps listed below:
    'Standalone example' or 'Scripting Toolkit Example' notebooks).
 5. Paste the ``dataflow_payload`` JSON in the corresponding variable within the ``testing()`` function. This
    allows you to debug the ``step_logic`` without re-running the workflow. See the documentation for the
-   :class:`~.MIDataFlowIntegration.get_payload_as_str` and :class:`~.MIDataFlowIntegration.get_payload_as_dict` methods
+   :meth:`~.MIDataflowIntegration.get_payload_as_string` and :meth:`~.MIDataflowIntegration.get_payload_as_dict` methods
    for more information, including how to handle Basic and OIDC authentication.
 6. Switch back to 'testing' mode by commenting ``main()`` in the ``if __name__ == "__main__":`` block and
    un-commenting ``testing()``.

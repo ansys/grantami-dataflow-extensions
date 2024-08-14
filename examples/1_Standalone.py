@@ -118,7 +118,7 @@ def step_logic(dataflow_integration):
 
     # Get the poayload from the integration option. Enable indenting
     # to make the result easier to read.
-    payload = dataflow_integration.get_payload_as_str(
+    payload = dataflow_integration.get_payload_as_string(
         indent=True,
         include_credentials=False,
     )

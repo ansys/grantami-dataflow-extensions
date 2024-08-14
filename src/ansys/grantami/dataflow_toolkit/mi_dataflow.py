@@ -245,7 +245,7 @@ class MIDataflowIntegration:
         Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a JSON formatted string.
 
         Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
-        See :meth:`~.MIDataflowIntegration.get_payload_as_str` for information on generating a suitable payload.
+        See :meth:`~.MIDataflowIntegration.get_payload_as_string` for information on generating a suitable payload.
 
         Parameters
         ----------
@@ -324,7 +324,7 @@ class MIDataflowIntegration:
         df = cls(**kwargs)
         return df
 
-    def get_payload_as_str(self, indent: bool = False, include_credentials: bool = False) -> str:
+    def get_payload_as_string(self, indent: bool = False, include_credentials: bool = False) -> str:
         """
         Get the payload used to instantiate this class as serialized JSON.
 
