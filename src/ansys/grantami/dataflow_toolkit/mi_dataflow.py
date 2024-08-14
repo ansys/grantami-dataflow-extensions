@@ -106,7 +106,7 @@ class MIDataflowIntegration:
         Whether to use HTTPS if supported by the Granta MI server.
     verify_ssl : bool, default ``True``
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
-    certificate_file : str | Path | None, default ``None``
+    certificate_file : str | pathlib.Path | None, default ``None``
         The CA certificate file, provided as either a string or pathlib.Path object. This paraemter can be provided
         in the following ways:
 
@@ -252,8 +252,8 @@ class MIDataflowIntegration:
             else:
                 raise FileNotFoundError(
                     f'CA certificate "{certificate_file}" not found. Ensure the {value_type} is '
-                    "correct and that the certificate was included in the Workflow definition "
-                    "and try again."
+                    "correct, that the certificate was included in the Workflow definition, and that "
+                    "the sys.path search path has not been modified."
                 )
 
         # HTTPS is enabled, verification is enabled, and no CA certificate has been provided
@@ -376,7 +376,7 @@ class MIDataflowIntegration:
 
         Returns
         -------
-        Path
+        pathlib.Path
             The directory containing supporting files added to the workflow definition.
         """
         return self._supporting_files_dir
