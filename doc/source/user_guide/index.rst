@@ -197,10 +197,12 @@ ones. The root of the logger hierarchy is the *root logger*, and contains all me
 instance.
 
 For single-module scripts generally used with this script, it is recommended to use the root logger directly to ensure
-that all log messages are included in the output. To create an instance of the root logger, use the following code::
+that all log messages are included in the output. To create an instance of the root logger and have it capture log
+messages of ``logging.DEBUG`` level and higher, use the following code::
 
    import logging
    logger = logging.getLogger()
+   logger.setLevel(logging.DEBUG)
 
 You can then add log statements to the logger at a certain log level as follows::
 
