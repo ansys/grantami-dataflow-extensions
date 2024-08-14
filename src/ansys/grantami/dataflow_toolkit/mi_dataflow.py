@@ -87,7 +87,7 @@ class MIDataflowIntegration:
     ------
     json.JSONDecodeError
         If the string read from stdin is invalid JSON.
-    ValueError
+    KeyError
         If the JSON read from stdin does not conform to the correct data structure.
 
     Warns
@@ -149,10 +149,7 @@ class MIDataflowIntegration:
         # Get data from data flow. Getting the payload as a santizied string performs a basic check that we have
         # an expected data structure.
         self._df_data = self._get_standard_input()
-        try:
-            sanitized_payload = self.get_payload_as_string(indent=False)
-        except KeyError as e:
-            raise ValueError("Payload is not a valid data flow payload.") from e
+        sanitized_payload = self.get_payload_as_string(indent=False)
         logger.debug(f"Dataflow data received: {sanitized_payload}")
 
         # Parse url
@@ -357,8 +354,13 @@ class MIDataflowIntegration:
         the result is stored securely to avoid leaking credentials.
         """
         data = copy.deepcopy(self._df_data)
-        if not include_credentials and data["AuthorizationHeader"]:
-            data["AuthorizationHeader"] = "<HeaderRemoved>"
+        try:
+            if not include_credentials and data["AuthorizationHeader"]:
+                data["AuthorizationHeader"] = "<HeaderRemoved>"
+        except KeyError as e:
+            raise KeyError(
+                'Key "AuthorizationHeader" not found in provided payload. Ensure the payload is correct and try again.'
+            ) from e
         return data
 
     def get_payload_as_string(self, indent: bool = False, **kwargs: Any) -> str:

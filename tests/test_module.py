@@ -159,7 +159,9 @@ class TestInstantiationFromDict:
 
     def test_invalid_dict_raises_exception(self):
         invalid_dict = {"key": "value", "key2": "value2"}
-        with pytest.raises(ValueError, match="Payload is not a valid data flow payload"):
+        with pytest.raises(
+            KeyError, match='Key "AuthorizationHeader" not found in provided payload'
+        ):
             MIDataflowIntegration.from_dict_payload(invalid_dict)
         pass
 
@@ -252,7 +254,9 @@ class TestInstantiationFromStr:
 
     def test_invalid_dict_raises_exception(self):
         invalid_json_value = '{"key": "value", "key2": "value2"}'
-        with pytest.raises(ValueError, match="Payload is not a valid data flow payload"):
+        with pytest.raises(
+            KeyError, match='Key "AuthorizationHeader" not found in provided payload'
+        ):
             MIDataflowIntegration.from_string_payload(invalid_json_value)
 
 
