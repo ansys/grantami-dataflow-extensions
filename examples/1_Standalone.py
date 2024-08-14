@@ -73,8 +73,10 @@ def main():
     # It is strongly recommended to use HTTPS in production
     # If you are using an internal certificate, you should specify the
     # CA certificate with certificate_filename=my_cert_file.crt and add the
-    # certificate to the workflow as a supporting file.
+    # certificate to the workflow as a supporting file, or use an absolute
+    # pathlib.Path object to the file on disk.
     dataflow_integration = MIDataflowIntegration(use_https=False)
+
     try:
         step_logic(dataflow_integration)
         exit_code = 0
@@ -122,7 +124,7 @@ def step_logic(dataflow_integration):
 
     # Get the poayload from the integration option. Enable indenting
     # to make the result easier to read.
-    payload = dataflow_integration.get_payload_as_str(
+    payload = dataflow_integration.get_payload_as_string(
         indent=True,
         include_credentials=False,
     )

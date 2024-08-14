@@ -58,6 +58,71 @@ Finally, modify Data Flow to use the virtual environment:
 5. Reload the Data Flow worker process in IIS Manager. Warning: This stops any actively running Workflow processes.
 
 
+Supporting files
+----------------
+
+It is common for Python scripts to depend on additional supporting files, for example:
+
+* Additional Python submodules
+* Data files, such as JSON or CSV files
+* Certificate Authority (CA) certificate files
+
+These files can either be stored in a known location on disk and referred to explicitly via an absolute path, or they
+can be added to the workflow definition in Data Flow Designer. There are pros and cons to each method.
+
+Store files externally
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. currentmodule:: pathlib
+
+If the file is stored externally (for example in a folder C:\DataflowFiles), then you should use the
+:class:`Path` class to ensure you are using an absolute path, which is independent of the Python working
+directory. For example::
+
+   my_path = pathlib.Path("C:\DataflowFiles\my_data.csv")
+
+
+.. currentmodule:: ansys.grantami.dataflow_toolkit
+
+Or in the case of providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor::
+
+  my_cert = pathlib.Path(C"\DataflowFiles\my_cert.crt")
+  dataflow = MIDataflowIntegration(certificate_file=my_cert)
+
+The advantage of this approach is that files can easily be shared across workflow definitions, and do not need to be
+uploaded to each one separately. However, the disadvantage is that the files are stored outside of the workflow
+definition, and so does not automatically upload/download these files from the server when using Data Flow Manager.
+
+
+Store files within the workflow definition
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the file is stored within the workflow definition, then Data Flow makes these files are available on disk at
+script runtime in a Data Flow-managed location. To access files in this location, use the
+:attr:`~.MIDataflowIntegration.supporting_files_dir` property. For example, to access a CSV file which was uploaded as a
+supporting file to Data Flow::
+
+   dataflow = MIDataflowIntegration()
+   my_path = dataflow.supporting_files_dir \ "my_data.csv"
+
+
+In the case of providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor, the filename can
+be provided as a string, and the Data Flow Toolkit automatically looks for the file in this location::
+
+  my_cert = "my_cert.crt"
+  dataflow = MIDataflowIntegration(certificate_file=my_cert)
+
+The advantage of this approach is that files are managed by Data Flow Designer and are automatically included in the
+workflow definition if it is uploaded/downloaded and transferred to a different system. However, the disadvantage is
+that each workflow definition tracks the supporting files separately, and so every workflow needs to be modified
+separately if a commonly used supporting file is changed.
+
+.. warning::
+   This property depends on the use of the ``sys.path`` property, specifically that ``sys.path[0]`` refers
+   to the location of the executing script. If you intend to use supporting files with your Python scripts, you must
+   not prepend additional paths to the ``sys.path`` property.
+
+
 Business logic development best practice
 ----------------------------------------
 
@@ -66,7 +131,7 @@ workflow fully defined with all required features apart from Python script execu
 with Data Flow Designer, see the `Granta MI Data Flow Designer documentation
 <https://ansyshelp.ansys.com/account/secured?returnurl=/Views/Secured/Granta/v242/en/mi_data_flow_designer/index.html>`_.
 
-To implement your business logic, you should start from one of the :ref:`ref_grantami_dataflow_toolkit_examples`, and
+To implement your business logic, you should start from one of the :ref:`ref_grantami_dataflow_toolkit_examples` and
 follow the steps listed below:
 
 1. Copy the code block from one of the examples to a local ``.py`` file.
@@ -74,19 +139,21 @@ follow the steps listed below:
    un-commenting ``main()``.
 3. Upload the script into MI Data Flow Designer, and add it to the Start or End Script sections.
 4. Run the workflow step once in MI Data Flow Manager. Obtain the ``dataflow_payload`` JSON response from the
-   logs page or the ``Additional Processing Notes`` attribute in Granta MI.
+   logs page or the ``Additional Processing Notes`` attribute in Granta MI (only available when using the
+   'Standalone example' or 'Scripting Toolkit Example' notebooks).
 5. Paste the ``dataflow_payload`` JSON in the corresponding variable within the ``testing()`` function. This
-   allows you to debug the ``step_logic`` without re-running the workflow.
-6. Edit the ``service_layer_url`` and credentials to connect to the MI session in the ``testing()`` function.
-7. Switch back to 'testing' mode by commenting ``main()`` in the ``if __name__ == "__main__":`` block and
+   allows you to debug the ``step_logic`` without re-running the workflow. See the documentation for the
+   :meth:`~.MIDataflowIntegration.get_payload_as_string` and :meth:`~.MIDataflowIntegration.get_payload_as_dict` methods
+   for more information, including how to handle Basic and OIDC authentication.
+6. Switch back to 'testing' mode by commenting ``main()`` in the ``if __name__ == "__main__":`` block and
    un-commenting ``testing()``.
-8. Modify the ``step_logic`` function with your specific logic and test locally.
-9. Once the business logic is implemented, switch back to ``main()`` in the in the ``if __name__ == "__main__":``
+7. Modify the ``step_logic`` function with your specific logic and test locally.
+8. Once the business logic is implemented, switch back to ``main()`` in the in the ``if __name__ == "__main__":``
    block (see step 1), re-upload the file into MI Data Flow Designer, and re-add it to the Start or End Script
    sections.
-10. Update the workflow and test from within MI Data Flow Manager.
+9. Update the workflow and test from within MI Data Flow Manager.
 
-Repeat steps 8 to 10 as required.
+Repeat steps 7 to 9 as required.
 
 
 .. currentmodule:: logging

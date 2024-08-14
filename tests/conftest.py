@@ -52,7 +52,7 @@ def windows_https_verify_false():
 @pytest.fixture(scope="function")
 def windows_https_custom_cert():
     return MIDataflowIntegration.from_dict_payload(
-        payloads.windows_https, certificate_filename=CERT_FILE
+        payloads.windows_https, certificate_file=CERT_FILE
     )
 
 
@@ -78,9 +78,7 @@ def basic_https_verify_false():
 
 @pytest.fixture(scope="function")
 def basic_https_custom_cert():
-    return MIDataflowIntegration.from_dict_payload(
-        payloads.basic_https, certificate_filename=CERT_FILE
-    )
+    return MIDataflowIntegration.from_dict_payload(payloads.basic_https, certificate_file=CERT_FILE)
 
 
 @pytest.fixture(scope="function")

@@ -92,7 +92,7 @@ PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClient
 
 
 class MIDataflowIntegration:
-    """
+    r"""
     Represents a MI Data Flow step at the point at which the Python script is triggered.
 
     When this class is instantiated, it parses the data provided by Data Flow, enabling Granta MI API client sessions
@@ -106,10 +106,20 @@ class MIDataflowIntegration:
         Whether to use HTTPS if supported by the Granta MI server.
     verify_ssl : bool, default ``True``
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
-    certificate_filename : str | None, default ``None``
-        The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. If specified,
-        the certificate must be added to the workflow definition file in Data Flow Designer. Has no effect
-        if ``use_https`` or ``verify_ssl`` are set to ``False``.
+    certificate_file : str | pathlib.Path | None, default ``None``
+        The CA certificate file, provided as either a string or pathlib.Path object. This paraemter can be provided
+        in the following ways:
+
+        *  The filename of the certificate provided as a string. In this case, the certificate must be added to the
+           workflow definition as a supporting file.
+        *  The filename or relative path of the certificate provided as a pathlib.Path object. In this case, the
+           certificate must be added to the workflow definition as a supporting file.
+        *  The absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it
+           is recommended to store it in a location that will not be modified between workflows.
+        *  ``None``. In this case, the certifi public CA store will be used.
+
+        If specified, the certificate will be used to verify PyGranta and Data Flow requests. Has no effect if
+        ``use_https`` or ``verify_ssl`` are set to ``False``.
 
     Raises
     ------
@@ -141,10 +151,16 @@ class MIDataflowIntegration:
     >>> data_flow = MIDataflowIntegration(use_https=True, verify_ssl=False)
 
     If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate **is**
-    available, provide the private CA certificate to use this certificate for verification. The certificate must be
-    added to the workflow definition file in Data Flow Designer.
+    available, provide the private CA certificate to use this certificate for verification. If the filename only is
+    provided, then the certificate must be added to the workflow definition file in Data Flow Designer.
 
-    >>> data_flow = MIDataflowIntegration(certificate_filename="my_cert.crt")
+    >>> data_flow = MIDataflowIntegration(certificate_file="my_cert.crt")
+
+    If the certificate is stored somewhere else on disk, it can be specified by using a pathlib.Path object. In this
+    case, the certificate should not be added to the workflow definition file in Data Flow Designer.
+
+    >>> cert = pathlib.Path(r"C:\dataflow_files\certificates\my_cert.crt")
+    >>> data_flow = MIDataflowIntegration(certificate_file=cert)
 
     If HTTPS **is** configured on the server with a **public certificate**, use the default configuration to enable
     HTTPS and certificate verification against public CAs.
@@ -157,7 +173,7 @@ class MIDataflowIntegration:
         logging_level: int = logging.DEBUG,
         use_https: bool = True,
         verify_ssl: bool = True,
-        certificate_filename: str | None = None,
+        certificate_file: str | Path | None = None,
     ) -> None:
 
         # Define properties
@@ -206,6 +222,12 @@ class MIDataflowIntegration:
         )  # Verify if HTTPS is enabled unless explicitly disabled
         self._ca_path = None  # Use public certs by default
 
+        if certificate_file is not None and not isinstance(certificate_file, (Path, str)):
+            raise TypeError(
+                f'Argument "certificate_file" must be of type pathlib.Path or str. '
+                f"Value provided was of type {type(certificate_file)}."
+            )
+
         # HTTPS is disabled. Nothing to configure.
         if not self._https_enabled:
             self._logger.debug("HTTPS is not enabled. Using plain HTTP.")
@@ -215,18 +237,35 @@ class MIDataflowIntegration:
             self._verify_ssl = False
             self._logger.debug("Certificate verification is disabled.")
 
-        # HTTPS is enabled, verification is enabled, and a CA certificate has been provided
-        elif certificate_filename:
-            self._logger.debug(f'CA certificate filename "{certificate_filename}" provided.')
+        # HTTPS is enabled, verification is enabled, and a CA certificate has been provided as an absolute Path
+        elif isinstance(certificate_file, Path) and certificate_file.is_absolute():
+            self._logger.debug(f'CA certificate absolute file path "{certificate_file}" provided.')
 
-            self._ca_path = self.supporting_files_dir / certificate_filename
+            self._ca_path = certificate_file
             if self._ca_path.is_file():
                 self._logger.debug(f'Successfully resolved file "{self._ca_path}"')
             else:
                 raise FileNotFoundError(
-                    f'CA certificate "{certificate_filename}" not found. Ensure the filename is '
-                    "correct and that the certificate was included in the Workflow definition "
+                    f'CA certificate "{certificate_file}" not found. Ensure the path refers to a file on disk '
                     "and try again."
+                )
+
+        # A CA certificate has been provided as a string or a relative Path
+        elif certificate_file is not None:
+            if isinstance(certificate_file, str):
+                value_type = "filename"
+            else:
+                value_type = "relative file path"
+
+            self._logger.debug(f'CA certificate {value_type} "{certificate_file}" provided.')
+            self._ca_path = self.supporting_files_dir / certificate_file
+            if self._ca_path.is_file():
+                self._logger.debug(f'Successfully resolved file "{self._ca_path}"')
+            else:
+                raise FileNotFoundError(
+                    f'CA certificate "{certificate_file}" not found. Ensure the {value_type} is '
+                    "correct, that the certificate was included in the Workflow definition, and that "
+                    "the sys.path search path has not been modified."
                 )
 
         # HTTPS is enabled, verification is enabled, and no CA certificate has been provided
@@ -234,56 +273,6 @@ class MIDataflowIntegration:
             self._logger.debug(
                 "No CA certificate provided. Using public CAs to verify certificates."
             )
-
-    @classmethod
-    def from_string_payload(
-        cls,
-        dataflow_payload: str,
-        **kwargs: Any,
-    ) -> "MIDataflowIntegration":
-        """
-        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a JSON formatted string.
-
-        Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
-        See :meth:`~.MIDataflowIntegration.get_payload_as_str` for information on generating a suitable payload.
-
-        Parameters
-        ----------
-        dataflow_payload : str
-            A JSON-formatted static copy of a Data Flow data payload used for testing purposes.
-        **kwargs
-            Additional keyword arguments are passed to the MIDataflowIntegration constructor.
-
-        Returns
-        -------
-        MIDataflowIntegration
-            The instantiated class.
-
-        Raises
-        ------
-        ValueError
-            If the ``dataflow_payload`` argument is not valid JSON.
-
-        Examples
-        --------
-        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
-        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload)
-
-        Additional parameters are passed through to the :class:`~MIDataflowIntegration` constructor
-
-        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
-        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload, verify_ssl=False)
-        """
-        try:
-            json.loads(dataflow_payload)
-        except json.JSONDecodeError as e:
-            raise ValueError(
-                "'dataflow_payload' is not valid JSON. Ensure the dataflow_payload argument contains a valid JSON "
-                "string and try again."
-            ) from e
-        sys.stdin = StringIO(dataflow_payload)
-        df = cls(**kwargs)
-        return df
 
     @classmethod
     def from_dict_payload(
@@ -324,45 +313,55 @@ class MIDataflowIntegration:
         df = cls(**kwargs)
         return df
 
-    def get_payload_as_str(self, indent: bool = False, include_credentials: bool = False) -> str:
+    @classmethod
+    def from_string_payload(
+        cls,
+        dataflow_payload: str,
+        **kwargs: Any,
+    ) -> "MIDataflowIntegration":
         """
-        Get the payload used to instantiate this class as serialized JSON.
+        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a JSON formatted string.
 
-        This can be stored and provided to the :meth:`~.MIDataflowIntegration.from_string_payload` method to test
-        independently of MI Data Flow.
+        Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
+        See :meth:`~.MIDataflowIntegration.get_payload_as_string` for information on generating a suitable payload.
 
         Parameters
         ----------
-        indent : bool, default ``False``
-            Whether to indent the JSON representation of the payload. Useful if displaying the result.
-        include_credentials : bool, default ``False``
-            Whether to include the Basic or OIDC token header in the result.
+        dataflow_payload : str
+            A JSON-formatted static copy of a Data Flow data payload used for testing purposes.
+        **kwargs
+            Additional keyword arguments are passed to the :class:`~.MIDataflowIntegration` constructor.
 
         Returns
         -------
-        str
-            A static copy of a Data Flow data payload used for testing purposes.
+        MIDataflowIntegration
+            The instantiated class.
 
-        Notes
-        -----
-        By default the basic and OIDC authentication header ``AuthorizationHeader`` is replaced with the string
-        ``"<HeaderRemoved>"`` to avoid leaking credentials. To construct the appropriate header manually:
+        Raises
+        ------
+        ValueError
+            If the ``dataflow_payload`` argument is not valid JSON.
 
-        * For basic authentication, combine the username and password with a colon (``:``), Base64 encode the resulting
-          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and password
-          ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to ``"QWxpY2U6czNjcjN0"``, which
-          gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
-        * For OIDC authentication, generate a valid access token and prepend with ``"Bearer "``. For example, for the
-          token ``gaUDsgUrOiJSUzI``, the final ``AuthorizationHeader`` value would be ``"Bearer gaUDsgUrOiJSUzI"``.
+        Examples
+        --------
+        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
+        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload)
 
-        Alternatively, you can invoke this method with ``include_credentials=True``, however you **must** ensure that
-        the result is stored securely to avoid leaking credentials.
+        Additional parameters are passed through to the :class:`~MIDataflowIntegration` constructor
+
+        >>> dataflow_payload = '{"WorkflowId": "67eb55ff-363a-42c7-9793-df363f1ecc83", ...: ...}'
+        >>> df = MIDataflowIntegration.from_string_payload(dataflow_payload, verify_ssl=False)
         """
-        data = self.get_payload_as_dict(include_credentials=include_credentials)
-        if indent:
-            return json.dumps(data, indent=4)
-        else:
-            return json.dumps(data)
+        try:
+            json.loads(dataflow_payload)
+        except json.JSONDecodeError as e:
+            raise ValueError(
+                "'dataflow_payload' is not valid JSON. Ensure the dataflow_payload argument contains a valid JSON "
+                "string and try again."
+            ) from e
+        sys.stdin = StringIO(dataflow_payload)
+        df = cls(**kwargs)
+        return df
 
     def get_payload_as_dict(self, include_credentials: bool = False) -> Dict[str, Any]:
         """
@@ -400,6 +399,35 @@ class MIDataflowIntegration:
         if not include_credentials and data["AuthorizationHeader"]:
             data["AuthorizationHeader"] = "<HeaderRemoved>"
         return data
+
+    def get_payload_as_string(self, indent: bool = False, **kwargs: Any) -> str:
+        """
+        Get the payload used to instantiate this class and serialize to a JSON string.
+
+        This can be stored and provided to the :meth:`~.MIDataflowIntegration.from_string_payload` method to test
+        independently of MI Data Flow.
+
+        This method uses the :meth:`.MIDataflowIntegration.get_payload_as_dict` method to prepare the dictionary. See
+        the :meth:`.MIDataflowIntegration.get_payload_as_dict` documentation for more details and additional keyword
+        arguments.
+
+        Parameters
+        ----------
+        indent : bool, default ``False``
+            Whether to indent the JSON representation of the payload. Useful if displaying the result.
+        **kwargs
+            Additional keyword arguments are passed to the :meth:`.MIDataflowIntegration.get_payload_as_dict` method.
+
+        Returns
+        -------
+        str
+            A static copy of a Data Flow data payload used for testing purposes.
+        """
+        data = self.get_payload_as_dict(**kwargs)
+        if indent:
+            return json.dumps(data, indent=4)
+        else:
+            return json.dumps(data)
 
     @property
     def service_layer_url(self) -> str:

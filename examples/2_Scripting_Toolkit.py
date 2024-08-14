@@ -12,7 +12,7 @@
 #     name: python3
 # ---
 
-# # Scripting Toolkit Example
+# # Scripting Toolkit example
 
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
 # Toolkit as part of a Data Flow operation.
@@ -80,7 +80,8 @@ def main():
     # It is strongly recommended to use HTTPS in production
     # If you are using an internal certificate, you should specify the
     # CA certificate with certificate_filename=my_cert_file.crt and add the
-    # certificate to the workflow as a supporting file.
+    # certificate to the workflow as a supporting file, or use an absolute
+    # pathlib.Path object to the file on disk.
     dataflow_integration = MIDataflowIntegration(use_https=False)
 
     try:
@@ -140,7 +141,7 @@ def step_logic(dataflow_integration):
 
     # Write the json received from the dataflow API to the attribute
     # "Additional Processing Notes"
-    data = dataflow_integration.get_payload_as_str(indent=True)
+    data = dataflow_integration.get_payload_as_string(indent=True)
     rec.attributes["Additional Processing Notes"].value = data
     rec.set_attributes([rec.attributes["Additional Processing Notes"]])
 
