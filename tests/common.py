@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 from base64 import b64encode
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -55,8 +56,10 @@ payloads.windows_http = {
     "CustomValues": {},
 }
 
+payloads.windows_http_str = json.dumps(payloads.windows_http)
 payloads.windows_https = payloads.windows_http.copy()
 payloads.windows_https["WorkflowUrl"] = HTTPS_URL
+payloads.windows_https_str = json.dumps(payloads.windows_https)
 
 USERNAME = "username"
 PASSWORD = "secret_password"
@@ -82,9 +85,11 @@ payloads.basic_http = {
     },
     "CustomValues": {},
 }
+payloads.basic_http_str = json.dumps(payloads.basic_http)
 
 payloads.basic_https = payloads.basic_http.copy()
 payloads.basic_https["WorkflowUrl"] = HTTPS_URL
+payloads.basic_https_str = json.dumps(payloads.basic_https)
 
 payloads.digest_http = payloads.windows_http.copy()
 payloads.digest_http["ClientCredentialType"] = "Digest"

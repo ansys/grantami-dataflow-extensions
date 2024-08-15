@@ -12,7 +12,7 @@
 #     name: python3
 # ---
 
-# # PyGranta RecordLists Example
+# # PyGranta RecordLists example
 
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact a Granta MI Record List as
 # part of a Data Flow step. For more information on how to use the PyGranta RecordLists package, see the
@@ -60,17 +60,15 @@ def main():
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
     # pathlib.Path object to the file on disk.
-    df = MIDataflowIntegration(use_https=False)
+    dataflow_integration = MIDataflowIntegration(use_https=False)
 
     try:
-        connection = df.configure_pygranta_connection(RecordListsConnection)
-        client = connection.connect()
-        step_logic(client, df.df_data)
+        step_logic(dataflow_integration)
         exit_code = 0
     except Exception:
         traceback.print_exc()
         exit_code = 1
-    df.resume_bookmark(exit_code)
+    dataflow_integration.resume_bookmark(exit_code)
 
 
 def testing():
@@ -96,12 +94,11 @@ def testing():
 
     # Call MIDataflowIntegration constructor with "dataflow_payload" argument
     # instead of reading data from Data Flow.
-    df = MIDataflowIntegration.from_static_payload(
+    dataflow_integration = MIDataflowIntegration.from_dict_payload(
         dataflow_payload=dataflow_payload,
         use_https=False,
     )
-    client = df.configure_pygranta_connection(RecordListsConnection).connect()
-    step_logic(client, dataflow_payload)
+    step_logic(dataflow_integration)
 
 
 # These GUIDs cannot be determined by a PyGranta package, so they are hardcoded
@@ -114,7 +111,7 @@ TABLE_GUID = "ad27baf0-42e9-4136-bc96-9dbbf116e265"  # Metals Pedigree
 RECORD_LIST_NAME = "Data Flow List"
 
 
-def step_logic(client, dataflow_payload):
+def step_logic(dataflow_integration):
     """Contains the business logic to be executed as part of the workflow.
 
     In this example, get a record list with the required name and add
@@ -122,16 +119,20 @@ def step_logic(client, dataflow_payload):
 
     Replace the code in this module with your custom business logic.
     """
+    connection = dataflow_integration.configure_pygranta_connection(RecordListsConnection)
+    client = connection.connect()
+
     try:
         record_list = next(rl for rl in client.get_all_lists() if rl.name == RECORD_LIST_NAME)
     except StopIteration:
         ValueError(f'Could not find record list with name "{RECORD_LIST_NAME}"')
         return
 
+    payload = dataflow_integration.get_payload_as_dict()
     new_item = RecordListItem(
         database_guid=DATABASE_GUID,
         table_guid=TABLE_GUID,
-        record_history_guid=dataflow_payload["Record"]["RecordHistoryGuid"],
+        record_history_guid=payload["Record"]["RecordHistoryGuid"],
     )
     client.add_items_to_list(record_list=record_list, items=[new_item])
     print("Added item to list")  # This output will be visible in the api/logs page

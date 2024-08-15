@@ -12,7 +12,7 @@
 #     name: python3
 # ---
 
-# # Scripting Toolkit Example
+# # Scripting Toolkit example
 
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
 # Toolkit as part of a Data Flow operation.
@@ -47,10 +47,11 @@
 #
 # **Warning:**
 #
-# The `step_logic()` function removes authentication information from the Data Flow payload before writing it to
-# stdout. If you are using Basic or OIDC Authentication, you should inject these credentials into the `testing()`
-# function directly, for example via an environment variable. Then modify the `mpy.Session()` call to use these
-# credentials to create a Scripting Toolkit session.
+# The `step_logic()` function generates the dataflow payload, and explicitly calls the `get_payload_as_str()` method
+# with `include_credentials=False` to avoid writing credentials to the Granta MI database. If you are using Basic or
+# OIDC Authentication and require these credentials for your business logic, you should inject these credentials into
+# the `dataflow_payload["AuthorizationHeader"]` value in the `testing()` function directly, for example via an
+# environment variable.
 # </div>
 
 # ## Additional notes
@@ -62,7 +63,6 @@
 # ## Example script
 
 # +
-import json
 import traceback
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
@@ -79,15 +79,15 @@ def main():
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
     # pathlib.Path object to the file on disk.
-    df = MIDataflowIntegration(use_https=False)
+    dataflow_integration = MIDataflowIntegration(use_https=False)
 
     try:
-        step_logic(df.mi_session, df.df_data)
+        step_logic(dataflow_integration)
         exit_code = 0
     except Exception:
         traceback.print_exc()
         exit_code = 1
-    df.resume_bookmark(exit_code)
+    dataflow_integration.resume_bookmark(exit_code)
 
 
 def testing():
@@ -113,15 +113,14 @@ def testing():
 
     # Call MIDataflowIntegration constructor with "dataflow_payload" argument
     # instead of reading data from Data Flow.
-    df = MIDataflowIntegration.from_static_payload(
+    dataflow_integration = MIDataflowIntegration.from_dict_payload(
         dataflow_payload=dataflow_payload,
         use_https=False,
     )
+    step_logic(dataflow_integration)
 
-    step_logic(df.mi_session, dataflow_payload)
 
-
-def step_logic(mi_session, dataflow_payload):
+def step_logic(dataflow_integration):
     """Contains the business logic to be executed as part of the workflow.
 
     In this example, identify the record that is the subject of the
@@ -129,18 +128,17 @@ def step_logic(mi_session, dataflow_payload):
 
     Replace the code in this module with your custom business logic.
     """
-    db_key = dataflow_payload["Record"]["Database"]
-    db = mi_session.get_db(db_key=db_key)
-    record_hguid = dataflow_payload["Record"]["RecordHistoryGuid"]
-    rec = db.get_record_by_id(hguid=record_hguid)
+    payload = dataflow_integration.get_payload_as_dict()
+    mi_session = dataflow_integration.mi_session
 
-    # Remove credentials if they are present in the payload
-    if dataflow_payload["AuthorizationHeader"]:
-        dataflow_payload["AuthorizationHeader"] = "<scrubbed>"
+    db_key = payload["Record"]["Database"]
+    db = mi_session.get_db(db_key=db_key)
+    record_hguid = payload["Record"]["RecordHistoryGuid"]
+    rec = db.get_record_by_id(hguid=record_hguid)
 
     # Write the json received from the dataflow API to the attribute
     # "Additional Processing Notes"
-    data = json.dumps(dataflow_payload, indent=4)
+    data = dataflow_integration.get_payload_as_string(indent=True)
     rec.attributes["Additional Processing Notes"].value = data
     rec.set_attributes([rec.attributes["Additional Processing Notes"]])
 
