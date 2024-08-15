@@ -92,7 +92,7 @@ PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClient
 
 
 class MIDataflowIntegration:
-    """
+    r"""
     Represents a MI Data Flow session.
 
     When this class is instantiated, it parses the data provided by Data Flow, enabling Granta MI API client sessions
@@ -106,9 +106,20 @@ class MIDataflowIntegration:
         Whether to use HTTPS if supported by the Granta MI server.
     verify_ssl : bool, default ``True``
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
-    certificate_filename : str | None, default ``None``
-        The filename of the CA certificate file. ``None`` means the certifi public CA store will be used. Has no effect
-        if ``use_https`` or ``verify_ssl`` are set to ``False``.
+    certificate_file : str | pathlib.Path | None, default ``None``
+        The CA certificate file, provided as either a string or pathlib.Path object. This paraemter can be provided
+        in the following ways:
+
+        *  The filename of the certificate provided as a string. In this case, the certificate must be added to the
+           workflow definition as a supporting file.
+        *  The filename or relative path of the certificate provided as a pathlib.Path object. In this case, the
+           certificate must be added to the workflow definition as a supporting file.
+        *  The absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it
+           is recommended to store it in a location that will not be modified between workflows.
+        *  ``None``. In this case, the certifi public CA store will be used.
+
+        If specified, the certificate will be used to verify PyGranta and Data Flow requests. Has no effect if
+        ``use_https`` or ``verify_ssl`` are set to ``False``.
 
     Warns
     -----
@@ -133,9 +144,16 @@ class MIDataflowIntegration:
     >>> data_flow = MIDataflowIntegration(use_https=True, verify_ssl=False)
 
     If HTTPS **is** configured on the server with an **internal certificate** and the private CA certificate **is**
-    available, provide the private CA certificate to use this certificate for verification.
+    available, provide the private CA certificate to use this certificate for verification. If the filename only is
+    provided, then the certificate must be added to the workflow definition file in Data Flow Designer.
 
-    >>> data_flow = MIDataflowIntegration(certificate_filename="my_cert.crt")
+    >>> data_flow = MIDataflowIntegration(certificate_file="my_cert.crt")
+
+    If the certificate is stored somewhere else on disk, it can be specified by using a pathlib.Path object. In this
+    case, the certificate should not be added to the workflow definition file in Data Flow Designer.
+
+    >>> cert = pathlib.Path(r"C:\dataflow_files\certificates\my_cert.crt")
+    >>> data_flow = MIDataflowIntegration(certificate_file=cert)
 
     If HTTPS **is** configured on the server with a **public certificate**, use the default configuration to enable
     HTTPS and certificate verification against public CAs.
@@ -148,11 +166,12 @@ class MIDataflowIntegration:
         logging_level: int = logging.DEBUG,
         use_https: bool = True,
         verify_ssl: bool = True,
-        certificate_filename: str | None = None,
+        certificate_file: str | Path | None = None,
     ) -> None:
 
         # Define properties
         self._logging_level = logging_level
+        self._supporting_files_dir = Path(sys.path[0])
 
         self._mi_session: mpy.Session | None = None
 
@@ -163,7 +182,6 @@ class MIDataflowIntegration:
         self.logger.debug("---------- NEW RUN ----------")
 
         # Get data from data flow
-        self.logger.debug("Using data provided in by MI Data Flow")
         self.df_data = self._get_standard_input()
         self.logger.debug(f"Dataflow data received: {json.dumps(self.df_data)}")
 
@@ -173,6 +191,8 @@ class MIDataflowIntegration:
         parsed_url = urlparse(url)
         self._hostname = parsed_url.netloc
         self._dataflow_path = parsed_url.path
+        self.logger.debug(f'Data Flow hostname: "{self._hostname}"')
+        self.logger.debug(f'Data Flow path: "{self._dataflow_path}"')
 
         # Configure HTTPS
         server_supports_https = parsed_url.scheme == "https"
@@ -185,9 +205,16 @@ class MIDataflowIntegration:
                 "configured on the Granta MI server."
             )
         self._https_enabled = use_https and server_supports_https
+        self._verify_ssl = (
+            self._https_enabled
+        )  # Verify if HTTPS is enabled unless explicitly disabled
+        self._ca_path = None  # Use public certs by default
 
-        self._verify_ssl = verify_ssl
-        self._ca_path = None
+        if certificate_file is not None and not isinstance(certificate_file, (Path, str)):
+            raise TypeError(
+                f'Argument "certificate_file" must be of type pathlib.Path or str. '
+                f"Value provided was of type {type(certificate_file)}."
+            )
 
         # HTTPS is disabled. Nothing to configure.
         if not self._https_enabled:
@@ -195,17 +222,38 @@ class MIDataflowIntegration:
 
         # HTTPS is enabled, but verification is disabled.
         elif not verify_ssl:
+            self._verify_ssl = False
             self.logger.debug("Certificate verification is disabled.")
 
-        # HTTPS is enabled, verification is enabled, and a CA certificate has been provided
-        elif certificate_filename:
-            self.logger.debug(f"CA certificate '{certificate_filename}' provided.")
-            self._ca_path = Path().cwd() / certificate_filename
-            if not self._ca_path.is_file():
+        # HTTPS is enabled, verification is enabled, and a CA certificate has been provided as an absolute Path
+        elif isinstance(certificate_file, Path) and certificate_file.is_absolute():
+            self.logger.debug(f'CA certificate absolute file path "{certificate_file}" provided.')
+
+            self._ca_path = certificate_file
+            if self._ca_path.is_file():
+                self.logger.debug(f'Successfully resolved file "{self._ca_path}"')
+            else:
                 raise FileNotFoundError(
-                    f'CA certificate "{certificate_filename}" not found. Ensure the filename is '
-                    "correct and that the certificate was included in the Workflow definition "
+                    f'CA certificate "{certificate_file}" not found. Ensure the path refers to a file on disk '
                     "and try again."
+                )
+
+        # A CA certificate has been provided as a string or a relative Path
+        elif certificate_file is not None:
+            if isinstance(certificate_file, str):
+                value_type = "filename"
+            else:
+                value_type = "relative file path"
+
+            self.logger.debug(f'CA certificate {value_type} "{certificate_file}" provided.')
+            self._ca_path = self.supporting_files_dir / certificate_file
+            if self._ca_path.is_file():
+                self.logger.debug(f'Successfully resolved file "{self._ca_path}"')
+            else:
+                raise FileNotFoundError(
+                    f'CA certificate "{certificate_file}" not found. Ensure the {value_type} is '
+                    "correct, that the certificate was included in the Workflow definition, and that "
+                    "the sys.path search path has not been modified."
                 )
 
         # HTTPS is enabled, verification is enabled, and no CA certificate has been provided
@@ -286,9 +334,9 @@ class MIDataflowIntegration:
             URL to Granta MI Data Flow.
         """
         if self._https_enabled:
-            return f"https://{self._hostname}/{self._dataflow_path}"
+            return f"https://{self._hostname}{self._dataflow_path}"
         else:
-            return f"http://{self._hostname}/{self._dataflow_path}"
+            return f"http://{self._hostname}{self._dataflow_path}"
 
     @property
     def mi_session(self) -> "mpy.Session":
@@ -318,6 +366,21 @@ class MIDataflowIntegration:
             ) from e
         return self._mi_session
 
+    @property
+    def supporting_files_dir(self) -> Path:
+        """
+        The directory containing the supporting files added to the workflow definition.
+
+        Will always include the script executed by the workflow, but may contain additional scripts,
+        CA certificates, and any other files as required by the business logic.
+
+        Returns
+        -------
+        pathlib.Path
+            The directory containing supporting files added to the workflow definition.
+        """
+        return self._supporting_files_dir
+
     def _start_stk_session_from_dataflow_credentials(self) -> "mpy.Session":
         """
         Create a Scripting Toolkit session based on the Data Flow authentication.
@@ -344,12 +407,9 @@ class MIDataflowIntegration:
             access_token = self._get_oidc_token()
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
 
-        elif client_credential_type == "Windows" and sys.platform == "win32":
+        elif client_credential_type == "Windows":
             self.logger.debug("Using Windows authentication.")
             session = mpy.connect(self.service_layer_url, autologon=True)
-
-        elif client_credential_type == "Windows" and sys.platform != "win32":
-            raise NotImplementedError("Windows auth available on Windows only.")
 
         else:
             raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
@@ -399,7 +459,7 @@ class MIDataflowIntegration:
             )
 
         config = SessionConfiguration(
-            cert_store_path=str(self._ca_path),
+            cert_store_path=str(self._ca_path) if self._ca_path is not None else None,
             verify_ssl=self._verify_ssl,
         )
         # We rename the first argument from 'api_url' to 'servicelayer_url', so use a positional
@@ -416,14 +476,11 @@ class MIDataflowIntegration:
         elif client_credential_type == "None":
             self.logger.debug("Using OIDC authentication.")
             access_token = self._get_oidc_token()
-            return builder.with_oidc().with_token(access_token)  # type: ignore[return-value]
+            return builder.with_oidc(idp_session_configuration=config).with_token(access_token)  # type: ignore[return-value]
 
-        elif client_credential_type == "Windows" and sys.platform == "win32":
+        elif client_credential_type == "Windows":
             self.logger.debug("Using Windows authentication.")
             return builder.with_autologon()
-
-        elif client_credential_type == "Windows" and sys.platform != "win32":
-            raise NotImplementedError("Windows auth available on Windows only.")
 
         else:
             raise NotImplementedError(f'Unknown credentials type "{client_credential_type}".')

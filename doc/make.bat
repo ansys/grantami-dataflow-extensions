@@ -43,7 +43,7 @@ goto end
 	cd "%BUILDDIR%\latex"
 	for %%f in (*.tex) do (
 	pdflatex "%%f" --interaction=nonstopmode)
-	if NOT EXIST ansys-grantami-jobqueue.pdf (
+	if NOT EXIST ansys-grantami-dataflow_toolkit.pdf (
 		Echo "no pdf generated!"
 		exit /b 1)
 	Echo "pdf generated!"

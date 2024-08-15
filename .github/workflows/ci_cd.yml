@@ -22,7 +22,7 @@ jobs:
 
   code-style:
     name: "Code style"
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: ansys/actions/code-style@v7
         with:
@@ -39,7 +39,7 @@ jobs:
 
   doc-build:
     name: Documentation Build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - name: "Run Ansys documentation building action"
       uses: ansys/actions/doc-build@v7
@@ -47,14 +47,14 @@ jobs:
         check-links: false
         dependencies: "pandoc"
         sphinxopts: "-n -W --keep-going"
+        skip-dependencies-cache: true
 
   smoke-tests:
     name: "Build wheelhouse for latest Python versions"
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     needs: code-style
     strategy:
        matrix:
-           os: [ubuntu-latest, windows-latest]
            python-version: ['3.10', '3.11', '3.12']
     steps:
       - uses: ansys/actions/build-wheelhouse@v7
@@ -63,10 +63,22 @@ jobs:
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
 
+  unit-tests:
+    name: "Run unit tests"
+    runs-on: windows-latest
+    needs: code-style
+    strategy:
+       matrix:
+           python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: ansys/actions/tests-pytest@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
   build-library:
     name: "Build library"
-    runs-on: ubuntu-latest
-    needs: [ smoke-tests, doc-build ]
+    runs-on: windows-latest
+    needs: [ smoke-tests, unit-tests, doc-build ]
     steps:
       - uses: ansys/actions/build-library@v7
         with:
