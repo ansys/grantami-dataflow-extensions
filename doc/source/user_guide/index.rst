@@ -272,6 +272,5 @@ use the following code::
 However, note that once the workflow is successfully resumed, this folder and all its contents are deleted. They are
 only persisted if the workflow is manually cancelled in Data Flow Manager.
 
-
 .. _logging API documentation: https://docs.python.org/3/library/logging.html
 .. _Logging HOWTO: https://docs.python.org/3/howto/logging.html
