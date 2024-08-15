@@ -25,8 +25,8 @@
 
 # The cell below contains an example script that adds the data flow record to a record list.
 
-# The example script sets up logging (see :ref:`ref_user_guide_logging` for more details) and includes the following
-# functions:
+# The example script sets up logging (see [Logging and debugging](../user_guide/index.rst#logging-and-debugging) for
+# more details) and includes the following functions:
 #
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.

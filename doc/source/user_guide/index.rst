@@ -221,7 +221,7 @@ There are two main types of handlers provided by the Python logging library: :cl
 :class:`StreamHandler` handlers. A :class:`FileHandler` is used to write log messages to a file on disk, and a
 :class:`StreamHandler` is used to write log messages to ``stderr`` or ``stdout``.
 
-For code using this package, it is best practice to log to ``stdout``, which is collected by Data Flow toolkit and
+For code using this package, it is best practice to log to ``stderr``, which is collected by Data Flow toolkit and
 included in the central Data Flow log. To add a :class:`StreamHandler` handler to the root logger from the previous
 section, use the following code::
 
