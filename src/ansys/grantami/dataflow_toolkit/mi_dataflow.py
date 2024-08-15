@@ -144,9 +144,9 @@ class MIDataflowIntegration:
 
         # Logger
         logger.info("")
-        logger.info("---------- NEW RUN ----------")
+        logger.info("---------- New Dataflow Toolkit instance starting ----------")
 
-        # Get data from data flow. Getting the payload as a santizied string performs a basic check that we have
+        # Get data from data flow. Getting the payload as a sanitized string performs a basic check that we have
         # an expected data structure.
         self._df_data = self._get_standard_input()
         sanitized_payload = self.get_payload_as_string(indent=False)
