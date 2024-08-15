@@ -147,7 +147,7 @@ def step_logic(dataflow_integration):
         record_history_guid=payload["Record"]["RecordHistoryGuid"],
     )
     client.add_items_to_list(record_list=record_list, items=[new_item])
-    print("Added item to list")  # This output will be visible in the api/logs page
+    logger.info("Added item to list")  # This output will be visible in the api/logs page
 
 
 if __name__ == "__main__":

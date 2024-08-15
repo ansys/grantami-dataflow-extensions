@@ -156,7 +156,7 @@ def step_logic(dataflow_integration):
 
     # Update record database
     mi_session.update([rec])
-    print("Updated MI database")  # This output will be visible in the api/logs page
+    logger.info("Updated MI database")  # This output will be visible in the api/logs page
 
 
 if __name__ == "__main__":

@@ -140,8 +140,8 @@ def step_logic(dataflow_integration):
 
     # Print the payload. This will appear in the Data Flow log.
     data = json.dumps(payload, indent=4)
-    print("Writing dataflow payload.")  # This output will be visible in the api/logs page
-    print(data)
+    logger.info("Writing dataflow payload.")  # This output will be visible in the api/logs page
+    logger.info(data)
 
 
 if __name__ == "__main__":
