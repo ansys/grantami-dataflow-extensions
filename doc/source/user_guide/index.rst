@@ -156,6 +156,8 @@ follow the steps listed below:
 Repeat steps 7 to 9 as required.
 
 
+.. _ref_user_guide_logging:
+
 .. currentmodule:: logging
 
 

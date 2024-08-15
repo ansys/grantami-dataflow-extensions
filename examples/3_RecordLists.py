@@ -25,7 +25,8 @@
 
 # The cell below contains an example script that adds the data flow record to a record list.
 
-# The example script includes the following functions:
+# The example script sets up logging (see :ref:`ref_user_guide_logging` for more details) and includes the following
+# functions:
 #
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
@@ -49,7 +50,15 @@ from ansys.grantami.recordlists import RecordListItem
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 
-logger = logging.getLogger("MIDataFlowIntegration")
+# Create an instance of the root logger
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+# Add a StreamHandler to write the output to stdout
+ch = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
 def main():
@@ -138,7 +147,7 @@ def step_logic(dataflow_integration):
         record_history_guid=payload["Record"]["RecordHistoryGuid"],
     )
     client.add_items_to_list(record_list=record_list, items=[new_item])
-    logger.info("Added item to list")  # This output will be visible in the api/logs page
+    print("Added item to list")  # This output will be visible in the api/logs page
 
 
 if __name__ == "__main__":

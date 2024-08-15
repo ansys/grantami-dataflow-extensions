@@ -30,7 +30,8 @@
 # The cell below contains an example script that uploads the data payload received by Data Flow to the workflow record.
 # However, this could be replaced with any other business logic which requires access to Granta MI resources.
 
-# The example script includes the following functions:
+# The example script sets up logging (see :ref:`ref_user_guide_logging` for more details) and includes the following
+# functions:
 #
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
@@ -68,7 +69,15 @@ import traceback
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 
-logger = logging.getLogger("MIDataFlowIntegration")
+# Create an instance of the root logger
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+# Add a StreamHandler to write the output to stdout
+ch = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
 def main():
@@ -147,7 +156,7 @@ def step_logic(dataflow_integration):
 
     # Update record database
     mi_session.update([rec])
-    logger.info("Updated MI database")  # This output will be visible in the api/logs page
+    print("Updated MI database")  # This output will be visible in the api/logs page
 
 
 if __name__ == "__main__":
