@@ -563,7 +563,7 @@ class MIDataflowIntegration:
         Warnings
         --------
         This method does not currently support OIDC. A workaround is to create the client manually and
-        authenticate with a stored OIDC refresh token. See :class:`openapi-common:OIDCSessionBuilder`
+        authenticate with a stored OIDC refresh token. See :class:`~ansys.openapi.common.OIDCSessionBuilder`
         for more details.
 
         Examples
