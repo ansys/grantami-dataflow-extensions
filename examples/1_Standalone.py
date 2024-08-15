@@ -138,9 +138,9 @@ def step_logic(dataflow_integration):
         include_credentials=False,
     )
 
-    # Print the payload. This will appear in the Data Flow log.
-    data = json.dumps(payload, indent=4)
-    logger.info("Writing dataflow payload.")  # This output will be visible in the api/logs page
+    # Log the payload. All log messages will appear in the Data Flow log.
+    data = json.dumps(payload)
+    logger.info("Writing dataflow payload.")
     logger.info(data)
 
 
