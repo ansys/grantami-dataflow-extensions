@@ -20,12 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pytest
-
-from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
+from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 from mocks.scripting_toolkit import mpy as mpy_mock
-
-# TODO: Test OIDC
 
 
 def test_windows_https(windows_https, debug_caplog):
@@ -74,12 +70,16 @@ def test_basic_http(basic_http, debug_caplog):
     assert "Using Basic authentication." in debug_caplog.text
 
 
-@pytest.mark.parametrize("fixture_name", ["digest_http", "digest_https"])
-def test_unknown_creds_raises_exception(fixture_name, request, debug_caplog):
-    df = request.getfixturevalue(fixture_name)
-    with pytest.raises(NotImplementedError, match='Unknown credentials type "Digest"'):
-        _ = df.mi_session
+def test_oidc_https(oidc_https, debug_caplog):
+    mpy_mock.connect.reset_mock()
+    _ = oidc_https.mi_session
+    mpy_mock.connect.assert_called_once_with(
+        HTTPS_SL_URL,
+        oidc=True,
+        auth_token=access_token,
+    )
     assert _scripting_toolkit_logged(debug_caplog.text)
+    assert "Using OIDC authentication." in debug_caplog.text
 
 
 def _scripting_toolkit_logged(log):

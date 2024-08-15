@@ -27,8 +27,6 @@ import pytest
 
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
 
-# TODO: Test OIDC
-
 # Don't try and merge a test with its associated '_url' test. The act of mocking the authentication method
 # means that the completed client can no longer be returned, so it's not possible to both observe the URL in
 # the completed client AND check the arguments it was created with. We must do it with two separate tests.
@@ -92,11 +90,11 @@ def test_basic_http_url(basic_http):
     assert client._service_layer_url == HTTP_SL_URL
 
 
-@pytest.mark.parametrize("fixture_name", ["digest_http", "digest_https"])
-def test_unknown_creds_raises_exception(fixture_name, request):
-    df = request.getfixturevalue(fixture_name)
-    with pytest.raises(NotImplementedError, match='Unknown credentials type "Digest"'):
-        _ = df.configure_pygranta_connection(RecordListConnection)
+def test_oidc_raises_exception(oidc_https, debug_caplog):
+    with pytest.raises(
+        NotImplementedError, match="OIDC authentication is not supported with PyGranta packages"
+    ):
+        oidc_https.configure_pygranta_connection(RecordListConnection).connect()
 
 
 def test_invalid_class_raises_exception(windows_https):

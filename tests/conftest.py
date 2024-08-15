@@ -27,69 +27,111 @@ import logging
 import pytest
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
-from common import CERT_FILE, payloads
+from common import CERT_FILE, dict_test_cases
 
 
 @pytest.fixture(scope="function")
 def windows_http():
-    return MIDataflowIntegration.from_dict_payload(payloads.windows_http, use_https=False)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["windows_http"].payload, use_https=False
+    )
 
 
 @pytest.fixture(scope="function")
 def windows_https():
-    return MIDataflowIntegration.from_dict_payload(payloads.windows_https)
+    return MIDataflowIntegration.from_dict_payload(dict_test_cases["windows_https"].payload)
 
 
 @pytest.fixture(scope="function")
 def windows_https_use_https_false():
-    return MIDataflowIntegration.from_dict_payload(payloads.windows_https, use_https=False)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["windows_https"].payload, use_https=False
+    )
 
 
 @pytest.fixture(scope="function")
 def windows_https_verify_false():
-    return MIDataflowIntegration.from_dict_payload(payloads.windows_https, verify_ssl=False)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["windows_https"].payload, verify_ssl=False
+    )
 
 
 @pytest.fixture(scope="function")
 def windows_https_custom_cert():
     return MIDataflowIntegration.from_dict_payload(
-        payloads.windows_https, certificate_file=CERT_FILE
+        dict_test_cases["windows_https"].payload, certificate_file=CERT_FILE
     )
 
 
 @pytest.fixture(scope="function")
 def basic_http():
-    return MIDataflowIntegration.from_dict_payload(payloads.basic_http, use_https=False)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["basic_http"].payload, use_https=False
+    )
 
 
 @pytest.fixture(scope="function")
 def basic_https():
-    return MIDataflowIntegration.from_dict_payload(payloads.basic_https)
+    return MIDataflowIntegration.from_dict_payload(dict_test_cases["basic_https"].payload)
 
 
 @pytest.fixture(scope="function")
 def basic_https_use_https_false():
-    return MIDataflowIntegration.from_dict_payload(payloads.basic_https, use_https=False)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["basic_https"].payload, use_https=False
+    )
 
 
 @pytest.fixture(scope="function")
 def basic_https_verify_false():
-    return MIDataflowIntegration.from_dict_payload(payloads.basic_https, verify_ssl=False)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["basic_https"].payload, verify_ssl=False
+    )
 
 
 @pytest.fixture(scope="function")
 def basic_https_custom_cert():
-    return MIDataflowIntegration.from_dict_payload(payloads.basic_https, certificate_file=CERT_FILE)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["basic_https"].payload, certificate_file=CERT_FILE
+    )
+
+
+@pytest.fixture(scope="function")
+def oidc_https():
+    return MIDataflowIntegration.from_dict_payload(dict_test_cases["oidc_https"].payload)
+
+
+@pytest.fixture(scope="function")
+def oidc_https_use_https_false():
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["oidc_https"].payload, use_https=False
+    )
+
+
+@pytest.fixture(scope="function")
+def oidc_https_verify_false():
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["oidc_https"].payload, verify_ssl=False
+    )
+
+
+@pytest.fixture(scope="function")
+def oidc_https_custom_cert():
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["oidc_https"].payload, certificate_file=CERT_FILE
+    )
 
 
 @pytest.fixture(scope="function")
 def digest_http():
-    return MIDataflowIntegration.from_dict_payload(payloads.digest_http, use_https=False)
+    return MIDataflowIntegration.from_dict_payload(
+        dict_test_cases["digest_http"].payload, use_https=False
+    )
 
 
 @pytest.fixture(scope="function")
 def digest_https():
-    return MIDataflowIntegration.from_dict_payload(payloads.digest_https)
+    return MIDataflowIntegration.from_dict_payload(dict_test_cases["digest_https"].payload)
 
 
 @pytest.fixture(scope="function")

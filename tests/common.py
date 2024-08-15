@@ -21,11 +21,15 @@
 # SOFTWARE.
 
 from base64 import b64encode
+from dataclasses import dataclass
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
-payloads = SimpleNamespace()
+from ansys.grantami.dataflow_toolkit.mi_dataflow import _AuthenticationMode
+
+CERT_FILE = "test_cert.crt"
+CERT_PATH_ABSOLUTE = Path(__file__).parent / CERT_FILE
+CERT_PATH_RELATIVE = Path(CERT_FILE)
 
 HTTP_URL = "http://my_server_name/mi_dataflow"
 HTTPS_URL = "https://my_server_name/mi_dataflow"
@@ -37,7 +41,25 @@ WORKFLOW_ID = "67eb55ff-363a-42c7-9793-df363f1ecc83"
 WORKFLOW_DEFINITION_ID = "Example; Version=1.0.0.0"
 TRANSITION_NAME = "Python_83e51914-3752-40d0-8350-c096674873e2"
 
-payloads.windows_http = {
+USERNAME = "username"
+PASSWORD = "secret_password"
+
+encoded_credentials = b64encode(f"{USERNAME}:{PASSWORD}".encode()).decode("ascii")
+basic_header = f"Basic {encoded_credentials}"
+
+access_token = "0123456789abcdefghijkl"
+oidc_header = f"Bearer {access_token}"
+
+dict_test_cases = {}
+
+
+@dataclass(frozen=True)
+class TestCase:
+    payload: dict | str
+    auth_mode: _AuthenticationMode | None = None
+
+
+windows_http_payload = {
     "WorkflowId": WORKFLOW_ID,
     "WorkflowDefinitionId": WORKFLOW_DEFINITION_ID,
     "TransitionName": TRANSITION_NAME,
@@ -55,19 +77,19 @@ payloads.windows_http = {
     },
     "CustomValues": {},
 }
+dict_test_cases["windows_http"] = TestCase(
+    payload=windows_http_payload,
+    auth_mode=_AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION,
+)
 
-payloads.windows_http_str = json.dumps(payloads.windows_http)
-payloads.windows_https = payloads.windows_http.copy()
-payloads.windows_https["WorkflowUrl"] = HTTPS_URL
-payloads.windows_https_str = json.dumps(payloads.windows_https)
+windows_https_payload = windows_http_payload.copy()
+windows_https_payload["WorkflowUrl"] = HTTPS_URL
+dict_test_cases["windows_https"] = TestCase(
+    payload=windows_https_payload,
+    auth_mode=_AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION,
+)
 
-USERNAME = "username"
-PASSWORD = "secret_password"
-
-encoded_credentials = b64encode(f"{USERNAME}:{PASSWORD}".encode()).decode("ascii")
-basic_header = f"Basic {encoded_credentials}"
-
-payloads.basic_http = {
+basic_http_payload = {
     "WorkflowId": WORKFLOW_ID,
     "WorkflowDefinitionId": WORKFLOW_DEFINITION_ID,
     "TransitionName": TRANSITION_NAME,
@@ -85,18 +107,44 @@ payloads.basic_http = {
     },
     "CustomValues": {},
 }
-payloads.basic_http_str = json.dumps(payloads.basic_http)
+dict_test_cases["basic_http"] = TestCase(
+    payload=basic_http_payload,
+    auth_mode=_AuthenticationMode.BASIC_AUTHENTICATION,
+)
 
-payloads.basic_https = payloads.basic_http.copy()
-payloads.basic_https["WorkflowUrl"] = HTTPS_URL
-payloads.basic_https_str = json.dumps(payloads.basic_https)
+basic_https_payload = basic_http_payload.copy()
+basic_https_payload["WorkflowUrl"] = HTTPS_URL
+dict_test_cases["basic_https"] = TestCase(
+    payload=basic_https_payload,
+    auth_mode=_AuthenticationMode.BASIC_AUTHENTICATION,
+)
 
-payloads.digest_http = payloads.windows_http.copy()
-payloads.digest_http["ClientCredentialType"] = "Digest"
+oidc_http_payload = basic_http_payload.copy()
+oidc_http_payload["ClientCredentialType"] = "None"
+oidc_http_payload["AuthorizationHeader"] = oidc_header
+dict_test_cases["oidc_http"] = TestCase(
+    payload=oidc_http_payload,
+    auth_mode=_AuthenticationMode.OIDC_AUTHENTICATION,
+)
 
-payloads.digest_https = payloads.digest_http.copy()
-payloads.digest_https["WorkflowUrl"] = HTTPS_URL
+oidc_https_payload = oidc_http_payload.copy()
+oidc_https_payload["WorkflowUrl"] = HTTPS_URL
+dict_test_cases["oidc_https"] = TestCase(
+    payload=oidc_https_payload,
+    auth_mode=_AuthenticationMode.OIDC_AUTHENTICATION,
+)
 
-CERT_FILE = "test_cert.crt"
-CERT_PATH_ABSOLUTE = Path(__file__).parent / CERT_FILE
-CERT_PATH_RELATIVE = Path(CERT_FILE)
+digest_http_payload = basic_http_payload.copy()
+digest_http_payload["ClientCredentialType"] = "Digest"
+dict_test_cases["digest_http"] = TestCase(
+    payload=digest_http_payload,
+)
+digest_https_payload = digest_http_payload.copy()
+digest_https_payload["WorkflowUrl"] = HTTPS_URL
+dict_test_cases["digest_https"] = TestCase(
+    payload=digest_https_payload,
+)
+
+str_test_cases = {
+    k: TestCase(json.dumps(v.payload), auth_mode=v.auth_mode) for k, v in dict_test_cases.items()
+}
