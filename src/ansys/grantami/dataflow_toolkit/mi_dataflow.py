@@ -562,7 +562,7 @@ class MIDataflowIntegration:
 
         Warnings
         --------
-        This class does not currently support OIDC. A workaround is to create the client manually and
+        This method does not currently support OIDC. A workaround is to create the client manually and
         authenticate with a stored OIDC refresh token. See :class:`openapi-common:OIDCSessionBuilder`
         for more details.
 
