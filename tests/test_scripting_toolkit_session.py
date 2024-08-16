@@ -26,7 +26,7 @@ from mocks.scripting_toolkit import mpy as mpy_mock
 
 def test_windows_https(windows_https, debug_caplog):
     mpy_mock.connect.reset_mock()
-    _ = windows_https.mi_session
+    _ = windows_https.dataflow_integration.mi_session
     mpy_mock.connect.assert_called_once_with(
         HTTPS_SL_URL,
         autologon=True,
@@ -37,7 +37,7 @@ def test_windows_https(windows_https, debug_caplog):
 
 def test_windows_http(windows_http, debug_caplog):
     mpy_mock.connect.reset_mock()
-    _ = windows_http.mi_session
+    _ = windows_http.dataflow_integration.mi_session
     mpy_mock.connect.assert_called_once_with(
         HTTP_SL_URL,
         autologon=True,
@@ -48,7 +48,7 @@ def test_windows_http(windows_http, debug_caplog):
 
 def test_basic_https(basic_https, debug_caplog):
     mpy_mock.connect.reset_mock()
-    _ = basic_https.mi_session
+    _ = basic_https.dataflow_integration.mi_session
     mpy_mock.connect.assert_called_once_with(
         HTTPS_SL_URL,
         user_name=USERNAME,
@@ -60,7 +60,7 @@ def test_basic_https(basic_https, debug_caplog):
 
 def test_basic_http(basic_http, debug_caplog):
     mpy_mock.connect.reset_mock()
-    _ = basic_http.mi_session
+    _ = basic_http.dataflow_integration.mi_session
     mpy_mock.connect.assert_called_once_with(
         HTTP_SL_URL,
         user_name=USERNAME,
@@ -72,7 +72,7 @@ def test_basic_http(basic_http, debug_caplog):
 
 def test_oidc_https(oidc_https, debug_caplog):
     mpy_mock.connect.reset_mock()
-    _ = oidc_https.mi_session
+    _ = oidc_https.dataflow_integration.mi_session
     mpy_mock.connect.assert_called_once_with(
         HTTPS_SL_URL,
         oidc=True,

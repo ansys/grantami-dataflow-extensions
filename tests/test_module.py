@@ -20,11 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from abc import ABC
 import json
 from pathlib import Path
 import sys
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 import pytest
 
@@ -41,46 +40,31 @@ from common import (
     WORKFLOW_DEFINITION_ID,
     WORKFLOW_ID,
     basic_header,
-    dict_test_cases,
     oidc_header,
-    str_test_cases,
 )
 
-if TYPE_CHECKING:
-    from common import TestCase as _TestCase
 
+class TestInstantiationFromDict:
 
-class InstantiationTests(ABC):
-    test_cases: dict[str, "_TestCase"]
-
-    def payload(self, test_case: str) -> dict | str:
-        return self.test_cases[test_case].payload
-
-    def auth_mode(self, test_case: str) -> "AuthenticationMode | None":
-        return self.test_cases[test_case].auth_mode
-
-
-class TestInstantiationFromDict(InstantiationTests):
-    test_cases = dict_test_cases
-
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https", "oidc_https"])
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https", "oidc_https"])
     @pytest.mark.parametrize("verify_ssl", [True, False])
     @pytest.mark.parametrize(
         "certificate_filename", [None, CERT_FILE, CERT_PATH_ABSOLUTE, CERT_PATH_RELATIVE]
     )
-    def test_https(self, test_case, verify_ssl, certificate_filename, debug_caplog):
+    def test_https(self, test_case_name, request, verify_ssl, certificate_filename, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
         df = MIDataflowIntegration.from_dict_payload(
-            self.payload(test_case),
+            test_case.payload,
             verify_ssl=verify_ssl,
             certificate_file=certificate_filename,
         )
 
-        assert df._df_data == self.payload(test_case)
+        assert df._df_data == test_case.payload
         assert TRANSITION_NAME in debug_caplog.text
 
         assert self._url_elements_logged(debug_caplog.text)
 
-        assert df._authentication_mode == self.auth_mode(test_case)
+        assert df._authentication_mode == test_case.auth_mode
 
         assert df._https_enabled is True
         assert "HTTPS is not enabled. Using plain HTTP." not in debug_caplog.text
@@ -109,106 +93,125 @@ class TestInstantiationFromDict(InstantiationTests):
         else:
             assert df._ca_path is None
 
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https"])
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https"])
     @pytest.mark.parametrize("verify_ssl", [True, False])
     @pytest.mark.parametrize(
         "certificate_filename", [None, CERT_FILE, CERT_PATH_ABSOLUTE, CERT_PATH_RELATIVE]
     )
-    def test_disable_https(self, test_case, verify_ssl, certificate_filename, debug_caplog):
+    def test_disable_https(
+        self, test_case_name, request, verify_ssl, certificate_filename, debug_caplog
+    ):
+        test_case = request.getfixturevalue(test_case_name)
         df = MIDataflowIntegration.from_dict_payload(
-            self.payload(test_case),
+            test_case.payload,
             use_https=False,
             verify_ssl=verify_ssl,
             certificate_file=certificate_filename,
         )
 
-        assert df._df_data == self.payload(test_case)
+        assert df._df_data == test_case.payload
         assert TRANSITION_NAME in debug_caplog.text
 
         assert self._url_elements_logged(debug_caplog.text)
-        assert df._authentication_mode == self.auth_mode(test_case)
+        assert df._authentication_mode == test_case.auth_mode
         assert df._https_enabled is False
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
         assert df._verify_ssl is False
         assert df._ca_path is None
 
-    def test_oidc_disable_https_raises_exception(self):
+    def test_oidc_disable_https_raises_exception(self, oidc_https):
         with pytest.raises(
             ValueError, match="HTTPS cannot be disabled when using OIDC authentication"
         ):
             MIDataflowIntegration.from_dict_payload(
-                self.payload("oidc_https"),
+                oidc_https.payload,
                 use_https=False,
             )
 
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https", "oidc_https"])
-    def test_https_missing_cert_str_raises_error(self, test_case, debug_caplog):
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https", "oidc_https"])
+    def test_https_missing_cert_str_raises_error(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
         with pytest.raises(FileNotFoundError, match=r'"my_missing_cert.crt"'):
             MIDataflowIntegration.from_dict_payload(
-                self.payload(test_case),
+                test_case.payload,
                 certificate_file="my_missing_cert.crt",
             )
         assert 'CA certificate filename "my_missing_cert.crt" provided.' in debug_caplog.text
 
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https", "oidc_https"])
-    def test_https_missing_cert_relative_path_raises_error(self, test_case, debug_caplog):
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https", "oidc_https"])
+    def test_https_missing_cert_relative_path_raises_error(
+        self, test_case_name, request, debug_caplog
+    ):
+        test_case = request.getfixturevalue(test_case_name)
         with pytest.raises(FileNotFoundError, match=r'"my_missing_cert.crt"'):
             MIDataflowIntegration.from_dict_payload(
-                self.payload(test_case),
+                test_case.payload,
                 certificate_file=Path("my_missing_cert.crt"),
             )
         assert (
             'CA certificate relative file path "my_missing_cert.crt" provided.' in debug_caplog.text
         )
 
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https", "oidc_https"])
-    def test_https_missing_cert_absolute_path_raises_error(self, test_case, debug_caplog):
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https", "oidc_https"])
+    def test_https_missing_cert_absolute_path_raises_error(
+        self, test_case_name, request, debug_caplog
+    ):
+        test_case = request.getfixturevalue(test_case_name)
         path = Path(__file__) / "my_missing_cert.crt"
         with pytest.raises(FileNotFoundError) as e:
             MIDataflowIntegration.from_dict_payload(
-                self.payload(test_case),
+                test_case.payload,
                 certificate_file=path,
             )
         assert str(path) in str(e.value)
         assert f'CA certificate absolute file path "{path}" provided.' in debug_caplog.text
 
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https", "oidc_https"])
-    def test_incorrect_cert_type(self, test_case):
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https", "oidc_https"])
+    def test_incorrect_cert_type(self, test_case_name, request):
+        test_case = request.getfixturevalue(test_case_name)
         with pytest.raises(
             TypeError,
             match=r'Argument "certificate_file" must be of type pathlib.Path or str.*float',
         ):
             MIDataflowIntegration.from_dict_payload(
-                self.payload(test_case),
+                test_case.payload,
                 certificate_file=123.456,
             )
 
-    @pytest.mark.parametrize("test_case", ["basic_http", "windows_http"])
-    def test_http(self, test_case, debug_caplog):
-        df = MIDataflowIntegration.from_dict_payload(self.payload(test_case), use_https=False)
-        assert df._df_data == self.payload(test_case)
+    @pytest.mark.parametrize("test_case_name", ["basic_http", "windows_http"])
+    def test_http(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
+        df = MIDataflowIntegration.from_dict_payload(test_case.payload, use_https=False)
+        assert df._df_data == test_case.payload
         assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
-        assert df._authentication_mode == self.auth_mode(test_case)
+        assert df._authentication_mode == test_case.auth_mode
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
         assert df._https_enabled is False
 
-    def test_oidc_in_http_mode_raises_exception(self):
+    def test_oidc_in_http_mode_raises_exception(self, oidc_http):
         with pytest.raises(
             ValueError, match="HTTPS cannot be disabled when using OIDC authentication"
         ):
             MIDataflowIntegration.from_dict_payload(
-                self.payload("oidc_http"),
+                oidc_http.payload,
                 use_https=False,
             )
 
-    @pytest.mark.parametrize("test_case", ["basic_http", "windows_http"])
-    def test_http_in_https_mode_raises_warning(self, test_case, debug_caplog):
+    @pytest.mark.parametrize("test_case_name", ["basic_http", "windows_http"])
+    def test_http_in_https_mode_raises_warning(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
         with pytest.warns(UserWarning, match='"use_https" is set to True'):
-            MIDataflowIntegration.from_dict_payload(self.payload(test_case))
+            MIDataflowIntegration.from_dict_payload(test_case.payload)
         assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
+
+    @pytest.mark.parametrize("test_case_name", ["digest_http", "digest_https"])
+    def test_unknown_creds_raises_exception(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
+        with pytest.raises(NotImplementedError, match='Unknown ClientCredentialType "Digest"'):
+            MIDataflowIntegration.from_dict_payload(test_case.payload)
 
     def _url_elements_logged(self, log):
         hostname_logged = 'Data Flow hostname: "my_server_name"' in log
@@ -223,33 +226,27 @@ class TestInstantiationFromDict(InstantiationTests):
             MIDataflowIntegration.from_dict_payload(invalid_dict)
         pass
 
-    @pytest.mark.parametrize("test_case", ["digest_http", "digest_https"])
-    def test_unknown_creds_raises_exception(self, test_case, debug_caplog):
-        with pytest.raises(NotImplementedError, match='Unknown ClientCredentialType "Digest"'):
-            MIDataflowIntegration.from_dict_payload(self.payload(test_case))
 
-
-class TestInstantiationFromStr(InstantiationTests):
-    test_cases = str_test_cases
-
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https", "oidc_https"])
+class TestInstantiationFromStr:
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https", "oidc_https"])
     @pytest.mark.parametrize("verify_ssl", [True, False])
     @pytest.mark.parametrize(
         "certificate_filename", [None, CERT_FILE, CERT_PATH_ABSOLUTE, CERT_PATH_RELATIVE]
     )
-    def test_https(self, test_case, verify_ssl, certificate_filename, debug_caplog):
+    def test_https(self, test_case_name, request, verify_ssl, certificate_filename, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
         df = MIDataflowIntegration.from_string_payload(
-            self.payload(test_case),
+            test_case.payload_str,
             verify_ssl=verify_ssl,
             certificate_file=certificate_filename,
         )
 
-        assert self._payload_parsed(self.payload(test_case), df._df_data)
+        assert self._payload_parsed(test_case.payload_str, df._df_data)
         assert TRANSITION_NAME in debug_caplog.text
 
         assert self._url_elements_logged(debug_caplog.text)
 
-        assert df._authentication_mode == self.auth_mode(test_case)
+        assert df._authentication_mode == test_case.auth_mode
         assert df._https_enabled is True
         assert "HTTPS is not enabled. Using plain HTTP." not in debug_caplog.text
 
@@ -277,82 +274,80 @@ class TestInstantiationFromStr(InstantiationTests):
         else:
             assert df._ca_path is None
 
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https"])
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https"])
     @pytest.mark.parametrize("verify_ssl", [True, False])
     @pytest.mark.parametrize(
         "certificate_filename", [None, CERT_FILE, CERT_PATH_ABSOLUTE, CERT_PATH_RELATIVE]
     )
-    def test_disable_https(self, test_case, verify_ssl, certificate_filename, debug_caplog):
+    def test_disable_https(
+        self, test_case_name, request, verify_ssl, certificate_filename, debug_caplog
+    ):
+        test_case = request.getfixturevalue(test_case_name)
         df = MIDataflowIntegration.from_string_payload(
-            self.payload(test_case),
+            test_case.payload_str,
             use_https=False,
             verify_ssl=verify_ssl,
             certificate_file=certificate_filename,
         )
 
-        assert self._payload_parsed(self.payload(test_case), df._df_data)
+        assert self._payload_parsed(test_case.payload_str, df._df_data)
         assert TRANSITION_NAME in debug_caplog.text
 
         assert self._url_elements_logged(debug_caplog.text)
-        assert df._authentication_mode == self.auth_mode(test_case)
+        assert df._authentication_mode == test_case.auth_mode
         assert df._https_enabled is False
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
         assert df._verify_ssl is False
         assert df._ca_path is None
 
-    def test_oidc_disable_https_raises_exception(self):
+    def test_oidc_disable_https_raises_exception(self, oidc_https):
         with pytest.raises(
             ValueError, match="HTTPS cannot be disabled when using OIDC authentication"
         ):
             MIDataflowIntegration.from_string_payload(
-                self.payload("oidc_https"),
+                oidc_https.payload_str,
                 use_https=False,
             )
 
-    @pytest.mark.parametrize("test_case", ["basic_https", "windows_https", "oidc_https"])
-    def test_https_missing_cert_raises_error(self, test_case, debug_caplog):
+    @pytest.mark.parametrize("test_case_name", ["basic_https", "windows_https", "oidc_https"])
+    def test_https_missing_cert_raises_error(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
         with pytest.raises(FileNotFoundError, match='"my_missing_cert.crt"'):
             MIDataflowIntegration.from_string_payload(
-                self.payload(test_case),
+                test_case.payload_str,
                 certificate_file="my_missing_cert.crt",
             )
         assert 'CA certificate filename "my_missing_cert.crt" provided.' in debug_caplog.text
 
-    @pytest.mark.parametrize("test_case", ["basic_http", "windows_http"])
-    def test_http(self, test_case, debug_caplog):
-        df = MIDataflowIntegration.from_string_payload(self.payload(test_case), use_https=False)
-        assert self._payload_parsed(self.payload(test_case), df._df_data)
+    @pytest.mark.parametrize("test_case_name", ["basic_http", "windows_http"])
+    def test_http(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
+        df = MIDataflowIntegration.from_string_payload(test_case.payload_str, use_https=False)
+        assert self._payload_parsed(test_case.payload_str, df._df_data)
         assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
-        assert df._authentication_mode == self.auth_mode(test_case)
+        assert df._authentication_mode == test_case.auth_mode
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
         assert df._https_enabled is False
 
-    def test_oidc_in_http_mode_raises_exception(self):
+    def test_oidc_in_http_mode_raises_exception(self, oidc_http):
         with pytest.raises(
             ValueError, match="HTTPS cannot be disabled when using OIDC authentication"
         ):
             MIDataflowIntegration.from_string_payload(
-                self.payload("oidc_http"),
+                oidc_http.payload_str,
                 use_https=False,
             )
 
-    @pytest.mark.parametrize("test_case", ["basic_http", "windows_http"])
-    def test_http_in_https_mode_raises_warning(self, test_case, debug_caplog):
+    @pytest.mark.parametrize("test_case_name", ["basic_http", "windows_http"])
+    def test_http_in_https_mode_raises_warning(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
         with pytest.warns(UserWarning, match='"use_https" is set to True'):
-            df = MIDataflowIntegration.from_string_payload(self.payload(test_case))
+            df = MIDataflowIntegration.from_string_payload(test_case.payload_str)
         assert TRANSITION_NAME in debug_caplog.text
         assert self._url_elements_logged(debug_caplog.text)
         assert "HTTPS is not enabled. Using plain HTTP." in debug_caplog.text
         assert df._https_enabled is False
-
-    def _url_elements_logged(self, log):
-        hostname_logged = 'Data Flow hostname: "my_server_name"' in log
-        path_logged = 'Data Flow path: "/mi_dataflow"' in log
-        return hostname_logged and path_logged
-
-    def _payload_parsed(self, payload, df_data):
-        return df_data == json.loads(payload)
 
     def test_invalid_json_raises_exception(self):
         invalid_json_syntax = "Invalid JSON"
@@ -366,22 +361,31 @@ class TestInstantiationFromStr(InstantiationTests):
         ):
             MIDataflowIntegration.from_string_payload(invalid_json_value)
 
-    @pytest.mark.parametrize("test_case", ["digest_http", "digest_https"])
-    def test_unknown_creds_raises_exception(self, test_case, debug_caplog):
+    @pytest.mark.parametrize("test_case_name", ["digest_http", "digest_https"])
+    def test_unknown_creds_raises_exception(self, test_case_name, request, debug_caplog):
+        test_case = request.getfixturevalue(test_case_name)
         with pytest.raises(NotImplementedError, match='Unknown ClientCredentialType "Digest"'):
-            MIDataflowIntegration.from_string_payload(self.payload(test_case))
+            MIDataflowIntegration.from_string_payload(test_case.payload_str)
+
+    def _url_elements_logged(self, log):
+        hostname_logged = 'Data Flow hostname: "my_server_name"' in log
+        path_logged = 'Data Flow path: "/mi_dataflow"' in log
+        return hostname_logged and path_logged
+
+    def _payload_parsed(self, payload, df_data):
+        return df_data == json.loads(payload)
 
 
 class TestPayloadAccess:
     @pytest.mark.parametrize("fixture_name", ["windows_https", "windows_http"])
     def test_payload_auth_header_is_empty(self, fixture_name, request):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         data = df.get_payload_as_dict()
         assert not data["AuthorizationHeader"]
 
     @pytest.mark.parametrize("fixture_name", ["basic_https", "basic_http", "oidc_https"])
     def test_payload_auth_header_is_scrubbed(self, fixture_name, request):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         data = df.get_payload_as_dict()
         assert data["AuthorizationHeader"] == "<HeaderRemoved>"
 
@@ -389,7 +393,7 @@ class TestPayloadAccess:
         "fixture_name", ["basic_https", "basic_http", "windows_https", "windows_http", "oidc_https"]
     )
     def test_payload_serialized_to_str(self, fixture_name, request):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         data = df.get_payload_as_string()
         assert "AuthorizationHeader" in data
 
@@ -397,22 +401,22 @@ class TestPayloadAccess:
 class TestURLs:
     @pytest.mark.parametrize("fixture_name", ["windows_https", "basic_https", "oidc_https"])
     def test_service_layer_url_https(self, fixture_name, request):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         assert df.service_layer_url == HTTPS_SL_URL
 
     @pytest.mark.parametrize("fixture_name", ["windows_http", "basic_http"])
     def test_service_layer_url_http(self, fixture_name, request):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         assert df.service_layer_url == HTTP_SL_URL
 
     @pytest.mark.parametrize("fixture_name", ["windows_https", "basic_https", "oidc_https"])
     def test_dataflow_url_https(self, fixture_name, request):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         assert df._dataflow_url == HTTPS_URL
 
     @pytest.mark.parametrize("fixture_name", ["windows_http", "basic_http"])
     def test_dataflow_url_http(self, fixture_name, request):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         assert df._dataflow_url == HTTP_URL
 
 
@@ -420,7 +424,7 @@ class TestURLs:
 class TestResumeBookmark:
     def test_windows_https(self, requests_mock, windows_https, return_code, debug_caplog):
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
-        windows_https.resume_bookmark(return_code)
+        windows_https.dataflow_integration.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
@@ -431,7 +435,7 @@ class TestResumeBookmark:
         self, requests_mock, windows_https_use_https_false, return_code, debug_caplog
     ):
         requests_mock.post(f"{HTTP_URL}/api/workflows/{WORKFLOW_ID}")
-        windows_https_use_https_false.resume_bookmark(return_code)
+        windows_https_use_https_false.dataflow_integration.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
@@ -442,7 +446,7 @@ class TestResumeBookmark:
         self, requests_mock, windows_https_verify_false, return_code, debug_caplog
     ):
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
-        windows_https_verify_false.resume_bookmark(return_code)
+        windows_https_verify_false.dataflow_integration.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
@@ -453,7 +457,7 @@ class TestResumeBookmark:
         self, requests_mock, windows_https_custom_cert, return_code, debug_caplog
     ):
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
-        windows_https_custom_cert.resume_bookmark(return_code)
+        windows_https_custom_cert.dataflow_integration.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
@@ -462,7 +466,7 @@ class TestResumeBookmark:
 
     def test_windows_http(self, requests_mock, windows_http, return_code, debug_caplog):
         requests_mock.post(f"{HTTP_URL}/api/workflows/{WORKFLOW_ID}")
-        windows_http.resume_bookmark(return_code)
+        windows_http.dataflow_integration.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
@@ -481,7 +485,7 @@ class TestResumeBookmark:
         return_code,
         debug_caplog,
     ):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
         df.resume_bookmark(return_code)
 
@@ -494,7 +498,7 @@ class TestResumeBookmark:
         self, requests_mock, basic_https_use_https_false, return_code, debug_caplog
     ):
         requests_mock.post(f"{HTTP_URL}/api/workflows/{WORKFLOW_ID}")
-        basic_https_use_https_false.resume_bookmark(return_code)
+        basic_https_use_https_false.dataflow_integration.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
@@ -514,7 +518,7 @@ class TestResumeBookmark:
         return_code,
         debug_caplog,
     ):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
         df.resume_bookmark(return_code)
 
@@ -536,7 +540,7 @@ class TestResumeBookmark:
         return_code,
         debug_caplog,
     ):
-        df = request.getfixturevalue(fixture_name)
+        df = request.getfixturevalue(fixture_name).dataflow_integration
         requests_mock.post(f"{HTTPS_URL}/api/workflows/{WORKFLOW_ID}")
         df.resume_bookmark(return_code)
 
@@ -547,7 +551,7 @@ class TestResumeBookmark:
 
     def test_basic_http(self, requests_mock, basic_http, return_code, debug_caplog):
         requests_mock.post(f"{HTTP_URL}/api/workflows/{WORKFLOW_ID}")
-        basic_http.resume_bookmark(return_code)
+        basic_http.dataflow_integration.resume_bookmark(return_code)
 
         assert requests_mock.call_count == 1
         request = requests_mock.request_history[0]
@@ -584,5 +588,5 @@ class TestResumeBookmark:
     "fixture_name", ["basic_http", "basic_https", "windows_http", "windows_https", "oidc_https"]
 )
 def test_supporting_files(fixture_name, request):
-    df = request.getfixturevalue(fixture_name)
+    df = request.getfixturevalue(fixture_name).dataflow_integration
     assert df.supporting_files_dir == Path(sys.path[0])

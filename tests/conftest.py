@@ -22,116 +22,194 @@
 # This import must happen before dataflow_toolkit is imported to correct mock these libraries
 from mocks import record_lists, scripting_toolkit  # isort:skip  # noqa: F401
 
+from copy import deepcopy
+from dataclasses import dataclass
+import json
 import logging
+from pathlib import Path
 
 import pytest
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
-from common import CERT_FILE, dict_test_cases
+from ansys.grantami.dataflow_toolkit.mi_dataflow import _AuthenticationMode
+from common import (
+    CERT_FILE,
+    HTTP_URL,
+    HTTPS_URL,
+    TRANSITION_NAME,
+    WORKFLOW_DEFINITION_ID,
+    WORKFLOW_ID,
+    basic_header,
+    oidc_header,
+)
+
+
+@dataclass
+class TestCase:
+    payload: dict | str
+    use_https: bool | None = True
+    verify_ssl: bool | None = True
+    certificate_file: Path | str | None = None
+    auth_mode: _AuthenticationMode | None = None
+
+    @property
+    def payload_str(self) -> str:
+        return json.dumps(self.payload)
+
+    @property
+    def dataflow_integration(self) -> MIDataflowIntegration | None:
+        kwargs = {"dataflow_payload": self.payload}
+        if self.use_https is not None:
+            kwargs["use_https"] = self.use_https
+        if self.verify_ssl is not None:
+            kwargs["verify_ssl"] = self.verify_ssl
+        if self.certificate_file is not None:
+            kwargs["certificate_file"] = self.certificate_file
+        try:
+            return MIDataflowIntegration.from_dict_payload(**kwargs)
+        except (NotImplementedError, ValueError):
+            raise RuntimeError("This TestCase object has an incorrect configuration.")
 
 
 @pytest.fixture(scope="function")
-def windows_http():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["windows_http"].payload, use_https=False
+def windows_http() -> TestCase:
+    payload = {
+        "WorkflowId": WORKFLOW_ID,
+        "WorkflowDefinitionId": WORKFLOW_DEFINITION_ID,
+        "TransitionName": TRANSITION_NAME,
+        "Record": {
+            "Database": "MI_Training",
+            "Table": "Metals Pedigree",
+            "RecordHistoryGuid": "d2f51a3d-c274-4a1e-b7c9-8ba2976202cc",
+        },
+        "WorkflowUrl": HTTP_URL,
+        "AuthorizationHeader": "",
+        "ClientCredentialType": "Windows",
+        "Attributes": {
+            "Record": {"Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]},
+            "TransitionId": {"Value": "9f1bf6e7-0b05-4cd3-ac61-1d2d11a1d351"},
+        },
+        "CustomValues": {},
+    }
+    return TestCase(
+        payload=payload,
+        use_https=False,
+        auth_mode=_AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION,
     )
 
 
 @pytest.fixture(scope="function")
-def windows_https():
-    return MIDataflowIntegration.from_dict_payload(dict_test_cases["windows_https"].payload)
+def windows_https(windows_http) -> TestCase:
+    test_case = deepcopy(windows_http)
+    test_case.payload["WorkflowUrl"] = HTTPS_URL
+    test_case.use_https = True
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def windows_https_use_https_false():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["windows_https"].payload, use_https=False
-    )
+def windows_https_use_https_false(windows_https) -> TestCase:
+    test_case = deepcopy(windows_https)
+    test_case.use_https = False
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def windows_https_verify_false():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["windows_https"].payload, verify_ssl=False
-    )
+def windows_https_verify_false(windows_https) -> TestCase:
+    test_case = deepcopy(windows_https)
+    test_case.verify_ssl = False
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def windows_https_custom_cert():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["windows_https"].payload, certificate_file=CERT_FILE
-    )
+def windows_https_custom_cert(windows_https) -> TestCase:
+    test_case = deepcopy(windows_https)
+    test_case.certificate_file = CERT_FILE
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def basic_http():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["basic_http"].payload, use_https=False
-    )
+def basic_http(windows_http) -> TestCase:
+    test_case = deepcopy(windows_http)
+    test_case.payload["ClientCredentialType"] = "Basic"
+    test_case.payload["AuthorizationHeader"] = basic_header
+    test_case.auth_mode = _AuthenticationMode.BASIC_AUTHENTICATION
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def basic_https():
-    return MIDataflowIntegration.from_dict_payload(dict_test_cases["basic_https"].payload)
+def basic_https(basic_http) -> TestCase:
+    test_case = deepcopy(basic_http)
+    test_case.payload["WorkflowUrl"] = HTTPS_URL
+    test_case.use_https = True
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def basic_https_use_https_false():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["basic_https"].payload, use_https=False
-    )
+def basic_https_use_https_false(basic_https) -> TestCase:
+    test_case = deepcopy(basic_https)
+    test_case.use_https = False
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def basic_https_verify_false():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["basic_https"].payload, verify_ssl=False
-    )
+def basic_https_verify_false(basic_https) -> TestCase:
+    test_case = deepcopy(basic_https)
+    test_case.verify_ssl = False
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def basic_https_custom_cert():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["basic_https"].payload, certificate_file=CERT_FILE
-    )
+def basic_https_custom_cert(basic_https) -> TestCase:
+    test_case = deepcopy(basic_https)
+    test_case.certificate_file = CERT_FILE
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def oidc_https():
-    return MIDataflowIntegration.from_dict_payload(dict_test_cases["oidc_https"].payload)
+def oidc_http(basic_http) -> TestCase:
+    test_case = deepcopy(basic_http)
+    test_case.payload["ClientCredentialType"] = "None"
+    test_case.payload["AuthorizationHeader"] = oidc_header
+    test_case.auth_mode = _AuthenticationMode.OIDC_AUTHENTICATION
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def oidc_https_use_https_false():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["oidc_https"].payload, use_https=False
-    )
+def oidc_https(oidc_http) -> TestCase:
+    test_case = deepcopy(oidc_http)
+    test_case.payload["WorkflowUrl"] = HTTPS_URL
+    test_case.use_https = True
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def oidc_https_verify_false():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["oidc_https"].payload, verify_ssl=False
-    )
+def oidc_https_verify_false(oidc_https) -> TestCase:
+    test_case = deepcopy(oidc_https)
+    test_case.verify_ssl = False
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def oidc_https_custom_cert():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["oidc_https"].payload, certificate_file=CERT_FILE
-    )
+def oidc_https_custom_cert(oidc_https) -> TestCase:
+    test_case = deepcopy(oidc_https)
+    test_case.certificate_file = CERT_FILE
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def digest_http():
-    return MIDataflowIntegration.from_dict_payload(
-        dict_test_cases["digest_http"].payload, use_https=False
-    )
+def digest_http(basic_http) -> TestCase:
+    test_case = deepcopy(basic_http)
+    test_case.payload["ClientCredentialType"] = "Digest"
+    test_case.auth_mode = None
+    return test_case
 
 
 @pytest.fixture(scope="function")
-def digest_https():
-    return MIDataflowIntegration.from_dict_payload(dict_test_cases["digest_https"].payload)
+def digest_https(digest_http) -> TestCase:
+    test_case = deepcopy(digest_http)
+    test_case.payload["WorkflowUrl"] = HTTPS_URL
+    test_case.use_https = True
+    return test_case
 
 
 @pytest.fixture(scope="function")
