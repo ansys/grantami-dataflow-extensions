@@ -73,7 +73,7 @@ from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Add a StreamHandler to write the output to stdout
+# Add a StreamHandler to write the output to stderr
 ch = logging.StreamHandler()
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 ch.setFormatter(formatter)
@@ -150,7 +150,10 @@ def step_logic(dataflow_integration):
 
     # Write the json received from the dataflow API to the attribute
     # "Additional Processing Notes"
-    data = dataflow_integration.get_payload_as_string(indent=True)
+    data = dataflow_integration.get_payload_as_string(
+        indent=True,
+        include_credentials=False,
+    )
     rec.attributes["Additional Processing Notes"].value = data
     rec.set_attributes([rec.attributes["Additional Processing Notes"]])
 

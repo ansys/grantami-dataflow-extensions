@@ -54,7 +54,7 @@ from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Add a StreamHandler to write the output to stdout
+# Add a StreamHandler to write the output to stderr
 ch = logging.StreamHandler()
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 ch.setFormatter(formatter)

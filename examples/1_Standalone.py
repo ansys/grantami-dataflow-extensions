@@ -66,7 +66,7 @@ from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Add a StreamHandler to write the output to stdout
+# Add a StreamHandler to write the output to stderr
 ch = logging.StreamHandler()
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 ch.setFormatter(formatter)
@@ -131,10 +131,8 @@ def step_logic(dataflow_integration):
 
     Replace the code in this module with your custom business logic."""
 
-    # Get the poayload from the integration option. Enable indenting
-    # to make the result easier to read.
+    # Get the payload from the integration option
     payload = dataflow_integration.get_payload_as_string(
-        indent=True,
         include_credentials=False,
     )
 
