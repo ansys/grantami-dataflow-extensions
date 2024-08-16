@@ -29,6 +29,7 @@ Allows direct access to this data or supports spawning a Scripting Toolkit sessi
 
 import base64
 import copy
+import enum
 from io import StringIO
 import json
 from pathlib import Path
@@ -53,6 +54,14 @@ except ImportError:
 from ._logger import logger
 
 PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClientFactory)
+
+
+class _AuthenticationMode(enum.Enum):
+    """The authentication mode of the Granta MI server."""
+
+    INTEGRATED_WINDOWS_AUTHENTICATION = "Windows"
+    BASIC_AUTHENTICATION = "Basic"
+    OIDC_AUTHENTICATION = "None"
 
 
 class MIDataflowIntegration:
@@ -144,7 +153,7 @@ class MIDataflowIntegration:
 
         # Logger
         logger.info("")
-        logger.info("---------- New Dataflow Toolkit instance starting ----------")
+        logger.info("---------- Initializing new Dataflow Toolkit instance ----------")
 
         # Get data from data flow. Getting the payload as a sanitized string performs a basic check that we have
         # an expected data structure.
@@ -165,6 +174,16 @@ class MIDataflowIntegration:
         self._dataflow_path = parsed_url.path
         logger.debug(f'Data Flow hostname: "{self._hostname}"')
         logger.debug(f'Data Flow path: "{self._dataflow_path}"')
+
+        # Authentication method
+        client_credential_type = self._df_data["ClientCredentialType"]
+        try:
+            self._authentication_mode = _AuthenticationMode(client_credential_type)
+        except ValueError as e:
+            raise NotImplementedError(
+                f'Unknown ClientCredentialType "{client_credential_type}"'
+            ) from e
+        logger.debug(f'Authentication mode: "{self._authentication_mode.name}"')
 
         # Configure HTTPS
         server_supports_https = parsed_url.scheme == "https"
@@ -187,6 +206,13 @@ class MIDataflowIntegration:
                 f'Argument "certificate_file" must be of type pathlib.Path or str. '
                 f"Value provided was of type {type(certificate_file)}."
             )
+
+        # HTTP and OIDC is not supported
+        if (
+            not self._https_enabled
+            and self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION
+        ):
+            raise ValueError("HTTPS cannot be disabled when using OIDC authentication.")
 
         # HTTPS is disabled. Nothing to configure.
         if not self._https_enabled:
@@ -231,6 +257,8 @@ class MIDataflowIntegration:
         # HTTPS is enabled, verification is enabled, and no CA certificate has been provided
         else:
             logger.debug("No CA certificate provided. Using public CAs to verify certificates.")
+
+        logger.info("------------------- Initialization complete --------------------")
 
     @classmethod
     def from_dict_payload(
@@ -485,24 +513,22 @@ class MIDataflowIntegration:
         """
         logger.debug("Creating MI Scripting Toolkit session.")
 
-        client_credential_type = self._df_data["ClientCredentialType"]
-
-        if client_credential_type == "Basic":
+        if self._authentication_mode == _AuthenticationMode.BASIC_AUTHENTICATION:
             logger.debug("Using Basic authentication.")
             username, password = self._get_basic_creds()
             session = mpy.connect(self.service_layer_url, user_name=username, password=password)
 
-        elif client_credential_type == "None":
+        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
+            logger.debug("Using Windows authentication.")
+            session = mpy.connect(self.service_layer_url, autologon=True)
+
+        elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
             logger.debug("Using OIDC authentication.")
             access_token = self._get_oidc_token()
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
 
-        elif client_credential_type == "Windows":
-            logger.debug("Using Windows authentication.")
-            session = mpy.connect(self.service_layer_url, autologon=True)
-
         else:
-            raise NotImplementedError(f'Unknown credentials type "{client_credential_type}"')
+            raise NotImplementedError()
 
         return session
 
@@ -531,6 +557,14 @@ class MIDataflowIntegration:
         TypeError
             If the class provided to this method is not a subclass of
             :class:`~ansys.openapi.common.SessionConfiguration`.
+        NotImplementedError
+            If the Granta MI server is configured with OIDC authentication.
+
+        Warnings
+        --------
+        This method does not currently support OIDC. A workaround is to create the client manually and
+        authenticate with a stored OIDC refresh token. See :class:`~ansys.openapi.common.OIDCSessionBuilder`
+        for more details.
 
         Examples
         --------
@@ -556,24 +590,22 @@ class MIDataflowIntegration:
         # argument to avoid type errors.
         builder = pygranta_connection_class(self.service_layer_url, session_configuration=config)
 
-        client_credential_type = self._df_data["ClientCredentialType"]
-
-        if client_credential_type == "Basic":
+        if self._authentication_mode == _AuthenticationMode.BASIC_AUTHENTICATION:
             logger.debug("Using Basic authentication.")
             username, password = self._get_basic_creds()
             return builder.with_credentials(username=username, password=password)
 
-        elif client_credential_type == "None":
-            logger.debug("Using OIDC authentication.")
-            access_token = self._get_oidc_token()
-            return builder.with_oidc(idp_session_configuration=config).with_token(access_token)  # type: ignore[return-value]
-
-        elif client_credential_type == "Windows":
+        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
             logger.debug("Using Windows authentication.")
             return builder.with_autologon()
 
+        elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
+            raise NotImplementedError(
+                "OIDC authentication is not supported with PyGranta packages."
+            )
+
         else:
-            raise NotImplementedError(f'Unknown credentials type "{client_credential_type}".')
+            raise NotImplementedError()
 
     def _get_basic_creds(self) -> Tuple[str, str]:
         """
@@ -654,8 +686,10 @@ class MIDataflowIntegration:
         logger.debug(f"Resuming bookmark using URL {self._dataflow_url}")
 
         request_url = f"{self._dataflow_url}/api/workflows/{self._get_workflow_id(self._df_data)}"
-        if self._df_data["ClientCredentialType"] in ["Basic", "None"]:
-            # MI server setup: Basic authentication or OIDC authentication
+        if self._authentication_mode in [
+            _AuthenticationMode.OIDC_AUTHENTICATION,
+            _AuthenticationMode.BASIC_AUTHENTICATION,
+        ]:
             headers["Authorization"] = self._df_data["AuthorizationHeader"]
             response = requests.post(
                 url=request_url,
@@ -663,8 +697,7 @@ class MIDataflowIntegration:
                 headers=headers,
                 verify=verify_argument,
             )
-        else:
-            # MI server setup: Windows authentication
+        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
             response = requests.post(
                 url=request_url,
                 data=response_data,
@@ -672,7 +705,10 @@ class MIDataflowIntegration:
                 headers=headers,
                 verify=verify_argument,
             )
+        else:
+            raise NotImplementedError()
         response.raise_for_status()
+        logger.info("---------------- Workflow successfully resumed -----------------")
 
 
 class MissingClientModuleException(ImportError):

@@ -21,11 +21,11 @@
 # SOFTWARE.
 
 from base64 import b64encode
-import json
 from pathlib import Path
-from types import SimpleNamespace
 
-payloads = SimpleNamespace()
+CERT_FILE = "test_cert.crt"
+CERT_PATH_ABSOLUTE = Path(__file__).parent / CERT_FILE
+CERT_PATH_RELATIVE = Path(CERT_FILE)
 
 HTTP_URL = "http://my_server_name/mi_dataflow"
 HTTPS_URL = "https://my_server_name/mi_dataflow"
@@ -37,66 +37,11 @@ WORKFLOW_ID = "67eb55ff-363a-42c7-9793-df363f1ecc83"
 WORKFLOW_DEFINITION_ID = "Example; Version=1.0.0.0"
 TRANSITION_NAME = "Python_83e51914-3752-40d0-8350-c096674873e2"
 
-payloads.windows_http = {
-    "WorkflowId": WORKFLOW_ID,
-    "WorkflowDefinitionId": WORKFLOW_DEFINITION_ID,
-    "TransitionName": TRANSITION_NAME,
-    "Record": {
-        "Database": "MI_Training",
-        "Table": "Metals Pedigree",
-        "RecordHistoryGuid": "d2f51a3d-c274-4a1e-b7c9-8ba2976202cc",
-    },
-    "WorkflowUrl": HTTP_URL,
-    "AuthorizationHeader": "",
-    "ClientCredentialType": "Windows",
-    "Attributes": {
-        "Record": {"Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]},
-        "TransitionId": {"Value": "9f1bf6e7-0b05-4cd3-ac61-1d2d11a1d351"},
-    },
-    "CustomValues": {},
-}
-
-payloads.windows_http_str = json.dumps(payloads.windows_http)
-payloads.windows_https = payloads.windows_http.copy()
-payloads.windows_https["WorkflowUrl"] = HTTPS_URL
-payloads.windows_https_str = json.dumps(payloads.windows_https)
-
 USERNAME = "username"
 PASSWORD = "secret_password"
 
 encoded_credentials = b64encode(f"{USERNAME}:{PASSWORD}".encode()).decode("ascii")
 basic_header = f"Basic {encoded_credentials}"
 
-payloads.basic_http = {
-    "WorkflowId": WORKFLOW_ID,
-    "WorkflowDefinitionId": WORKFLOW_DEFINITION_ID,
-    "TransitionName": TRANSITION_NAME,
-    "Record": {
-        "Database": "MI_Training",
-        "Table": "Metals Pedigree",
-        "RecordHistoryGuid": "d2f51a3d-c274-4a1e-b7c9-8ba2976202cc",
-    },
-    "WorkflowUrl": HTTP_URL,
-    "AuthorizationHeader": basic_header,
-    "ClientCredentialType": "Basic",
-    "Attributes": {
-        "Record": {"Value": ["d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training"]},
-        "TransitionId": {"Value": "9f1bf6e7-0b05-4cd3-ac61-1d2d11a1d351"},
-    },
-    "CustomValues": {},
-}
-payloads.basic_http_str = json.dumps(payloads.basic_http)
-
-payloads.basic_https = payloads.basic_http.copy()
-payloads.basic_https["WorkflowUrl"] = HTTPS_URL
-payloads.basic_https_str = json.dumps(payloads.basic_https)
-
-payloads.digest_http = payloads.windows_http.copy()
-payloads.digest_http["ClientCredentialType"] = "Digest"
-
-payloads.digest_https = payloads.digest_http.copy()
-payloads.digest_https["WorkflowUrl"] = HTTPS_URL
-
-CERT_FILE = "test_cert.crt"
-CERT_PATH_ABSOLUTE = Path(__file__).parent / CERT_FILE
-CERT_PATH_RELATIVE = Path(CERT_FILE)
+access_token = "0123456789abcdefghijkl"
+oidc_header = f"Bearer {access_token}"
