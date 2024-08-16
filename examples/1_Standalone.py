@@ -17,12 +17,13 @@
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with a non-Granta MI resource
 # as part of a Data Flow operation.
 
-# The cell below contains an example script that simply prints the record identifying information which is received from
+# The cell below contains an example script that simply logs the record identifying information which is received from
 # Data Flow. However, this could be replaced with any other business logic which can make use of the data provided by
 # Data Flow. To perform operations that rely on additional information from Granta MI, see the other examples in this
 # package.
 
-# The example script includes the following functions:
+# The example script sets up logging (see [Logging and debugging](../user_guide/index.rst#logging-and-debugging) for
+# more details) and includes the following functions:
 #
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
@@ -55,9 +56,21 @@
 # ## Example script
 
 # +
+import json
+import logging
 import traceback
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+
+# Create an instance of the root logger
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+# Add a StreamHandler to write the output to stderr
+ch = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
 def main():
@@ -118,15 +131,15 @@ def step_logic(dataflow_integration):
 
     Replace the code in this module with your custom business logic."""
 
-    # Get the poayload from the integration option. Enable indenting
-    # to make the result easier to read.
+    # Get the payload from the integration option
     payload = dataflow_integration.get_payload_as_string(
-        indent=True,
         include_credentials=False,
     )
 
-    # Print the payload. This will appear in the Data Flow log.
-    print(payload)
+    # Log the payload. All log messages will appear in the Data Flow log.
+    data = json.dumps(payload)
+    logger.info("Writing dataflow payload.")
+    logger.info(data)
 
 
 if __name__ == "__main__":

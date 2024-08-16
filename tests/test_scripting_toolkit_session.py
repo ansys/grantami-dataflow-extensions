@@ -28,29 +28,29 @@ from mocks.scripting_toolkit import mpy as mpy_mock
 # TODO: Test OIDC
 
 
-def test_windows_https(windows_https, caplog):
+def test_windows_https(windows_https, debug_caplog):
     mpy_mock.connect.reset_mock()
     _ = windows_https.mi_session
     mpy_mock.connect.assert_called_once_with(
         HTTPS_SL_URL,
         autologon=True,
     )
-    assert _scripting_toolkit_logged(caplog.text)
-    assert "Using Windows authentication." in caplog.text
+    assert _scripting_toolkit_logged(debug_caplog.text)
+    assert "Using Windows authentication." in debug_caplog.text
 
 
-def test_windows_http(windows_http, caplog):
+def test_windows_http(windows_http, debug_caplog):
     mpy_mock.connect.reset_mock()
     _ = windows_http.mi_session
     mpy_mock.connect.assert_called_once_with(
         HTTP_SL_URL,
         autologon=True,
     )
-    assert _scripting_toolkit_logged(caplog.text)
-    assert "Using Windows authentication." in caplog.text
+    assert _scripting_toolkit_logged(debug_caplog.text)
+    assert "Using Windows authentication." in debug_caplog.text
 
 
-def test_basic_https(basic_https, caplog):
+def test_basic_https(basic_https, debug_caplog):
     mpy_mock.connect.reset_mock()
     _ = basic_https.mi_session
     mpy_mock.connect.assert_called_once_with(
@@ -58,11 +58,11 @@ def test_basic_https(basic_https, caplog):
         user_name=USERNAME,
         password=PASSWORD,
     )
-    assert _scripting_toolkit_logged(caplog.text)
-    assert "Using Basic authentication." in caplog.text
+    assert _scripting_toolkit_logged(debug_caplog.text)
+    assert "Using Basic authentication." in debug_caplog.text
 
 
-def test_basic_http(basic_http, caplog):
+def test_basic_http(basic_http, debug_caplog):
     mpy_mock.connect.reset_mock()
     _ = basic_http.mi_session
     mpy_mock.connect.assert_called_once_with(
@@ -70,16 +70,16 @@ def test_basic_http(basic_http, caplog):
         user_name=USERNAME,
         password=PASSWORD,
     )
-    assert _scripting_toolkit_logged(caplog.text)
-    assert "Using Basic authentication." in caplog.text
+    assert _scripting_toolkit_logged(debug_caplog.text)
+    assert "Using Basic authentication." in debug_caplog.text
 
 
 @pytest.mark.parametrize("fixture_name", ["digest_http", "digest_https"])
-def test_unknown_creds_raises_exception(fixture_name, request, caplog):
+def test_unknown_creds_raises_exception(fixture_name, request, debug_caplog):
     df = request.getfixturevalue(fixture_name)
     with pytest.raises(NotImplementedError, match='Unknown credentials type "Digest"'):
         _ = df.mi_session
-    assert _scripting_toolkit_logged(caplog.text)
+    assert _scripting_toolkit_logged(debug_caplog.text)
 
 
 def _scripting_toolkit_logged(log):

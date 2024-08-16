@@ -19,9 +19,10 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 # This import must happen before dataflow_toolkit is imported to correct mock these libraries
 from mocks import record_lists, scripting_toolkit  # isort:skip  # noqa: F401
+
+import logging
 
 import pytest
 
@@ -89,3 +90,9 @@ def digest_http():
 @pytest.fixture(scope="function")
 def digest_https():
     return MIDataflowIntegration.from_dict_payload(payloads.digest_https)
+
+
+@pytest.fixture(scope="function")
+def debug_caplog(caplog):
+    caplog.set_level(logging.DEBUG)
+    return caplog

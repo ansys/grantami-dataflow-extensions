@@ -30,7 +30,8 @@
 # The cell below contains an example script that uploads the data payload received by Data Flow to the workflow record.
 # However, this could be replaced with any other business logic which requires access to Granta MI resources.
 
-# The example script includes the following functions:
+# The example script sets up logging (see [Logging and debugging](../user_guide/index.rst#logging-and-debugging) for
+# more details) and includes the following functions:
 #
 # * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
 #   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
@@ -63,9 +64,20 @@
 # ## Example script
 
 # +
+import logging
 import traceback
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+
+# Create an instance of the root logger
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+# Add a StreamHandler to write the output to stderr
+ch = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
 def main():
@@ -138,13 +150,16 @@ def step_logic(dataflow_integration):
 
     # Write the json received from the dataflow API to the attribute
     # "Additional Processing Notes"
-    data = dataflow_integration.get_payload_as_string(indent=True)
+    data = dataflow_integration.get_payload_as_string(
+        indent=True,
+        include_credentials=False,
+    )
     rec.attributes["Additional Processing Notes"].value = data
     rec.set_attributes([rec.attributes["Additional Processing Notes"]])
 
     # Update record database
     mi_session.update([rec])
-    print("Updated MI database")  # This output will be visible in the api/logs page
+    logger.info("Updated MI database")  # This output will be visible in the api/logs page
 
 
 if __name__ == "__main__":

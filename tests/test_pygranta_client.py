@@ -34,12 +34,12 @@ from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
 # the completed client AND check the arguments it was created with. We must do it with two separate tests.
 
 
-def test_windows_https(windows_https, caplog):
+def test_windows_https(windows_https, debug_caplog):
     with patch.object(RecordListConnection, "with_autologon") as mock:
         windows_https.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with()
-    assert _pygranta_client_logged(caplog.text)
-    assert "Using Windows authentication." in caplog.text
+    assert _pygranta_client_logged(debug_caplog.text)
+    assert "Using Windows authentication." in debug_caplog.text
 
 
 def test_windows_https_url(windows_https):
@@ -47,12 +47,12 @@ def test_windows_https_url(windows_https):
     assert client._service_layer_url == HTTPS_SL_URL
 
 
-def test_windows_http(windows_http, caplog):
+def test_windows_http(windows_http, debug_caplog):
     with patch.object(RecordListConnection, "with_autologon") as mock:
         windows_http.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with()
-    assert _pygranta_client_logged(caplog.text)
-    assert "Using Windows authentication." in caplog.text
+    assert _pygranta_client_logged(debug_caplog.text)
+    assert "Using Windows authentication." in debug_caplog.text
 
 
 def test_windows_http_url(windows_http):
@@ -60,15 +60,15 @@ def test_windows_http_url(windows_http):
     assert client._service_layer_url == HTTP_SL_URL
 
 
-def test_basic_https(basic_https, caplog):
+def test_basic_https(basic_https, debug_caplog):
     with patch.object(RecordListConnection, "with_credentials") as mock:
         basic_https.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with(
         username=USERNAME,
         password=PASSWORD,
     )
-    assert _pygranta_client_logged(caplog.text)
-    assert "Using Basic authentication." in caplog.text
+    assert _pygranta_client_logged(debug_caplog.text)
+    assert "Using Basic authentication." in debug_caplog.text
 
 
 def test_basic_https_url(basic_https):
@@ -76,15 +76,15 @@ def test_basic_https_url(basic_https):
     assert client._service_layer_url == HTTPS_SL_URL
 
 
-def test_basic_http(basic_http, caplog):
+def test_basic_http(basic_http, debug_caplog):
     with patch.object(RecordListConnection, "with_credentials") as mock:
         basic_http.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with(
         username=USERNAME,
         password=PASSWORD,
     )
-    assert _pygranta_client_logged(caplog.text)
-    assert "Using Basic authentication." in caplog.text
+    assert _pygranta_client_logged(debug_caplog.text)
+    assert "Using Basic authentication." in debug_caplog.text
 
 
 def test_basic_http_url(basic_http):
