@@ -15,7 +15,9 @@
 # # Scripting Toolkit example
 
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
-# Toolkit as part of a Data Flow operation.
+# Toolkit as part of a Data Flow operation. This example assumes the workflow has been configured with the 'Metals
+# Pedigree' table in the MI Training database, but includes guidance for how to adjust the Python code to work with
+# a different database schema.
 
 # <div class="alert alert-info">
 #
