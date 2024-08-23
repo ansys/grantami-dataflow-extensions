@@ -56,7 +56,6 @@
 # ## Example script
 
 # +
-import json
 import logging
 import traceback
 
@@ -84,6 +83,7 @@ def main():
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
     # pathlib.Path object to the file on disk.
+    # Refer to the MIDataflowIntegration API reference page for more details.
     dataflow_integration = MIDataflowIntegration(use_https=False)
 
     try:
@@ -137,9 +137,8 @@ def step_logic(dataflow_integration):
     )
 
     # Log the payload. All log messages will appear in the Data Flow log.
-    data = json.dumps(payload)
     logger.info("Writing dataflow payload.")
-    logger.info(data)
+    logger.info(payload)
 
 
 if __name__ == "__main__":

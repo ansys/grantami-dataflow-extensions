@@ -72,6 +72,7 @@ def main():
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
     # pathlib.Path object to the file on disk.
+    # Refer to the MIDataflowIntegration API reference page for more details.
     dataflow_integration = MIDataflowIntegration(use_https=False)
 
     try:

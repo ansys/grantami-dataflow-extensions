@@ -131,29 +131,55 @@ workflow fully defined with all required features apart from Python script execu
 with Data Flow Designer, see the `Granta MI Data Flow Designer documentation
 <https://ansyshelp.ansys.com/account/secured?returnurl=/Views/Secured/Granta/v242/en/mi_data_flow_designer/index.html>`_.
 
-To implement your business logic, you should start from one of the :ref:`ref_grantami_dataflow_toolkit_examples` and
-follow the steps listed below:
+There are two key stages to developing custom Data Flow business logic.
 
-1. Copy the code block from one of the examples to a local ``.py`` file.
+Obtaining a ``dataflow_payload``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first stage involves copying one of the example scripts and using it to obtain a ``dataflow_payload``, which makes
+development much more straightforward. The steps to obtain the payload are described below:
+
+1. Copy the code block from the :doc:`../examples/1_Standalone` or :doc:`../examples/2_Scripting_Toolkit` to a local
+   ``.py`` file.
+
+   * If you are starting from the Scripting Toolkit example, you **must** make sure that Scripting Toolkit is installed.
+   * If you plan to develop PyGranta-based business logic, start from the Standalone example.
+
 2. Switch the script to 'main' mode by commenting ``testing()`` in the ``if __name__ == "__main__":`` block and
    un-commenting ``main()``.
-3. Upload the script into MI Data Flow Designer, and add it to the Start or End Script sections.
-4. Run the workflow step once in MI Data Flow Manager. Obtain the ``dataflow_payload`` JSON response from the
-   logs page or the ``Additional Processing Notes`` attribute in Granta MI (only available when using the
-   'Standalone example' or 'Scripting Toolkit Example' notebooks).
-5. Paste the ``dataflow_payload`` JSON in the corresponding variable within the ``testing()`` function. This
+3. Upload the script into MI Data Flow Designer, and add it to the Start or End Script sections for the relevant step.
+4. Run the workflow step once in MI Data Flow Manager.
+5. Obtain the ``dataflow_payload``.
+
+   * If you started from the Standalone example, obtain the ``dataflow_payload`` from the Data Flow log. See
+     :ref:`ref_user_guide_logging` for log file locations.
+   * If you started from the Scripting Toolkit example, obtain the ``dataflow_payload`` from the ``Additional
+     Processing Notes`` attribute.
+
+You should now have a JSON-formatted string which contains information specific to your deployment of Granta MI,
+including the Data Flow URL and internal workflow identifiers.
+
+Developing business logic
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now the ``dataflow_payload`` has been obtained, it can be used to test your custom business logic separate to the
+workflow. This makes it much faster to re-run the script, and allows running and debugging the script in an IDE. The
+steps to use this payload to develop your custom business logic are described below:
+
+1. Optional: If you are planning to develop a PyGranta-based script, replace the code you copied previously with the
+   :doc:`../examples/3_RecordLists`, and modify the PyGranta library as required.
+2. Paste the ``dataflow_payload`` JSON in the corresponding variable within the ``testing()`` function. This
    allows you to debug the ``step_logic`` without re-running the workflow. See the documentation for the
    :meth:`~.MIDataflowIntegration.get_payload_as_string` and :meth:`~.MIDataflowIntegration.get_payload_as_dict` methods
    for more information, including how to handle Basic and OIDC authentication.
-6. Switch back to 'testing' mode by commenting ``main()`` in the ``if __name__ == "__main__":`` block and
+3. Switch back to 'testing' mode by commenting ``main()`` in the ``if __name__ == "__main__":`` block and
    un-commenting ``testing()``.
-7. Modify the ``step_logic`` function with your specific logic and test locally.
-8. Once the business logic is implemented, switch back to ``main()`` in the in the ``if __name__ == "__main__":``
-   block (see step 1), re-upload the file into MI Data Flow Designer, and re-add it to the Start or End Script
-   sections.
-9. Update the workflow and test from within MI Data Flow Manager.
+4. Modify the ``step_logic`` function with your specific logic and test locally.
+5. Once the business logic is implemented, switch back to ``main()`` in the in the ``if __name__ == "__main__":``
+   block, re-upload the file into MI Data Flow Designer, and re-add it to the Start or End Script sections.
+6. Update the workflow and test from within MI Data Flow Manager.
 
-Repeat steps 7 to 9 as required.
+Repeat steps 4 to 6 as required.
 
 
 .. _ref_user_guide_logging:

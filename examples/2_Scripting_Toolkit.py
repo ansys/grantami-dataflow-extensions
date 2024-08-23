@@ -22,7 +22,7 @@
 # **Info:**
 #
 # Running this notebook requires the Granta MI Scripting Toolkit package. If you do not have access to the Scripting
-# Toolkit, consult your ACE representative.
+# Toolkit, contact your system administrator.
 # </div>
 
 # ## Script Overview
@@ -59,7 +59,8 @@
 
 # This script can be used to generate new Data Flow payloads for testing. Add this script to an existing Data Flow job,
 # run the workflow, and the payload will be uploaded to the workflow record. Then copy the payload into a local copy
-# of the script, and use that payload when adding functionality to the `step_logic()` function.
+# of the script, and use that payload when adding functionality to the `step_logic()` function. See the
+# [User guide](../user_guide/index.rst#business-logic-development-best-practice) for more details.
 
 # ## Example script
 
@@ -91,6 +92,7 @@ def main():
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
     # pathlib.Path object to the file on disk.
+    # Refer to the MIDataflowIntegration API reference page for more details.
     dataflow_integration = MIDataflowIntegration(use_https=False)
 
     try:
@@ -154,8 +156,14 @@ def step_logic(dataflow_integration):
         indent=True,
         include_credentials=False,
     )
-    rec.attributes["Additional Processing Notes"].value = data
-    rec.set_attributes([rec.attributes["Additional Processing Notes"]])
+
+    # To import the payload into a different attribute, change
+    # the name here. Specify any long text attribute in the
+    # table included in the workflow definition.
+    attribute_name = "Additional Processing Notes"
+    attribute = rec.attributes[attribute_name]
+    attribute.value = data
+    rec.set_attributes([attribute])
 
     # Update record database
     mi_session.update([rec])
