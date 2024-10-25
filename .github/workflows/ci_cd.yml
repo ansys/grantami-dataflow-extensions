@@ -42,7 +42,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: "Run Ansys documentation building action"
-      uses: ansys/actions/doc-build@v7
+      uses: ansys/actions/doc-build@fix/check-step-in-doc-build-windows
       with:
         check-links: false
         dependencies: "pandoc"
