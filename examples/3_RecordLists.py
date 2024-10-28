@@ -14,30 +14,21 @@
 
 # # PyGranta RecordLists example
 
-# This notebook provides a best-practice example for using Data Flow Toolkit to interact a Granta MI Record List as
-# part of a Data Flow step. For more information on how to use the PyGranta RecordLists package, see the
-# [PyGranta RecordLists documentation](https://recordlists.grantami.docs.pyansys.com/).
+# ## Introduction
 
-# This example uses the PyGranta RecordLists package as an example, and the principles shown here can be applied to any
-# PyGranta package.
+# This notebook provides a best-practice example for using Data Flow Toolkit to interact with a Granta MI Record List as
+# part of a Data Flow step. The code below shows how to add the workflow record to a record list.  However, the
+# principles shown here can be applied to any PyGranta package.
 
-# ## Script Overview
+# See [Recommended script structure](../user_guide/index.rst#recommended-script-structure) for more details on the
+# script structure, and the [PyGranta RecordLists documentation](https://recordlists.grantami.docs.pyansys.com/) for
+# more details on using the PyGranta RecordLists package.
 
-# The cell below contains an example script that adds the data flow record to a record list.
+# ## Pre-requisites
 
-# The example script sets up logging (see [Logging and debugging](../user_guide/index.rst#logging-and-debugging) for
-# more details) and includes the following functions:
-#
-# * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
-#   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
-# * `testing()`: Includes a static payload which can be provided to the `MIDataflowIntegration` constructor in place of
-#   real data for testing purposes.
-# * `step_logic()`: Contains the actual business logic for the step. Uses the data provided by Data Flow (or defined
-#   statically).
-#
-# Finally, the `if __name__ == "__main__":` block is the entry point for the script. It should be set to call the
-# `testing()` function whenever executed outside of Data Flow, but switched to `main()` when added to the workflow
-# definition in Data Flow Designer.
+# This example requires ``ansys-grantami-recordlists``. Install with ``pip install ansys-grantami-recordlists``, or
+# consult the [Getting started](https://recordlists.grantami.docs.pyansys.com/version/stable/getting_started/index.html)
+# guide for more details.
 
 # ## Example script
 
