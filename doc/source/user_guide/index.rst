@@ -33,9 +33,9 @@ Integration with Data Flow
 
 This package is designed to be used with Granta MI Data Flow. The integration works as follows:
 
-#. At a preconfigured point in a workflow, Data Flow will trigger a Python script. At this point the workflow is paused.
-#. The Python script performs preconfigured business logic, potentially utilizing additional Ansys or third-party Python
-   packages.
+#. At a defined point in a workflow Data Flow triggers a Python script and pauses the workflow until the script resumes
+   the workflow.
+#. The Python script executes, potentially utilizing additional Ansys or third-party Python packages.
 #. At a defined point in the Python script (generally the end), the Python script instructs Data Flow to resume the
    workflow.
 #. The Python script ends.
@@ -83,7 +83,7 @@ This payload includes the following information:
 * Custom values defined in the workflow definition
 
 .. note::
-   If Data Flow is configured in Basic or OIDC authentication mode, the server authorization information will contain an
+   If Data Flow is configured in Basic or OIDC authentication mode, the server authorization information contains an
    obfuscated username and password or an OIDC refresh token respectively. In these configurations, the payload should
    be treated as confidential.
 
@@ -100,8 +100,8 @@ Recommended script structure
 This section introduces the recommended components of a script that makes use of ``dataflow-toolkit``. To see all these
 script components together as a single example, see :doc:`../examples/1_Standalone`.
 
-* Logging: Use the built-in Python logging module to create a logger and write to ``stderr``, which will be collected by
-  Data Flow and logged centrally::
+* Logging: Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by Data
+  Flow and logged centrally::
 
      # Create an instance of the root logger
      logger = logging.getLogger()
@@ -167,14 +167,14 @@ Either ``main()`` or ``testing()`` should be executed when running the script. P
        # main()  # Used when running the script as part of a workflow
        testing()  # Used when testing the script manually
 
-In this state, the script will run the ``testing()`` function for testing separately to Data Flow. To switch the code
-to run the ``main()`` function, uncomment the ``main()`` line and comment the ``testing()`` line::
+In this state, the script runs the ``testing()`` function for testing separately to Data Flow. To switch the code to run
+the ``main()`` function, un-comment the ``main()`` line and comment the ``testing()`` line::
 
    if __name__ == "__main__":
        main()  # Used when running the script as part of a workflow
        # testing()  # Used when testing the script manually
 
-This code will now expect the payload to be provided via ``stdin``.
+This code now expects the payload to be provided via ``stdin``.
 
 
 Business logic development best practice
