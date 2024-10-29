@@ -127,7 +127,7 @@ Installing a development version
 To install the latest release from the
 `PyGranta Data Flow Toolkit repository <https://github.com/ansys/grantami-dataflow-toolkit>`_, run this command::
 
-    python -m pip install git:https://github.com/ansys/grantami-dataflow-toolkit.git
+    python -m pip install git+https://github.com/ansys/grantami-dataflow-toolkit.git
 
 To install a local *development* version with Git and Poetry, run these commands::
 
