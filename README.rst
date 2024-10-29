@@ -48,9 +48,8 @@ Dependencies
 To use PyGranta Data Flow Toolkit, you must have access to a Granta MI 2023 R2 deployment or later. Additionally, you
 must have an MI Data Flow Advanced edition license to be able to use Python scripts with Data Flow.
 
-The ``ansys.grantami.dataflow-toolkit`` package currently supports Python version 3.10 through 3.12. Python
-must be installed system-wide, as opposed to a per-user installation. This option is available during installation,
-and can only be modified by uninstalling and reinstalling Python.
+Python must be installed system-wide, as opposed to a per-user installation. This option is available during
+installation, and can only be modified by uninstalling and reinstalling Python.
 
 .. readme_software_requirements_end
 
