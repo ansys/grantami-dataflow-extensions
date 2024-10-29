@@ -14,35 +14,17 @@
 
 # # Scripting Toolkit example
 
+# ## Introduction
+
 # This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
-# Toolkit as part of a Data Flow operation.
+# Toolkit as part of a Data Flow operation. The code below uploads the data payload received by Data Flow to the
+# workflow record. However, this could be replaced with any other business logic which requires access to Granta MI
+# resources.
 
-# <div class="alert alert-info">
-#
-# **Info:**
-#
-# Running this notebook requires the Granta MI Scripting Toolkit package. If you do not have access to the Scripting
-# Toolkit, consult your ACE representative.
-# </div>
-
-# ## Script Overview
-
-# The cell below contains an example script that uploads the data payload received by Data Flow to the workflow record.
-# However, this could be replaced with any other business logic which requires access to Granta MI resources.
-
-# The example script sets up logging (see [Logging and debugging](../user_guide/index.rst#logging-and-debugging) for
-# more details) and includes the following functions:
-#
-# * `main()`: Instantiates the `MIDataflowIntegration` class, which parses the data passed into this script by Data
-#   Flow. Executes the business logic, and resumes the workflow once the business logic has completed.
-# * `testing()`: Includes a static payload which can be provided to the `MIDataflowIntegration` constructor in place of
-#   real data for testing purposes.
-# * `step_logic()`: Contains the actual business logic for the step. Uses the data provided by Data Flow (or defined
-#   statically).
-#
-# Finally, the `if __name__ == "__main__":` block is the entry point for the script. It should be set to call the
-# `testing()` function whenever executed outside of Data Flow, but switched to `main()` when added to the workflow
-# definition in Data Flow Designer.
+# See [Recommended script structure](../user_guide/index.rst#recommended-script-structure) for more details on the
+# script structure, and
+# [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice) for
+# guidance on using this example as a starting point for your development.
 
 # <div class="alert alert-warning">
 #
@@ -55,11 +37,18 @@
 # environment variable.
 # </div>
 
-# ## Additional notes
+# ## Pre-requisites
 
-# This script can be used to generate new Data Flow payloads for testing. Add this script to an existing Data Flow job,
-# run the workflow, and the payload will be uploaded to the workflow record. Then copy the payload into a local copy
-# of the script, and use that payload when adding functionality to the `step_logic()` function.
+# This example assumes the workflow has been configured with the 'Metals Pedigree' table in the MI Training database,
+# but includes guidance for how to adjust the Python code to work with a different database schema.
+
+# <div class="alert alert-info">
+#
+# **Info:**
+#
+# Running this notebook requires the Granta MI Scripting Toolkit package. If you do not have access to the Scripting
+# Toolkit, contact your system administrator.
+# </div>
 
 # ## Example script
 
@@ -91,6 +80,7 @@ def main():
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
     # pathlib.Path object to the file on disk.
+    # Refer to the MIDataflowIntegration API reference page for more details.
     dataflow_integration = MIDataflowIntegration(use_https=False)
 
     try:
@@ -154,8 +144,14 @@ def step_logic(dataflow_integration):
         indent=True,
         include_credentials=False,
     )
-    rec.attributes["Additional Processing Notes"].value = data
-    rec.set_attributes([rec.attributes["Additional Processing Notes"]])
+
+    # To import the payload into a different attribute, change
+    # the name here. Specify any long text attribute in the
+    # table included in the workflow definition.
+    attribute_name = "Additional Processing Notes"
+    attribute = rec.attributes[attribute_name]
+    attribute.value = data
+    rec.set_attributes([attribute])
 
     # Update record database
     mi_session.update([rec])

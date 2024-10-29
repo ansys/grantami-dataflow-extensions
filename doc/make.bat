@@ -33,6 +33,7 @@ goto end
 :clean
 rmdir /s /q %BUILDDIR% > /NUL 2>&1
 for /d /r %SOURCEDIR% %%d in (_autosummary) do @if exist "%%d" rmdir /s /q "%%d"
+@if exist %SOURCEDIR%\examples rmdir /s /q %SOURCEDIR%\examples
 goto end
 
 :help
