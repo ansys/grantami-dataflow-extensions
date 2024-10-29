@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  MAIN_PYTHON_VERSION: '3.10'
+  MAIN_PYTHON_VERSION: '3.11'
   DOCUMENTATION_CNAME: 'dataflow-toolkit.grantami.docs.pyansys.com'
   LIBRARY_NAME: 'ansys-grantami-dataflow-toolkit'
   LIBRARY_NAMESPACE: 'ansys.grantami.dataflow-toolkit'
@@ -55,7 +55,7 @@ jobs:
     needs: code-style
     strategy:
        matrix:
-           python-version: ['3.10', '3.11', '3.12']
+           python-version: ['3.10', '3.11', '3.12', '3.13']
     steps:
       - uses: ansys/actions/build-wheelhouse@v8
         with:
@@ -69,7 +69,7 @@ jobs:
     needs: code-style
     strategy:
        matrix:
-           python-version: ['3.10', '3.11', '3.12']
+           python-version: ['3.10', '3.11', '3.12', '3.13']
     steps:
       - uses: ansys/actions/tests-pytest@v8
         with:
