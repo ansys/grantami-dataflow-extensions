@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  MAIN_PYTHON_VERSION: '3.11'
+  MAIN_PYTHON_VERSION: '3.10'
   DOCUMENTATION_CNAME: 'dataflow-toolkit.grantami.docs.pyansys.com'
   LIBRARY_NAME: 'ansys-grantami-dataflow-toolkit'
   LIBRARY_NAMESPACE: 'ansys.grantami.dataflow-toolkit'
