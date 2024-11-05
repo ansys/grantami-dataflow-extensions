@@ -55,7 +55,7 @@ ansys-grantami-recordlists = "^1.2"  # Required to build examples
 
 [tool.poetry.group.tests.dependencies]
 pytest = "^8.0.2"
-pytest-cov = "^5.0.0"
+pytest-cov = "^6.0.0"
 requests-mock = "^1.10.0"
 pre-commit = "^4.0.0"
 mypy = "^1.8.0"
