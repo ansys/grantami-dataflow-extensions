@@ -368,9 +368,9 @@ class MIDataflowIntegration:
         ``"<HeaderRemoved>"`` to avoid leaking credentials. To construct the appropriate header manually:
 
         * For basic authentication, combine the username and password with a colon (``:``), Base64 encode the resulting
-          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and password
-          ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to ``"QWxpY2U6czNjcjN0"``, which
-          gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
+          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and
+          password ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to
+          ``"QWxpY2U6czNjcjN0"``, which gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
         * For OIDC authentication, generate a valid access token and prepend with ``"Bearer "``. For example, for the
           token ``gaUDsgUrOiJSUzI``, the final ``AuthorizationHeader`` value would be ``"Bearer gaUDsgUrOiJSUzI"``.
 

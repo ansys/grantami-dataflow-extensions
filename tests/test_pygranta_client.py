@@ -27,9 +27,10 @@ import pytest
 
 from ansys.grantami.recordlists import Connection as RecordListConnection
 
-# Don't try and merge a test with its associated '_url' test. The act of mocking the authentication method
-# means that the completed client can no longer be returned, so it's not possible to both observe the URL in
-# the completed client AND check the arguments it was created with. We must do it with two separate tests.
+# Don't try and merge a test with its associated '_url' test. The act of mocking the
+# authentication method means that the completed client can no longer be returned,
+# so it's not possible to both observe the URL in the completed client AND check the
+# arguments it was created with. We must do it with two separate tests.
 
 
 def test_windows_https(windows_https, debug_caplog):
