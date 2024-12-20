@@ -67,14 +67,15 @@ install the latest PyGranta Data Flow Toolkit release from
 `PyPI <https://pypi.org/project/ansys-grantami-dataflow-toolkit/>`_ as a system-wide package, run this command as an
 administrator::
 
-    python -m pip install ansys-grantami-dataflow-toolkit
+   python -m pip install ansys-grantami-dataflow-toolkit
 
 .. note::
+
    To install packages into the system-wide Python installation directly, you **must** run the preceding command with
    administrator rights. Otherwise, ``pip install`` will install the package for the current user only and will
    display the warning:
 
-      Defaulting to user installation because normal site-packages is not writeable
+   Defaulting to user installation because normal site-packages is not writeable
 
    A common symptom of this issue is a script that works when testing outside of Data Flow, but fails with an import
    error when running from within Data Flow.
@@ -126,13 +127,13 @@ Installing a development version
 To install the latest release from the
 `PyGranta Data Flow Toolkit repository <https://github.com/ansys/grantami-dataflow-toolkit>`_, run this command::
 
-    python -m pip install git+https://github.com/ansys/grantami-dataflow-toolkit.git
+   python -m pip install git+https://github.com/ansys/grantami-dataflow-toolkit.git
 
 To install a local *development* version with Git and Poetry, run these commands::
 
-    git clone https://github.com/ansys/grantami-dataflow-toolkit
-    cd grantami-dataflow-toolkit
-    poetry install
+   git clone https://github.com/ansys/grantami-dataflow-toolkit
+   cd grantami-dataflow-toolkit
+   poetry install
 
 The preceding commands install the package in development mode so that you can modify
 it locally. Your changes are reflected in your Python setup after restarting the Python kernel.
