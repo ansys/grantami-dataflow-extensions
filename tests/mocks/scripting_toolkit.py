@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import sys
 from types import ModuleType
 from unittest.mock import Mock
 
@@ -64,7 +65,5 @@ def connect(*args, **kwargs):
 
 mpy.connect = Mock(wraps=connect)
 scripting_toolkit.granta = mpy
-
-import sys
 
 sys.modules["GRANTA_MIScriptingToolkit"] = scripting_toolkit

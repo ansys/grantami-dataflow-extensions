@@ -36,10 +36,8 @@
 import logging
 import traceback
 
-from ansys.grantami.recordlists import Connection as RecordListsConnection
-from ansys.grantami.recordlists import RecordListItem
-
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+from ansys.grantami.recordlists import Connection as RecordListsConnection, RecordListItem
 
 # Create an instance of the root logger
 logger = logging.getLogger()

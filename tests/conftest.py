@@ -28,10 +28,6 @@ import json
 import logging
 from pathlib import Path
 
-import pytest
-
-from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
-from ansys.grantami.dataflow_toolkit.mi_dataflow import _AuthenticationMode
 from common import (
     CERT_FILE,
     HTTP_URL,
@@ -42,6 +38,10 @@ from common import (
     basic_header,
     oidc_header,
 )
+import pytest
+
+from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+from ansys.grantami.dataflow_toolkit.mi_dataflow import _AuthenticationMode
 
 
 @dataclass
