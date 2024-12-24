@@ -204,7 +204,7 @@ class MIDataflowIntegration:
             )
 
         # HTTP and OIDC is not supported
-        if not self._https_enabled and not self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
+        if not self._https_enabled and self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
             raise ValueError("HTTPS cannot be disabled when using OIDC authentication.")
 
         # HTTPS is disabled. Nothing to configure.
@@ -299,10 +299,9 @@ class MIDataflowIntegration:
         **kwargs: Any,
     ) -> "MIDataflowIntegration":
         """
-        Instantiate an :class:`~.MIDataflowIntegration` object.
+        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload.
 
-        Instantiate an :class:`~.MIDataflowIntegration` object with a static
-        payload provided as a JSON formatted string.
+        provided as a JSON formatted string.
 
         Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
         See :meth:`~.MIDataflowIntegration.get_payload_as_string` for information on generating a suitable payload.
@@ -310,7 +309,8 @@ class MIDataflowIntegration:
         Parameters
         ----------
         dataflow_payload : str
-            A JSON-formatted static copy of a Data Flow data payload used for testing purposes.
+            A JSON-formatted static copy of a Data Flow
+            data payload used for testing purposes.
         **kwargs
             Additional keyword arguments are passed to the :class:`~.MIDataflowIntegration` constructor.
 
@@ -368,9 +368,9 @@ class MIDataflowIntegration:
         ``"<HeaderRemoved>"`` to avoid leaking credentials. To construct the appropriate header manually:
 
         * For basic authentication, combine the username and password with a colon (``:``), Base64 encode the resulting
-          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and
-          password ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to
-          ``"QWxpY2U6czNjcjN0"``, which gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
+          string, and then prepend the result with `"Basic "`. For example, for the username ``Alice`` and password
+          ``s3cr3t``, these are combined to give ``"Alice:s3cr3t"`` and Base64 encoded to ``"QWxpY2U6czNjcjN0"``, which
+          gives the final ``AuthorizationHeader`` value of ``"Basic QWxpY2U6czNjcjN0"``.
         * For OIDC authentication, generate a valid access token and prepend with ``"Bearer "``. For example, for the
           token ``gaUDsgUrOiJSUzI``, the final ``AuthorizationHeader`` value would be ``"Bearer gaUDsgUrOiJSUzI"``.
 
