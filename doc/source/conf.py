@@ -191,3 +191,4 @@ Download this example as a :download:`Jupyter notebook </{{ env.docname }}.ipynb
 
 ----
 """
+nbsphinx_allow_errors = True
