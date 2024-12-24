@@ -204,7 +204,7 @@ class MIDataflowIntegration:
             )
 
         # HTTP and OIDC is not supported
-        if not self._https_enabled and self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
+        if not self._https_enabled and not self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
             raise ValueError("HTTPS cannot be disabled when using OIDC authentication.")
 
         # HTTPS is disabled. Nothing to configure.
