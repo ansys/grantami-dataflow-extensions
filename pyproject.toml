@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
 name = "ansys-grantami-dataflow-toolkit"
 version = "0.1.dev0"
-description = "Productivity package for use with Granta MI Dataflow"
+description = "Productivity package for use with Granta MI Dataflow."
 license = "MIT"
 authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
 maintainers = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
