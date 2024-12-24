@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import shutil
 
-from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 import jupytext
 
 from ansys.grantami.dataflow_toolkit import __version__
@@ -18,7 +18,6 @@ author = "ANSYS, Inc."
 release = version = __version__
 
 # Select desired logo, theme, and declare the html title
-html_logo = pyansys_logo_black
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "PyGranta Data Flow Toolkit"
 html_favicon = ansys_favicon
@@ -40,6 +39,7 @@ html_theme_options = {
         "version_match": get_version_match(__version__),
     },
     "check_switcher": False,
+    "logo": "pyansys",
 }
 
 # Sphinx extensions
