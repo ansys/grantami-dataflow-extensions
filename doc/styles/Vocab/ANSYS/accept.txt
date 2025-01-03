@@ -1,6 +1,6 @@
 Granta MI
 PyGranta
-Data Flow Toolkit
+Data Flow
 API
 Makefile
 jupytext
@@ -8,4 +8,4 @@ jupytext
 mypy
 stdout
 stderr
-Data Flow
+Toolkit
