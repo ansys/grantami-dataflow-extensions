@@ -38,9 +38,8 @@ from typing import Any, Dict, Tuple, Type, TypeVar, cast
 from urllib.parse import urlparse
 import warnings
 
-import requests  # type: ignore[import-untyped]
-
 from ansys.openapi.common import ApiClientFactory, SessionConfiguration
+import requests  # type: ignore[import-untyped]
 
 try:
     from requests_negotiate_sspi import HttpNegotiateAuth  # type: ignore

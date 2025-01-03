@@ -140,6 +140,7 @@ convention = "numpy"
 [tool.ruff.lint.isort]
 combine-as-imports = true
 force-sort-within-sections = true
+known-third-party = ["ansys.openapi.common", "ansys.grantami.recordlists"]
 
 [tool.towncrier]
 directory = "doc/changelog.d"
