@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -22,10 +22,9 @@
 
 from unittest.mock import patch
 
+from ansys.grantami.recordlists import Connection as RecordListConnection
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
 import pytest
-
-from ansys.grantami.recordlists import Connection as RecordListConnection
 
 # Don't try and merge a test with its associated '_url' test. The act of mocking the
 # authentication method means that the completed client can no longer be returned,

@@ -32,7 +32,7 @@ repos:
   hooks:
     - id: add-license-headers
       args:
-      - --start_year=2024
+      - --start_year=2025
       files: '(src|tests)/.*\.(py)'
 
 - repo: https://github.com/numpy/numpydoc

@@ -24,10 +24,6 @@
    :target: https://opensource.org/licenses/MIT
    :alt: MIT
 
-.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat
-   :target: https://github.com/psf/black
-   :alt: Black
-
 .. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
    :target: https://github.com/astral-sh/ruff
    :alt: Ruff
@@ -78,7 +74,7 @@ administrator::
    administrator rights. Otherwise, ``pip install`` will install the package for the current user only and will
    display the warning:
 
-   Defaulting to user installation because normal site-packages is not writeable
+      Defaulting to user installation because normal site-packages is not writeable
 
    A common symptom of this issue is a script that works when testing outside of Data Flow, but fails with an import
    error when running from within Data Flow.

@@ -40,7 +40,7 @@ This package is designed to be used with Granta MI Data Flow. The integration wo
    workflow.
 #. The Python script ends.
 
-Data flow payload
+Data Flow payload
 ~~~~~~~~~~~~~~~~~
 
 .. currentmodule:: ansys.grantami.dataflow_toolkit
