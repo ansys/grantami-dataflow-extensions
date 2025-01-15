@@ -1,4 +1,4 @@
-|pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
+|pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |ruff|
 
 .. |pyansys| image:: https://img.shields.io/badge/Py-Ansys-ffc107.svg?labelColor=black&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABDklEQVQ4jWNgoDfg5mD8vE7q/3bpVyskbW0sMRUwofHD7Dh5OBkZGBgW7/3W2tZpa2tLQEOyOzeEsfumlK2tbVpaGj4N6jIs1lpsDAwMJ278sveMY2BgCA0NFRISwqkhyQ1q/Nyd3zg4OBgYGNjZ2ePi4rB5loGBhZnhxTLJ/9ulv26Q4uVk1NXV/f///////69du4Zdg78lx//t0v+3S88rFISInD59GqIH2esIJ8G9O2/XVwhjzpw5EAam1xkkBJn/bJX+v1365hxxuCAfH9+3b9/+////48cPuNehNsS7cDEzMTAwMMzb+Q2u4dOnT2vWrMHu9ZtzxP9vl/69RVpCkBlZ3N7enoDXBwEAAA+YYitOilMVAAAAAElFTkSuQmCC
    :target: https://docs.pyansys.com/
@@ -24,10 +24,9 @@
    :target: https://opensource.org/licenses/MIT
    :alt: MIT
 
-.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat
-   :target: https://github.com/psf/black
-   :alt: Black
-
+.. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+   :target: https://github.com/astral-sh/ruff
+   :alt: Ruff
 
 PyGranta Data Flow Toolkit
 ==========================
@@ -67,9 +66,10 @@ install the latest PyGranta Data Flow Toolkit release from
 `PyPI <https://pypi.org/project/ansys-grantami-dataflow-toolkit/>`_ as a system-wide package, run this command as an
 administrator::
 
-    python -m pip install ansys-grantami-dataflow-toolkit
+   python -m pip install ansys-grantami-dataflow-toolkit
 
 .. note::
+
    To install packages into the system-wide Python installation directly, you **must** run the preceding command with
    administrator rights. Otherwise, ``pip install`` will install the package for the current user only and will
    display the warning:
@@ -126,13 +126,13 @@ Installing a development version
 To install the latest release from the
 `PyGranta Data Flow Toolkit repository <https://github.com/ansys/grantami-dataflow-toolkit>`_, run this command::
 
-    python -m pip install git+https://github.com/ansys/grantami-dataflow-toolkit.git
+   python -m pip install git+https://github.com/ansys/grantami-dataflow-toolkit.git
 
 To install a local *development* version with Git and Poetry, run these commands::
 
-    git clone https://github.com/ansys/grantami-dataflow-toolkit
-    cd grantami-dataflow-toolkit
-    poetry install
+   git clone https://github.com/ansys/grantami-dataflow-toolkit
+   cd grantami-dataflow-toolkit
+   poetry install
 
 The preceding commands install the package in development mode so that you can modify
 it locally. Your changes are reflected in your Python setup after restarting the Python kernel.

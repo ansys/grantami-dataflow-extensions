@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -23,54 +23,44 @@
 from unittest.mock import patch
 
 from ansys.grantami.recordlists import Connection as RecordListConnection
+from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
 import pytest
 
-from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
-
-# Don't try and merge a test with its associated '_url' test. The act of mocking the authentication method
-# means that the completed client can no longer be returned, so it's not possible to both observe the URL in
-# the completed client AND check the arguments it was created with. We must do it with two separate tests.
+# Don't try and merge a test with its associated '_url' test. The act of mocking the
+# authentication method means that the completed client can no longer be returned,
+# so it's not possible to both observe the URL in the completed client AND check the
+# arguments it was created with. We must do it with two separate tests.
 
 
 def test_windows_https(windows_https, debug_caplog):
     with patch.object(RecordListConnection, "with_autologon") as mock:
-        windows_https.dataflow_integration.configure_pygranta_connection(
-            RecordListConnection
-        ).connect()
+        windows_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with()
     assert _pygranta_client_logged(debug_caplog.text)
     assert "Using Windows authentication." in debug_caplog.text
 
 
 def test_windows_https_url(windows_https):
-    client = windows_https.dataflow_integration.configure_pygranta_connection(
-        RecordListConnection
-    ).connect()
+    client = windows_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     assert client._service_layer_url == HTTPS_SL_URL
 
 
 def test_windows_http(windows_http, debug_caplog):
     with patch.object(RecordListConnection, "with_autologon") as mock:
-        windows_http.dataflow_integration.configure_pygranta_connection(
-            RecordListConnection
-        ).connect()
+        windows_http.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with()
     assert _pygranta_client_logged(debug_caplog.text)
     assert "Using Windows authentication." in debug_caplog.text
 
 
 def test_windows_http_url(windows_http):
-    client = windows_http.dataflow_integration.configure_pygranta_connection(
-        RecordListConnection
-    ).connect()
+    client = windows_http.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     assert client._service_layer_url == HTTP_SL_URL
 
 
 def test_basic_https(basic_https, debug_caplog):
     with patch.object(RecordListConnection, "with_credentials") as mock:
-        basic_https.dataflow_integration.configure_pygranta_connection(
-            RecordListConnection
-        ).connect()
+        basic_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with(
         username=USERNAME,
         password=PASSWORD,
@@ -80,17 +70,13 @@ def test_basic_https(basic_https, debug_caplog):
 
 
 def test_basic_https_url(basic_https):
-    client = basic_https.dataflow_integration.configure_pygranta_connection(
-        RecordListConnection
-    ).connect()
+    client = basic_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     assert client._service_layer_url == HTTPS_SL_URL
 
 
 def test_basic_http(basic_http, debug_caplog):
     with patch.object(RecordListConnection, "with_credentials") as mock:
-        basic_http.dataflow_integration.configure_pygranta_connection(
-            RecordListConnection
-        ).connect()
+        basic_http.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     mock.assert_called_once_with(
         username=USERNAME,
         password=PASSWORD,
@@ -100,19 +86,13 @@ def test_basic_http(basic_http, debug_caplog):
 
 
 def test_basic_http_url(basic_http):
-    client = basic_http.dataflow_integration.configure_pygranta_connection(
-        RecordListConnection
-    ).connect()
+    client = basic_http.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
     assert client._service_layer_url == HTTP_SL_URL
 
 
 def test_oidc_raises_exception(oidc_https, debug_caplog):
-    with pytest.raises(
-        NotImplementedError, match="OIDC authentication is not supported with PyGranta packages"
-    ):
-        oidc_https.dataflow_integration.configure_pygranta_connection(
-            RecordListConnection
-        ).connect()
+    with pytest.raises(NotImplementedError, match="OIDC authentication is not supported with PyGranta packages"):
+        oidc_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
 
 
 def test_invalid_class_raises_exception(windows_https):

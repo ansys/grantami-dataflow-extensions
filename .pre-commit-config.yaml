@@ -1,33 +1,25 @@
 repos:
 
-- repo: https://github.com/psf/black
-  rev: 24.3.0
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.7.4
   hooks:
-  - id: black
-
-- repo: https://github.com/pycqa/isort
-  rev: 5.13.2
-  hooks:
-  - id: isort
-
-- repo: https://github.com/PyCQA/flake8
-  rev: 7.0.0
-  hooks:
-  - id: flake8
+    - id: ruff
+    - id: ruff-format
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.6
+  rev: v2.3.0
   hooks:
   - id: codespell
     args: ["--ignore-words", "doc/styles/Vocab/ANSYS/accept.txt", "--skip", "poetry.lock"]
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.5.0
+  rev: v5.0.0
   hooks:
   - id: check-yaml
   - id: debug-statements
   - id: check-merge-conflict
   - id: trailing-whitespace
+
 - repo: https://github.com/pycqa/pydocstyle
   rev: 6.3.0
   hooks:
@@ -36,15 +28,15 @@ repos:
     files: "^(src/)"
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.2.8
+  rev: v0.4.4
   hooks:
     - id: add-license-headers
       args:
-      - --start_year=2024
+      - --start_year=2025
       files: '(src|tests)/.*\.(py)'
 
 - repo: https://github.com/numpy/numpydoc
-  rev: v1.6.0
+  rev: v1.8.0
   hooks:
   - id: numpydoc-validation
     exclude: "^(tests/)|^(.github/)|^(examples/)|^(.ipython/)|^(doc)"

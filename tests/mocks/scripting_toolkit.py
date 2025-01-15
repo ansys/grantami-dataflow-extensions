@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import sys
 from types import ModuleType
 from unittest.mock import Mock
 
@@ -64,7 +65,5 @@ def connect(*args, **kwargs):
 
 mpy.connect = Mock(wraps=connect)
 scripting_toolkit.granta = mpy
-
-import sys
 
 sys.modules["GRANTA_MIScriptingToolkit"] = scripting_toolkit

@@ -36,8 +36,7 @@
 import logging
 import traceback
 
-from ansys.grantami.recordlists import Connection as RecordListsConnection
-from ansys.grantami.recordlists import RecordListItem
+from ansys.grantami.recordlists import Connection as RecordListsConnection, RecordListItem
 
 from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
 

@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -145,7 +145,6 @@ class MIDataflowIntegration:
         verify_ssl: bool = True,
         certificate_file: str | Path | None = None,
     ) -> None:
-
         # Define properties
         self._supporting_files_dir = Path(sys.path[0])
 
@@ -180,9 +179,7 @@ class MIDataflowIntegration:
         try:
             self._authentication_mode = _AuthenticationMode(client_credential_type)
         except ValueError as e:
-            raise NotImplementedError(
-                f'Unknown ClientCredentialType "{client_credential_type}"'
-            ) from e
+            raise NotImplementedError(f'Unknown ClientCredentialType "{client_credential_type}"') from e
         logger.debug(f'Authentication mode: "{self._authentication_mode.name}"')
 
         # Configure HTTPS
@@ -196,9 +193,7 @@ class MIDataflowIntegration:
                 "configured on the Granta MI server."
             )
         self._https_enabled = use_https and server_supports_https
-        self._verify_ssl = (
-            self._https_enabled
-        )  # Verify if HTTPS is enabled unless explicitly disabled
+        self._verify_ssl = self._https_enabled  # Verify if HTTPS is enabled unless explicitly disabled
         self._ca_path = None  # Use public certs by default
 
         if certificate_file is not None and not isinstance(certificate_file, (Path, str)):
@@ -208,10 +203,7 @@ class MIDataflowIntegration:
             )
 
         # HTTP and OIDC is not supported
-        if (
-            not self._https_enabled
-            and self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION
-        ):
+        if not self._https_enabled and self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
             raise ValueError("HTTPS cannot be disabled when using OIDC authentication.")
 
         # HTTPS is disabled. Nothing to configure.
@@ -306,7 +298,9 @@ class MIDataflowIntegration:
         **kwargs: Any,
     ) -> "MIDataflowIntegration":
         """
-        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload provided as a JSON formatted string.
+        Instantiate an :class:`~.MIDataflowIntegration` object with a static payload.
+
+        provided as a JSON formatted string.
 
         Can be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.
         See :meth:`~.MIDataflowIntegration.get_payload_as_string` for information on generating a suitable payload.
@@ -314,7 +308,8 @@ class MIDataflowIntegration:
         Parameters
         ----------
         dataflow_payload : str
-            A JSON-formatted static copy of a Data Flow data payload used for testing purposes.
+            A JSON-formatted static copy of a Data Flow
+            data payload used for testing purposes.
         **kwargs
             Additional keyword arguments are passed to the :class:`~.MIDataflowIntegration` constructor.
 
@@ -479,8 +474,7 @@ class MIDataflowIntegration:
             self._mi_session = self._start_stk_session_from_dataflow_credentials()
         except NameError as e:
             raise MissingClientModuleException(
-                "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed "
-                "and try again."
+                "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed " "and try again."
             ) from e
         return self._mi_session
 
@@ -578,9 +572,7 @@ class MIDataflowIntegration:
         logger.debug("Creating PyGranta client.")
 
         if not issubclass(pygranta_connection_class, ApiClientFactory):
-            raise TypeError(
-                '"pygranta_connection_class" must be a subclass of ansys.openapi.common.ApiClientFactory'
-            )
+            raise TypeError('"pygranta_connection_class" must be a subclass of ansys.openapi.common.ApiClientFactory')
 
         config = SessionConfiguration(
             cert_store_path=str(self._ca_path) if self._ca_path is not None else None,
@@ -600,9 +592,7 @@ class MIDataflowIntegration:
             return builder.with_autologon()
 
         elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
-            raise NotImplementedError(
-                "OIDC authentication is not supported with PyGranta packages."
-            )
+            raise NotImplementedError("OIDC authentication is not supported with PyGranta packages.")
 
         else:
             raise NotImplementedError()
@@ -711,7 +701,7 @@ class MIDataflowIntegration:
         logger.info("---------------- Workflow successfully resumed -----------------")
 
 
-class MissingClientModuleException(ImportError):
+class MissingClientModuleException(ImportError):  # noqa: N818
     """Raised when a client API module is expected but could not be imported."""
 
     pass

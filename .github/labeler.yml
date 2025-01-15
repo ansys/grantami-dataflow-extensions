@@ -1,11 +1,11 @@
 documentation:
 - changed-files:
-  - any-glob-to-any-file: ['doc/source/**/*', 'examples/**/*']
+  - any-glob-to-any-file: ['doc/source/**/*', 'examples/**/*', 'README.rst']
 - head-branch: ['^doc/', '^docs/']
 
 maintenance:
 - changed-files:
-  - any-glob-to-any-file: ['.github/**/*', '.flake8', 'pyproject.toml']
+  - any-glob-to-any-file: ['.github/**/*', 'pyproject.toml']
 - head-branch: ['^maint/', '^ci/', '^no-ci/']
 
 enhancement:
