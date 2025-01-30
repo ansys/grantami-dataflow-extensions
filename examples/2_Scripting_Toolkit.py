@@ -12,19 +12,18 @@
 #     name: python3
 # ---
 
-# # Scripting Toolkit example
+# # Granta MI Scripting Toolkit example
 
 # ## Introduction
 
-# This notebook provides a best-practice example for using Data Flow Toolkit to interact with Granta MI via Scripting
-# Toolkit as part of a Data Flow operation. The code below uploads the data payload received by Data Flow to the
-# workflow record. However, this could be replaced with any other business logic which requires access to Granta MI
+# An example that uses the PyGranta Data Flow Framework to interact with a Granta MI system via the Granta MI Scripting
+# Toolkit. This example uploads the data payload received by MI Data Flow to the
+# workflow record. This could be replaced with any other business logic which requires access to Granta MI
 # resources.
 
-# See [Recommended script structure](../user_guide/index.rst#recommended-script-structure) for more details on the
-# script structure, and
-# [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice) for
-# guidance on using this example as a starting point for your development.
+# ### Useful links ###
+# * [Recommended script structure](../user_guide/index.rst#recommended-script-structure)
+# * [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice)
 
 # <div class="alert alert-warning">
 #
@@ -32,7 +31,7 @@
 #
 # The `step_logic()` function generates the dataflow payload, and explicitly calls the `get_payload_as_str()` method
 # with `include_credentials=False` to avoid writing credentials to the Granta MI database. If you are using Basic or
-# OIDC Authentication and require these credentials for your business logic, you should inject these credentials into
+# OIDC Authentication and require these credentials for your business logic, inject these credentials into
 # the `dataflow_payload["AuthorizationHeader"]` value in the `testing()` function directly, for example via an
 # environment variable.
 # </div>
@@ -46,8 +45,8 @@
 #
 # **Info:**
 #
-# Running this notebook requires the Granta MI Scripting Toolkit package. If you do not have access to the Scripting
-# Toolkit, contact your system administrator.
+# Running this notebook requires the Granta MI Scripting Toolkit package. If you do not have access to the Granta MI Scripting
+# Toolkit, contact your System Administrator.
 # </div>
 
 # ## Example script
@@ -71,11 +70,11 @@ logger.addHandler(ch)
 
 def main():
     """
-    Initializes the Data Flow integration module, runs the business logic,
+    Initializes the MI Data Flow integration module, runs the business logic,
     and cleans up once execution has completed.
     """
 
-    # It is strongly recommended to use HTTPS in production
+    # Ansys strongly recommend using HTTPS in production environments.
     # If you are using an internal certificate, you should specify the
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute

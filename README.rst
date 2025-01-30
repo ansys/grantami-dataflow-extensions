@@ -28,15 +28,15 @@
    :target: https://github.com/astral-sh/ruff
    :alt: Ruff
 
-PyGranta Data Flow
+PyGranta Data Flow Framework
 ==========================
 
 ..
    _after-badges
 
 
-PyGranta Data Flow provides easy interoperability between Granta MI Data Flow and Python scripts that implement
-custom business logic. This package streamlines the interaction with Granta MI using other PyGranta packages and with
+The PyGranta Data Flow Framework provides easy interoperability between Granta MI Data Flow and Python scripts that implement
+custom business logic. This framework streamlines the interaction with Granta MI&trade; systems using other PyGranta packages and with the
 Granta MI Scripting Toolkit.
 
 
@@ -44,7 +44,7 @@ Dependencies
 ------------
 .. readme_software_requirements
 
-To use PyGranta Data Flow, you need access to a deployment of Granta MI 2023 R2 or later with an MI Data Flow Advanced edition license.
+To use the PyGranta Data Flow Framework, you need access to a deployment of Granta MI 2023 R2 or later with an MI Data Flow Advanced edition license.
 
 Python must be installed system-wide, as opposed to a per-user installation. This option is available during installation, and can only be modified by uninstalling and reinstalling Python.
 
@@ -61,7 +61,7 @@ System-wide
 
 Install the package system-wide on the Granta MI application server for production or for integration testing. 
 
-To install `the latest release <https://pypi.org/project/ansys-grantami-dataflow-toolkit/>`_ as a system-wide package, run this command as an
+To install `the latest release <https://pypi.org/project/ansys-grantami-dataflow-framework/>`_ as a system-wide package, run this command as an
 administrator::
 
    python -m pip install ansys-grantami-dataflow
@@ -81,7 +81,7 @@ administrator::
 
    - Re-run the command above as a user with administrator privileges. This will ensure the package is installed
      system-wide.
-   - Re-run the command as the same user that runs MI Data Flow. This will install the package such that the Data Flow user can access it, and will suppress         the user installation warning.
+   - Re-run the command as the same user that runs MI Data Flow. This will install the package such that the Data Flow user can access it, and will suppress the user installation warning.
    - Follow the instructions in the Virtual environment to use a `Virtual environment`_.
 
 Virtual environment

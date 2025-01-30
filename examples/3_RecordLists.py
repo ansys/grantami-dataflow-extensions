@@ -16,13 +16,13 @@
 
 # ## Introduction
 
-# This notebook provides a best-practice example for using Data Flow Toolkit to interact with a Granta MI Record List as
+# An example that uses the PyGranta Data Flow Framework to interact with a Granta MI Record List as
 # part of a Data Flow step. The code below shows how to add the workflow record to a record list.  However, the
 # principles shown here can be applied to any PyGranta package.
 
-# See [Recommended script structure](../user_guide/index.rst#recommended-script-structure) for more details on the
-# script structure, and the [PyGranta RecordLists documentation](https://recordlists.grantami.docs.pyansys.com/) for
-# more details on using the PyGranta RecordLists package.
+# ### Useful links ###
+# * [Recommended script structure](../user_guide/index.rst#recommended-script-structure)
+# * [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice)
 
 # ## Pre-requisites
 
@@ -53,11 +53,12 @@ logger.addHandler(ch)
 
 def main():
     """
-    Initializes the Data Flow integration module, runs the business logic,
+    Initializes the MI Data Flow integration module, runs the business logic,
     and cleans up once execution has completed.
     """
 
-    # It is strongly recommended to use HTTPS in production
+
+    # Ansys strongly recommend using HTTPS in production environments.
     # If you are using an internal certificate, you should specify the
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
@@ -105,7 +106,7 @@ def testing():
 
 
 # These GUIDs cannot be determined by a PyGranta package, so they are hardcoded
-# Alternatively, they could be accessed via Scripting Toolkit
+# Alternatively, they could be accessed via the Granta MI Scripting Toolkit
 DATABASE_GUID = "43a43640-4919-428a-bac9-16efbc4ce6ed"  # MI_Training
 TABLE_GUID = "ad27baf0-42e9-4136-bc96-9dbbf116e265"  # Metals Pedigree
 

@@ -16,26 +16,25 @@
 
 # ## Introduction
 
-# This notebook provides a best-practice example for using Data Flow Toolkit to interact with a non-Granta MI resource
-# as part of a Data Flow operation.
+# An example that uses the PyGranta Data Flow Framework to interact with a resource that
+# isn't part of a standard Granta MI system.
 
-# The cell below contains an example script that simply logs the record identifying information which is received from
-# Data Flow. However, this could be replaced with any other business logic which can make use of the data provided by
-# Data Flow. To perform operations that rely on additional information from Granta MI, see the other examples in this
+# This example script logs the record identifying information, which is received from
+# MI Data Flow. This could be replaced with any other business logic which can make use of the data provided by
+# MI Data Flow. To perform operations that rely on additional information from a Granta MI system, see the other examples in this
 # package.
 
-# See [Recommended script structure](../user_guide/index.rst#recommended-script-structure) for more details on the
-# script structure, and
-# [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice) for
-# guidance on using this example as a starting point for your development.
+# ### Useful links ###
+# * [Recommended script structure](../user_guide/index.rst#recommended-script-structure)
+# * [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice)
 
 # <div class="alert alert-warning">
 #
 # **Warning:**
 #
 # The `step_logic()` function generates the dataflow payload, and explicitly calls the `get_payload_as_str()` method
-# with `include_credentials=False` to avoid logging credentials to the Data Flow log. If you are using Basic or OIDC
-# Authentication and require these credentials for your business logic, you should inject these credentials into the
+# with `include_credentials=False` to avoid logging credentials. If you are using Basic or OIDC
+# Authentication and require these credentials for your business logic, inject these credentials into the
 # `dataflow_payload["AuthorizationHeader"]` value in the `testing()` function directly, for example via an environment
 # variable.
 # </div>
@@ -46,7 +45,7 @@
 import logging
 import traceback
 
-from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+from ansys.grantami.dataflow_framework import MIDataflowIntegration
 
 # Create an instance of the root logger
 logger = logging.getLogger()
@@ -61,11 +60,11 @@ logger.addHandler(ch)
 
 def main():
     """
-    Initializes the Data Flow integration module, runs the business logic,
+    Initializes the MI Data Flow integration module, runs the business logic,
     and cleans up once execution has completed.
     """
 
-    # It is strongly recommended to use HTTPS in production
+    # Ansys strongly recommend using HTTPS in production environments.
     # If you are using an internal certificate, you should specify the
     # CA certificate with certificate_filename=my_cert_file.crt and add the
     # certificate to the workflow as a supporting file, or use an absolute
@@ -114,7 +113,7 @@ def testing():
 
 
 def step_logic(dataflow_integration):
-    """Contains the business logic to be executed as part of the workflow.
+    """Contains the business logic to be run as part of the workflow.
 
     Replace the code in this module with your custom business logic."""
 
