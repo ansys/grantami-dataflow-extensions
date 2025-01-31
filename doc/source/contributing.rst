@@ -8,24 +8,24 @@ General guidelines
 Overall guidance on contributing to a PyAnsys library appears in the
 `Contributing <https://dev.docs.pyansys.com/how-to/contributing.html>`_ topic
 in the *PyAnsys developer's guide*. Ensure that you are thoroughly familiar
-with this guide before attempting to contribute to PyGranta Data Flow Toolkit.
+with this guide before attempting to contribute to PyGranta Data Flow Framework.
 
-The following contribution information is specific to PyGranta Data Flow Toolkit.
+The following contribution information is specific to PyGranta Data Flow Framework.
 
 Developer environment setup
 ===========================
 
-PyGranta Data Flow Toolkit uses `Poetry`_ for packaging and dependency management.
+PyGranta Data Flow Framework uses `Poetry`_ for packaging and dependency management.
 Installation information is available in the Poetry documentation.
 
-Installing PyGranta Data Flow Toolkit in developer mode allows you to modify and
+Installing PyGranta Data Flow Framework in developer mode allows you to modify and
 enhance the source.
 
 Clone the source repository
 ---------------------------
 
 Run the following commands to clone and install the latest version of PyGranta Data Flow
-Toolkit in editable mode, which ensures changes to the code are immediately visible in the
+Framework in editable mode, which ensures changes to the code are immediately visible in the
 environment. Running these commands also installs the required development dependencies to
 run the tests, build the documentation, and build the package.
 
@@ -100,19 +100,19 @@ to ``True``. Otherwise, a different set of examples is run to validate the proce
 Examples are checked in as scripts using the ``light`` format. For more information,
 see the `Jupytext documentation <jupytext_>`_. As part of the documentation-building
 process, the Python files are converted back into Jupyter notebooks and the output
-cells are populated by running the notebooks against a Granta MI instance.
+cells are populated by running the notebooks against a Granta MI&trade; instance.
 
 This conversion between Jupyter notebooks and Python files is performed by
 `nb-convert`_. Installation information is available in the ``nb-convert`` documentation.
 
 Post issues
 ===========
-Use the `PyGranta Data Flow Toolkit Issues <https://github.com/pyansys/grantami-dataflow-toolkit/issues>`_
+Use the `PyGranta Data Flow Framework Issues <https://github.com/pyansys/grantami-dataflow-toolkit/issues>`_
 page to report bugs and request new features. When possible, use the issue templates provided. If
 your issue does not fit into one of these templates, click the link for opening a blank issue.
 
 If you have general questions about the PyAnsys ecosystem, email `pyansys.core@ansys.com <pyansys.core@ansys.com>`_.
-If your question is specific to PyGranta JobQueue, ask your question in an issue as described in
+If your question is specific to PyGranta Data Flow Framework, ask your question in an issue as described in
 the previous paragraph.
 
 .. _Poetry: https://python-poetry.org/

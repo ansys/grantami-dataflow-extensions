@@ -21,10 +21,10 @@
 # SOFTWARE.
 
 """
-MI Data Flow Toolkit module.
+MI Data Flow Framework module.
 
-Provides generic functionality for parsing step information provided by Data Flow.
-Allows direct access to this data or supports spawning a Scripting Toolkit session.
+Provides generic functionality for parsing step information provided by MI Data Flow.
+Allows direct access to this data or supports spawning a MI Scripting Toolkit session.
 """
 
 import base64
@@ -68,13 +68,13 @@ class MIDataflowIntegration:
     r"""
     Represents a MI Data Flow step at the point at which the Python script is triggered.
 
-    When this class is instantiated, it parses the data provided by Data Flow, enabling Granta MI API client sessions
+    When this class is instantiated, it parses the data provided by MI Data Flow, enabling Granta MI API client sessions
     to be created.
 
     Parameters
     ----------
     use_https : bool, default ``True``
-        Whether to use HTTPS if supported by the Granta MI server.
+        Whether to use HTTPS if supported by the Granta MI application server.
     verify_ssl : bool, default ``True``
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
     certificate_file : str | pathlib.Path | None, default ``None``
@@ -87,9 +87,9 @@ class MIDataflowIntegration:
            certificate must be added to the workflow definition as a supporting file.
         *  The absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it
            is recommended to store it in a location that will not be modified between workflows.
-        *  ``None``. In this case, the certifi public CA store will be used.
+        *  ``None``. In this case, the `certifi <https://pypi.org/project/certifi/>`_ public CA store will be used.
 
-        If specified, the certificate will be used to verify PyGranta and Data Flow requests. Has no effect if
+        If specified, the certificate will be used to verify PyGranta and MI Data Flow requests. Has no effect if
         ``use_https`` or ``verify_ssl`` are set to ``False``.
 
     Raises
