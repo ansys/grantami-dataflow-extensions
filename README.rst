@@ -59,7 +59,7 @@ Installation
 System-wide
 ###########
 
-Install the package system-wide on the Granta MI application server for production or for integration testing. 
+Install the package system-wide on the Granta MI application server for production use or for integration testing. 
 
 To install `the latest release <https://pypi.org/project/ansys-grantami-dataflow-framework/>`_ as a system-wide package, run this command as an
 administrator::
