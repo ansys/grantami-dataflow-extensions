@@ -29,7 +29,7 @@ The rest of this user guide provides more detail around specific aspects of the 
 
 
 Integration with MI Data Flow
---------------------------
+-----------------------------
 
 This package is designed to be used with Granta MI Data Flow. The integration works as follows:
 
@@ -41,7 +41,7 @@ This package is designed to be used with Granta MI Data Flow. The integration wo
 #. The Python script ends.
 
 MI Data Flow payload
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. currentmodule:: ansys.grantami.dataflow_framework
 
@@ -116,8 +116,8 @@ and logged centrally::
    logger.addHandler(ch)
 
 
- ``main()``
-~~~~~~~~~~~
+``main()``
+~~~~~~~~~~
 
 Instantiates the :class:`~.MIDataflowIntegration` class directly, which parses the data passed into this script via
 ``stdin`` by MI Data Flow. Executes the business logic in ``step_logic()``, and resumes the workflow once the business
@@ -407,32 +407,31 @@ These files can either be stored in a known location on disk and referred to exp
 can be added to the workflow definition in MI Data Flow Designer:
 
 Storing files externally
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. currentmodule:: pathlib
 
-If the file is stored externally (for example in a folder C:\DataflowFiles), then you should use the
-:class:`Path` class to ensure you are using an absolute path, which is independent of the Python working
-directory. For example::
+If the file is stored externally (for example in a folder ``C:\DataflowFiles``), then you should use the :class:`Path`
+class to ensure you are using an absolute path, which is independent of the Python working directory. For example::
 
-   my_path = pathlib.Path("C:\DataflowFiles\my_data.csv")
+   my_path = pathlib.Path(r"C:\DataflowFiles\my_data.csv")
 
 
 .. currentmodule:: ansys.grantami.dataflow_framework
 
 Or in the case of providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor::
 
-  my_cert = pathlib.Path(C"\DataflowFiles\my_cert.crt")
+  my_cert = pathlib.Path(r"C:\DataflowFiles\my_cert.crt")
   dataflow = MIDataflowIntegration(certificate_file=my_cert)
 
 * The advantage of this approach is that files can easily be shared across workflow definitions, and do not need to be
-uploaded to each one separately.
-* The disadvantage is that the files are stored outside of the workflow
-definition, and do not get automatically uploaded or downloaded from the server when using MI Data Flow Manager.
+  uploaded to each one separately.
+* The disadvantage is that the files are stored outside of the workflow definition, and do not get automatically
+  uploaded or downloaded from the server when using MI Data Flow Manager.
 
 
 Storing files within the workflow definition
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If the file is stored within the workflow definition, then MI Data Flow makes these files are available on disk at
 script runtime. To access these files, use the

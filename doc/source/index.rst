@@ -1,5 +1,5 @@
 PyGranta Data Flow Framework |version|
-====================================
+======================================
 
 PyGranta Data Flow Framework provides easy interoperability between Granta MI
 Data Flow and Python scripts that implement custom business logic. This
