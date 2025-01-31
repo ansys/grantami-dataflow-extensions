@@ -57,7 +57,7 @@ Installation
 
 
 System-wide
-~~~~~~~~~~~
+###########
 
 Install the package system-wide on the Granta MI application server for production or for integration testing. 
 
@@ -85,7 +85,7 @@ administrator::
    - Follow the instructions in the Virtual environment to use a `Virtual environment`_.
 
 Virtual environment
-~~~~~~~~~~~~~~~~~~~
+###################
 
 Install the package in a virtual environment:
 
@@ -117,7 +117,7 @@ virtual environment to be used:
 #. Reload the Data Flow worker process in IIS Manager. Warning: This stops any running Workflow processes.
 
 Installing a development version
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+################################
 
 To install the latest release from the
 `PyGranta Data Flow Toolkit repository <https://github.com/ansys/grantami-dataflow-toolkit>`_, run this command::

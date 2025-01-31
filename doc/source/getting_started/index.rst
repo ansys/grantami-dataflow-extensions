@@ -21,7 +21,7 @@ Installation
 
 Verify your installation
 ~~~~~~~~~~~~~~~~~~~~~~~~
-To verify that you can import the PyGranta Data Flow Toolkit in Python, run this code:
+To verify that your installation has been successful, run this code:
 
 .. code:: python
 
@@ -30,7 +30,9 @@ To verify that you can import the PyGranta Data Flow Toolkit in Python, run this
 
     0.0.1
 
-If you see a version number, you have successfully installed PyGranta Data Flow Toolkit. For
-best practice around developing scripts that interact with Data Flow, see :ref:`ref_user_guide`.
-For examples, see :ref:`ref_grantami_dataflow_toolkit_examples`. For comprehensive information
-on the API, see :ref:`ref_grantami_dataflow_toolkit_api_reference`.
+If you see a version number, your PyGranta Data Flow Framework is installed. 
+
+Useful links
+* For best practice around developing scripts that interact with Data Flow, see the :ref:`ref_user_guide`.
+* For examples, see the :ref:`ref_grantami_dataflow_toolkit_examples`. 
+* For comprehensive information on the API, see :ref:`ref_grantami_dataflow_toolkit_api_reference`.
