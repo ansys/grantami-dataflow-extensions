@@ -1,7 +1,7 @@
 .. _ref_getting_started:
 
 Getting started
-###############
+===============
 
 .. _ref_software_requirements:
 
