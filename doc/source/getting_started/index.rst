@@ -25,14 +25,14 @@ To verify that your installation has been successful, run this code:
 
 .. code:: python
 
-    >>> from ansys.grantami import dataflow_toolkit
-    >>> print(dataflow_toolkit.__version__)
+    >>> from ansys.grantami import dataflow_framework
+    >>> print(dataflow_framework.__version__)
 
     0.0.1
 
-If you see a version number, your PyGranta Data Flow Framework is installed. 
+If you see a version number, your PyGranta Data Flow Framework is installed.
 
 Useful links
 * For best practice around developing scripts that interact with Data Flow, see the :ref:`ref_user_guide`.
-* For examples, see the :ref:`ref_grantami_dataflow_toolkit_examples`. 
-* For comprehensive information on the API, see :ref:`ref_grantami_dataflow_toolkit_api_reference`.
+* For examples, see the :ref:`ref_grantami_dataflow_framework_examples`.
+* For comprehensive information on the API, see :ref:`ref_grantami_dataflow_framework_api_reference`.

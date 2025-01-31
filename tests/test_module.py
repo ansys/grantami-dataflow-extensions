@@ -41,7 +41,7 @@ from common import (
 )
 import pytest
 
-from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+from ansys.grantami.dataflow_framework import MIDataflowIntegration
 
 
 class TestInstantiationFromDict:

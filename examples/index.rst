@@ -1,15 +1,15 @@
-.. _ref_grantami_dataflow_toolkit_examples:
+.. _ref_grantami_dataflow_framework_examples:
 
 Examples
 ========
 
-The following examples demonstrate key aspects of Granta MI Data Flow Toolkit.
+The following examples demonstrate key aspects of Granta MI Data Flow Framework.
 
 To run these examples, install dependencies with this command:
 
 .. code::
 
-   pip install ansys-grantami-dataflow-toolkit[examples]
+   pip install ansys-grantami-dataflow-framework[examples]
 
 .. toctree::
    :maxdepth: 1

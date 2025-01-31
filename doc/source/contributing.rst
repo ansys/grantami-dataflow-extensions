@@ -31,8 +31,8 @@ run the tests, build the documentation, and build the package.
 
 .. code:: bash
 
-    git clone https://github.com/ansys/grantami-dataflow-toolkit
-    cd grantami-dataflow-toolkit
+    git clone https://github.com/ansys/grantami-dataflow-framework
+    cd grantami-dataflow-framework
     poetry install --with doc
 
 Additional tools
@@ -89,7 +89,7 @@ warnings and errors locally before pushing changes.
 Example notebooks
 =================
 Examples are included in the documentation to give you more context around
-the core capabilities described in :ref:`ref_grantami_dataflow_toolkit_api_reference`.
+the core capabilities described in :ref:`ref_grantami_dataflow_framework_api_reference`.
 Additional examples are welcomed, especially if they cover a key use case of the
 package that has not yet been covered.
 
@@ -107,7 +107,7 @@ This conversion between Jupyter notebooks and Python files is performed by
 
 Post issues
 ===========
-Use the `PyGranta Data Flow Framework Issues <https://github.com/pyansys/grantami-dataflow-toolkit/issues>`_
+Use the `PyGranta Data Flow Framework Issues <https://github.com/pyansys/grantami-dataflow-framework/issues>`_
 page to report bugs and request new features. When possible, use the issue templates provided. If
 your issue does not fit into one of these templates, click the link for opening a blank issue.
 

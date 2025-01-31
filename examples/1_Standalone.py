@@ -16,15 +16,14 @@
 
 # ## Introduction
 
-# An example that uses the PyGranta Data Flow Framework to interact with a resource that
-# isn't part of a standard Granta MI system.
+# An example that uses the PyGranta Data Flow Framework to interact with a resource that # isn't part of a standard
+# Granta MI system.
 
-# This example script logs the record identifying information, which is received from
-# MI Data Flow. This could be replaced with any other business logic which can make use of the data provided by
-# MI Data Flow. To perform operations that rely on additional information from a Granta MI system, see the other examples in this
-# package.
+# This example script logs the record identifying information, which is received from MI Data Flow. This could be
+# replaced with any other business logic which can make use of the data provided by MI Data Flow. To perform operations
+# that rely on additional information from a Granta MI system, see the other examples in this package.
 
-# ### Useful links ###
+# ### Useful links
 # * [Recommended script structure](../user_guide/index.rst#recommended-script-structure)
 # * [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice)
 
@@ -33,8 +32,8 @@
 # **Warning:**
 #
 # The `step_logic()` function generates the dataflow payload, and explicitly calls the `get_payload_as_str()` method
-# with `include_credentials=False` to avoid logging credentials. If you are using Basic or OIDC
-# Authentication and require these credentials for your business logic, inject these credentials into the
+# with `include_credentials=False` to avoid logging credentials. If you are using Basic or OIDC Authentication and
+# require these credentials for your business logic, inject these credentials into the
 # `dataflow_payload["AuthorizationHeader"]` value in the `testing()` function directly, for example via an environment
 # variable.
 # </div>

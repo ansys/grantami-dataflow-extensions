@@ -23,5 +23,5 @@
 
 import logging
 
-logger = logging.getLogger("ansys.grantami.dataflow_toolkit")
+logger = logging.getLogger("ansys.grantami.dataflow_framework")
 logger.addHandler(logging.NullHandler())

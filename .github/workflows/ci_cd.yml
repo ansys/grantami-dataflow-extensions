@@ -10,9 +10,9 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: '3.10'
-  DOCUMENTATION_CNAME: 'dataflow-toolkit.grantami.docs.pyansys.com'
-  LIBRARY_NAME: 'ansys-grantami-dataflow-toolkit'
-  LIBRARY_NAMESPACE: 'ansys.grantami.dataflow-toolkit'
+  DOCUMENTATION_CNAME: 'dataflow-framework.grantami.docs.pyansys.com'
+  LIBRARY_NAME: 'ansys-grantami-dataflow-framework'
+  LIBRARY_NAMESPACE: 'ansys.grantami.dataflow-framework'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

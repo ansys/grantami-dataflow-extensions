@@ -4,20 +4,20 @@
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-grantami-dataflow-toolkit?logo=pypi
-   :target: https://pypi.org/project/ansys-grantami-dataflow-toolkit/
+.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-grantami-dataflow-framework?logo=pypi
+   :target: https://pypi.org/project/ansys-grantami-dataflow-framework/
    :alt: Python
 
-.. |pypi| image:: https://img.shields.io/pypi/v/ansys-grantami-dataflow-toolkit.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/ansys-grantami-dataflow-toolkit
+.. |pypi| image:: https://img.shields.io/pypi/v/ansys-grantami-dataflow-framework.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/ansys-grantami-dataflow-framework
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/ansys/grantami-dataflow-toolkit/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/ansys/grantami-dataflow-toolkit
+.. |codecov| image:: https://codecov.io/gh/ansys/grantami-dataflow-framework/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys/grantami-dataflow-framework
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/ansys/grantami-dataflow-toolkit/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/ansys/grantami-dataflow-toolkit/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys/grantami-dataflow-framework/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys/grantami-dataflow-framework/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -29,24 +29,26 @@
    :alt: Ruff
 
 PyGranta Data Flow Framework
-==========================
+============================
 
 ..
    _after-badges
 
 
-The PyGranta Data Flow Framework provides easy interoperability between Granta MI Data Flow and Python scripts that implement
-custom business logic. This framework streamlines the interaction with Granta MI&trade; systems using other PyGranta packages and with the
-Granta MI Scripting Toolkit.
+The PyGranta Data Flow Framework provides easy interoperability between Granta MI Data Flow and Python scripts that
+implement custom business logic. This framework streamlines the interaction with Granta MI&trade; systems using other
+PyGranta packages and with the Granta MI Scripting Toolkit.
 
 
 Dependencies
 ------------
 .. readme_software_requirements
 
-To use the PyGranta Data Flow Framework, you need access to a deployment of Granta MI 2023 R2 or later with an MI Data Flow Advanced edition license.
+To use the PyGranta Data Flow Framework, you need access to a deployment of Granta MI 2023 R2 or later with an MI Data
+Flow Advanced edition license.
 
-Python must be installed system-wide, as opposed to a per-user installation. This option is available during installation, and can only be modified by uninstalling and reinstalling Python.
+Python must be installed system-wide, as opposed to a per-user installation. This option is available during
+installation, and can only be modified by uninstalling and reinstalling Python.
 
 .. readme_software_requirements_end
 
@@ -59,12 +61,12 @@ Installation
 System-wide
 ###########
 
-Install the package system-wide on the Granta MI application server for production use or for integration testing. 
+Install the package system-wide on the Granta MI application server for production use or for integration testing.
 
-To install `the latest release <https://pypi.org/project/ansys-grantami-dataflow-framework/>`_ as a system-wide package, run this command as an
-administrator::
+To install `the latest release <https://pypi.org/project/ansys-grantami-dataflow-framework/>`_ as a system-wide package,
+run this command as an administrator::
 
-   python -m pip install ansys-grantami-dataflow
+   python -m pip install ansys-grantami-dataflow-framework
 
 .. note::
 
@@ -81,7 +83,8 @@ administrator::
 
    - Re-run the command above as a user with administrator privileges. This will ensure the package is installed
      system-wide.
-   - Re-run the command as the same user that runs MI Data Flow. This will install the package such that the Data Flow user can access it, and will suppress the user installation warning.
+   - Re-run the command as the same user that runs MI Data Flow. This will install the package such that the Data Flow
+     user can access it, and will suppress the user installation warning.
    - Follow the instructions in the Virtual environment to use a `Virtual environment`_.
 
 Virtual environment
@@ -102,10 +105,10 @@ location that all users can access.
 Then activate the virtual environment and install the packages::
 
    C:\path\to\my\venv\Scripts\activate
-   pip install ansys-grantami-dataflow
+   pip install ansys-grantami-dataflow-framework
 
-If installing in a virtual environment on the Granta MI application server, Data Flow must be configured with details of the
-virtual environment to be used:
+If installing in a virtual environment on the Granta MI application server, Data Flow must be configured with details of
+the virtual environment to be used:
 
 #. Create a backup copy of the ``web.config`` file. By default, this file is located at
    ``C:\inetpub\wwwroot\mi_dataflow``.
@@ -120,14 +123,14 @@ Installing a development version
 ################################
 
 To install the latest release from the
-`PyGranta Data Flow Toolkit repository <https://github.com/ansys/grantami-dataflow-toolkit>`_, run this command::
+`PyGranta Data Flow Framework repository <https://github.com/ansys/grantami-dataflow-framework>`_, run this command::
 
-   python -m pip install git+https://github.com/ansys/grantami-dataflow.git
+   python -m pip install git+https://github.com/ansys/grantami-dataflow-framework.git
 
 To install a local *development* version with Git and Poetry, run these commands::
 
-   git clone https://github.com/ansys/grantami-dataflow
-   cd grantami-dataflow
+   git clone https://github.com/ansys/grantami-dataflow-framework
+   cd grantami-dataflow-framework
    poetry install
 
 The preceding commands install the package in development mode so that you can modify

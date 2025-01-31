@@ -16,11 +16,11 @@
 
 # ## Introduction
 
-# An example that uses the PyGranta Data Flow Framework to interact with a Granta MI Record List as
-# part of a Data Flow step. The code below shows how to add the workflow record to a record list.  However, the
-# principles shown here can be applied to any PyGranta package.
+# An example that uses the PyGranta Data Flow Framework to interact with a Granta MI Record List as part of a Data Flow
+# step. The code below shows how to add the workflow record to a record list.  However, the principles shown here can be
+# applied to any PyGranta package.
 
-# ### Useful links ###
+# ### Useful links
 # * [Recommended script structure](../user_guide/index.rst#recommended-script-structure)
 # * [Business logic development best practice](../user_guide/index.rst#business-logic-development-best-practice)
 
@@ -38,7 +38,7 @@ import traceback
 
 from ansys.grantami.recordlists import Connection as RecordListsConnection, RecordListItem
 
-from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
+from ansys.grantami.dataflow_framework import MIDataflowIntegration
 
 # Create an instance of the root logger
 logger = logging.getLogger()
@@ -56,7 +56,6 @@ def main():
     Initializes the MI Data Flow integration module, runs the business logic,
     and cleans up once execution has completed.
     """
-
 
     # Ansys strongly recommend using HTTPS in production environments.
     # If you are using an internal certificate, you should specify the

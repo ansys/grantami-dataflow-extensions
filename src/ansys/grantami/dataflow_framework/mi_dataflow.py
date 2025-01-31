@@ -152,7 +152,7 @@ class MIDataflowIntegration:
 
         # Logger
         logger.info("")
-        logger.info("---------- Initializing new Dataflow Toolkit instance ----------")
+        logger.info("---------- Initializing new Dataflow Framework instance ----------")
 
         # Get data from data flow. Getting the payload as a sanitized string performs a basic check that we have
         # an expected data structure.

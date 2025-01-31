@@ -1,9 +1,9 @@
-.. _ref_grantami_dataflow_toolkit_api_reference:
+.. _ref_grantami_dataflow_framework_api_reference:
 
 API reference
 #############
 
-.. autoclass:: ansys.grantami.dataflow_toolkit.MIDataflowIntegration
+.. autoclass:: ansys.grantami.dataflow_framework.MIDataflowIntegration
    :members:
 
-.. autoclass:: ansys.grantami.dataflow_toolkit.MissingClientModuleException
+.. autoclass:: ansys.grantami.dataflow_framework.MissingClientModuleException
