@@ -16,8 +16,8 @@
 
 # ## Introduction
 
-# An example that uses the PyGranta Data Flow Framework to interact with a resource that # isn't part of a standard
-# Granta MI system.
+# An example that uses the PyGranta Data Flow Extensions package to interact with a resource that # isn't part of a
+# standard Granta MI system.
 
 # This example script logs the record identifying information, which is received from MI Data Flow. This could be
 # replaced with any other business logic which can make use of the data provided by MI Data Flow. To perform operations
@@ -44,7 +44,7 @@
 import logging
 import traceback
 
-from ansys.grantami.dataflow_framework import MIDataflowIntegration
+from ansys.grantami.dataflow_extensions import MIDataflowIntegration
 
 # Create an instance of the root logger
 logger = logging.getLogger()

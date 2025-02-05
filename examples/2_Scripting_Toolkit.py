@@ -16,9 +16,9 @@
 
 # ## Introduction
 
-# An example that uses the PyGranta Data Flow Framework to interact with a Granta MI system via the Granta MI Scripting
-# Toolkit. This example uploads the data payload received by MI Data Flow to the workflow record. This could be replaced
-# with any other business logic which requires access to Granta MI resources.
+# An example that uses the PyGranta Data Flow Extensions package to interact with a Granta MI system via the Granta MI
+# Scripting Toolkit. This example uploads the data payload received by MI Data Flow to the workflow record. This could
+# be replaced with any other business logic which requires access to Granta MI resources.
 
 # ### Useful links
 # * [Recommended script structure](../user_guide/index.rst#recommended-script-structure)
@@ -54,7 +54,7 @@
 import logging
 import traceback
 
-from ansys.grantami.dataflow_framework import MIDataflowIntegration
+from ansys.grantami.dataflow_extensions import MIDataflowIntegration
 
 # Create an instance of the root logger
 logger = logging.getLogger()

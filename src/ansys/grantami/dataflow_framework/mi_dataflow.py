@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 """
-MI Data Flow Framework module.
+Granta MI Data Flow Extensions module.
 
 Provides generic functionality for parsing step information provided by MI Data Flow.
 Allows direct access to this data or supports spawning a MI Scripting Toolkit session.
@@ -152,7 +152,7 @@ class MIDataflowIntegration:
 
         # Logger
         logger.info("")
-        logger.info("---------- Initializing new Dataflow Framework instance ----------")
+        logger.info("---------- Initializing new Data Flow Extensions instance ----------")
 
         # Get data from data flow. Getting the payload as a sanitized string performs a basic check that we have
         # an expected data structure.

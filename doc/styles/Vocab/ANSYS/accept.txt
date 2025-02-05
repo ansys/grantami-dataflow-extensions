@@ -8,4 +8,4 @@ jupytext
 mypy
 stdout
 stderr
-Framework
+Extensions

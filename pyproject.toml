@@ -4,15 +4,15 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
-name = "ansys-grantami-dataflow-framework"
+name = "ansys-grantami-dataflow-extensions"
 version = "0.1.dev0"
 description = "Productivity package for use with Granta MI Dataflow."
 license = "MIT"
 authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
 maintainers = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
 readme = "README.rst"
-repository = "https://github.com/ansys/grantami-dataflow-framework"
-documentation = "https://dataflow-framework.grantami.docs.pyansys.com"
+repository = "https://github.com/ansys/grantami-dataflow-extensions"
+documentation = "https://dataflow-extensions.grantami.docs.pyansys.com"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
@@ -147,8 +147,8 @@ directory = "doc/changelog.d"
 filename = "doc/source/changelog.rst"
 template = "doc/changelog.d/changelog_template.jinja"
 start_string = ".. towncrier release notes start\n"
-title_format = "`{version} <https://github.com/ansys/grantami-dataflow-framework/releases/tag/v{version}>`_ - {project_date}"
-issue_format = "`#{issue} <https://github.com/ansys/grantami-dataflow-framework/pull/{issue}>`_"
+title_format = "`{version} <https://github.com/ansys/grantami-dataflow-extensions/releases/tag/v{version}>`_ - {project_date}"
+issue_format = "`#{issue} <https://github.com/ansys/grantami-dataflow-extensions/pull/{issue}>`_"
 
 [[tool.towncrier.type]]
 directory = "added"
