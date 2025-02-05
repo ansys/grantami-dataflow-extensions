@@ -36,7 +36,7 @@ PyGranta Data Flow Extensions
 
 
 The PyGranta Data Flow Extensions package provides easy interoperability between Granta MI Data Flow and Python scripts
-that implement custom business logic. This package streamlines the interaction with Granta MI&trade; systems using
+that implement custom business logic. This package streamlines the interaction with Granta MI™ systems using
 other PyGranta packages and with the Granta MI Scripting Toolkit.
 
 
@@ -47,7 +47,7 @@ Dependencies
 To use the PyGranta Data Flow Extensions package, you need access to a deployment of Granta MI 2023 R2 or later with an
 MI Data Flow Advanced edition license.
 
-Python must be installed system-wide, as opposed to a per-user installation. This option is available during
+Python must be installed system-wide, as opposed to a per-user installation. This option is available during Python
 installation, and can only be modified by uninstalling and reinstalling Python.
 
 .. readme_software_requirements_end

@@ -17,11 +17,11 @@ PyGranta suite of packages. Some typical use cases include:
 - Generating links to other records
 - Interacting with external systems
 
-This package includes the code required to process the state information from Data Flow, to pass log information back to
-Data Flow, and to return execution to Data Flow once the script is complete.
+The ``dataflow-extensions`` package includes the code required to process the state information from Data Flow, to pass
+log information back to Data Flow, and to return execution to Data Flow once the script is complete.
 
 It also includes :ref:`examples <ref_grantami_dataflow_extensions_examples>` which demonstrate use of the library.
-These examples can be extended to incorporated business logic for specific use cases. In particular, the
+These examples can be extended to incorporate business logic for specific use cases. In particular, the
 :doc:`../examples/1_Standalone` gives a detailed description of the core components of a typical ``dataflow-extensions``
 script.
 
@@ -103,7 +103,7 @@ Logging
 ~~~~~~~
 
 Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by MI Data Flow
-and logged centrally::
+and logged centrally on the Granta MI application server::
 
    # Create an instance of the root logger
    logger = logging.getLogger()
@@ -291,10 +291,11 @@ recommended best practices are different to those of a conventional Python scrip
 
 A very simple approach to logging the output of a script is to use the ``print()`` function to write text to the
 terminal. This approach can be used with this package, and any printed messages are visible in the central Data Flow
-log, available at``http://my.server.name/mi_dataflow/api/logs``
+log, available at ``http://my.server.name/mi_dataflow/api/logs``.
 
-However, using the ``print()`` function offers limited control around log format, and message filtering. Instead, the
+However, using the ``print()`` function offers limited control around log format and message filtering. Instead, the
 recommended approach is to use the Python logging module. For more information, see the Python documentation:
+
 * `logging API documentation`_
 * `Logging HOWTO`_.
 
@@ -327,8 +328,9 @@ You can then add log statements to the logger at a certain log level as follows:
    logger.debug("This is a debug message")
    logger.info("This is an info message")
 
-..Note::
-Until a log handler is attached, no log messages are emitted.
+.. note::
+
+   Until a log handler is attached, no log messages are emitted.
 
 
 Attach a handler
@@ -364,8 +366,8 @@ It is possible to also log files to disk by using a :class:`FileHandler`. The fo
 
    If you use a :class:`FileHandler` you **must** ensure that each instance of the script writes the logs to different
    file or you may encounter a ``PermissionError``. In certain authentication modes the script executes as the active
-   Data Flow user, and so either multiple users could run the same script concurrently, or may try to append to a file
-   created by a different user.
+   Data Flow user, and so either multiple users could run the same script concurrently, or a user may try to append to a
+   file created by a different user.
 
 
 Additional debugging
@@ -386,9 +388,10 @@ use the following code::
    import os
    working_dir = os.getcwd()
 
-..note::
-When the workflow resumes, this folder and all its contents are deleted. They are
-only persisted if the workflow is manually cancelled.
+.. note::
+
+  When the workflow resumes, this folder and all its contents are deleted. They are only persisted if the workflow is
+  manually cancelled.
 
 .. _logging API documentation: https://docs.python.org/3/library/logging.html
 .. _Logging HOWTO: https://docs.python.org/3/howto/logging.html
@@ -433,10 +436,9 @@ Or in the case of providing a custom CA certificate to the :class:`~.MIDataflowI
 Storing files within the workflow definition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the file is stored within the workflow definition, then MI Data Flow makes these files are available on disk at
-script runtime. To access these files, use the
-:attr:`~.MIDataflowIntegration.supporting_files_dir` property. For example, to access a CSV file which was uploaded as a
-supporting file to MI Data Flow::
+If the file is stored within the workflow definition, then MI Data Flow makes these files available on disk at
+script runtime. To access these files, use the :attr:`~.MIDataflowIntegration.supporting_files_dir` property. For
+example, to access a CSV file which was uploaded as a supporting file to MI Data Flow::
 
    dataflow = MIDataflowIntegration()
    my_path = dataflow.supporting_files_dir \ "my_data.csv"

@@ -33,6 +33,8 @@ To verify that your installation has been successful, run this code:
 If you see a version number, your PyGranta Data Flow Extensions is installed.
 
 Useful links
+~~~~~~~~~~~~
+
 * For best practice around developing scripts that interact with Data Flow, see the :ref:`ref_user_guide`.
 * For examples, see the :ref:`ref_grantami_dataflow_extensions_examples`.
 * For comprehensive information on the API, see :ref:`ref_grantami_dataflow_extensions_api_reference`.

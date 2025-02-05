@@ -83,8 +83,8 @@ class MIDataflowIntegration:
 
         *  The filename of the certificate provided as a string. In this case, the certificate must be added to the
            workflow definition as a supporting file.
-        *  The filename or relative path of the certificate provided as a pathlib.Path object. In this case, the
-           certificate must be added to the workflow definition as a supporting file.
+        *  The filename or relative path of the certificate provided as a :class:`pathlib.Path` object. In this case,
+           the certificate must be added to the workflow definition as a supporting file.
         *  The absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it
            is recommended to store it in a location that will not be modified between workflows.
         *  ``None``. In this case, the `certifi <https://pypi.org/project/certifi/>`_ public CA store will be used.
@@ -127,8 +127,8 @@ class MIDataflowIntegration:
 
     >>> data_flow = MIDataflowIntegration(certificate_file="my_cert.crt")
 
-    If the certificate is stored somewhere else on disk, it can be specified by using a pathlib.Path object. In this
-    case, the certificate should not be added to the workflow definition file in Data Flow Designer.
+    If the certificate is stored somewhere else on disk, it can be specified by using a :class:`pathlib.Path` object. In
+    this case, the certificate should not be added to the workflow definition file in Data Flow Designer.
 
     >>> cert = pathlib.Path(r"C:\dataflow_files\certificates\my_cert.crt")
     >>> data_flow = MIDataflowIntegration(certificate_file=cert)

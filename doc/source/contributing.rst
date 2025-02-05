@@ -100,7 +100,7 @@ to ``True``. Otherwise, a different set of examples is run to validate the proce
 Examples are checked in as scripts using the ``light`` format. For more information,
 see the `Jupytext documentation <jupytext_>`_. As part of the documentation-building
 process, the Python files are converted back into Jupyter notebooks and the output
-cells are populated by running the notebooks against a Granta MI&trade; instance.
+cells are populated by running the notebooks against a Granta MI™ instance.
 
 This conversion between Jupyter notebooks and Python files is performed by
 `nb-convert`_. Installation information is available in the ``nb-convert`` documentation.

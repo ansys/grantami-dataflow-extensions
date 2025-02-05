@@ -16,7 +16,7 @@
 
 # ## Introduction
 
-# An example that uses the PyGranta Data Flow Extensions package to interact with a resource that # isn't part of a
+# An example that uses the PyGranta Data Flow Extensions package to interact with a resource that isn't part of a
 # standard Granta MI system.
 
 # This example script logs the record identifying information, which is received from MI Data Flow. This could be
