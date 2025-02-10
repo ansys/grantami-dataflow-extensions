@@ -4,20 +4,20 @@
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-grantami-dataflow-toolkit?logo=pypi
-   :target: https://pypi.org/project/ansys-grantami-dataflow-toolkit/
+.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-grantami-dataflow-extensions?logo=pypi
+   :target: https://pypi.org/project/ansys-grantami-dataflow-extensions/
    :alt: Python
 
-.. |pypi| image:: https://img.shields.io/pypi/v/ansys-grantami-dataflow-toolkit.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/ansys-grantami-dataflow-toolkit
+.. |pypi| image:: https://img.shields.io/pypi/v/ansys-grantami-dataflow-extensions.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/ansys-grantami-dataflow-extensions
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/ansys/grantami-dataflow-toolkit/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/ansys/grantami-dataflow-toolkit
+.. |codecov| image:: https://codecov.io/gh/ansys/grantami-dataflow-extensions/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys/grantami-dataflow-extensions
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/ansys/grantami-dataflow-toolkit/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/ansys/grantami-dataflow-toolkit/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys/grantami-dataflow-extensions/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys/grantami-dataflow-extensions/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -28,26 +28,26 @@
    :target: https://github.com/astral-sh/ruff
    :alt: Ruff
 
-PyGranta Data Flow Toolkit
-==========================
+PyGranta Data Flow Extensions
+=============================
 
 ..
    _after-badges
 
 
-PyGranta Data Flow Toolkit provides easy interoperability between Granta MI Data Flow and Python scripts that implement
-custom business logic. This package streamlines the interaction with Granta MI using other PyGranta packages and with
-Granta MI Scripting Toolkit.
+The PyGranta Data Flow Extensions package provides easy interoperability between Granta MI Data Flow and Python scripts
+that implement custom business logic. This package streamlines the interaction with Granta MI™ systems using
+other PyGranta packages and with the Granta MI Scripting Toolkit.
 
 
 Dependencies
 ------------
 .. readme_software_requirements
 
-To use PyGranta Data Flow Toolkit, you must have access to a Granta MI 2023 R2 deployment or later. Additionally, you
-must have an MI Data Flow Advanced edition license to be able to use Python scripts with Data Flow.
+To use the PyGranta Data Flow Extensions package, you need access to a deployment of Granta MI 2023 R2 or later with an
+MI Data Flow Advanced edition license.
 
-Python must be installed system-wide, as opposed to a per-user installation. This option is available during
+Python must be installed system-wide, as opposed to a per-user installation. This option is available during Python
 installation, and can only be modified by uninstalling and reinstalling Python.
 
 .. readme_software_requirements_end
@@ -59,14 +59,14 @@ Installation
 
 
 System-wide
-~~~~~~~~~~~
+###########
 
-This package should be installed system-wide on the Data Flow server for production or for integration testing. To
-install the latest PyGranta Data Flow Toolkit release from
-`PyPI <https://pypi.org/project/ansys-grantami-dataflow-toolkit/>`_ as a system-wide package, run this command as an
-administrator::
+Install the package system-wide on the Granta MI application server for production use or for integration testing.
 
-   python -m pip install ansys-grantami-dataflow-toolkit
+To install `the latest release <https://pypi.org/project/ansys-grantami-dataflow-extensions/>`_ as a system-wide package,
+run this command as an administrator::
+
+   python -m pip install ansys-grantami-dataflow-extensions
 
 .. note::
 
@@ -83,18 +83,17 @@ administrator::
 
    - Re-run the command above as a user with administrator privileges. This will ensure the package is installed
      system-wide.
-   - Run the command ``python -m pip install --user ansys-grantami-dataflow-toolkit`` as the same user that runs MI Data
-     Flow. This will install the package such that the Data Flow user can access it, and will suppress the user
-     installation warning.
+   - Re-run the command as the same user that runs MI Data Flow. This will install the package such that the Data Flow
+     user can access it, and will suppress the user installation warning.
    - Follow the instructions in the Virtual environment to use a `Virtual environment`_.
 
 Virtual environment
-~~~~~~~~~~~~~~~~~~~
+###################
 
-This package should be installed in a virtual environment in the following situations:
+Install the package in a virtual environment:
 
-* On a local development environment, for script development and debugging separate to Data Flow
-* On the Data Flow server, when it is not possible to install system-wide packages
+* On a local development environment, for script development and debugging
+* On the Granta MI application server, when it is not possible to install system-wide packages
 
 To install the package in a virtual environment, first create a new virtual environment::
 
@@ -106,10 +105,10 @@ location that all users can access.
 Then activate the virtual environment and install the packages::
 
    C:\path\to\my\venv\Scripts\activate
-   pip install ansys-grantami-dataflow-toolkit
+   pip install ansys-grantami-dataflow-extensions
 
-If installing in a virtual environment on the Data Flow server, Data Flow must be configured with details of the
-virtual environment to be used:
+If installing in a virtual environment on the Granta MI application server, Data Flow must be configured with details of
+the virtual environment to be used:
 
 #. Create a backup copy of the ``web.config`` file. By default, this file is located at
    ``C:\inetpub\wwwroot\mi_dataflow``.
@@ -118,20 +117,20 @@ virtual environment to be used:
    path to the virtual environment specified above.
 #. Save the modified ``web.config`` file. If you see a permissions error, you may need to open the text editor with
    administrator privileges.
-#. Reload the Data Flow worker process in IIS Manager. Warning: This stops any actively running Workflow processes.
+#. Reload the Data Flow worker process in IIS Manager. Warning: This stops any running Workflow processes.
 
 Installing a development version
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+################################
 
 To install the latest release from the
-`PyGranta Data Flow Toolkit repository <https://github.com/ansys/grantami-dataflow-toolkit>`_, run this command::
+`PyGranta Data Flow Extensions repository <https://github.com/ansys/grantami-dataflow-extensions>`_, run this command::
 
-   python -m pip install git+https://github.com/ansys/grantami-dataflow-toolkit.git
+   python -m pip install git+https://github.com/ansys/grantami-dataflow-extensions.git
 
 To install a local *development* version with Git and Poetry, run these commands::
 
-   git clone https://github.com/ansys/grantami-dataflow-toolkit
-   cd grantami-dataflow-toolkit
+   git clone https://github.com/ansys/grantami-dataflow-extensions
+   cd grantami-dataflow-extensions
    poetry install
 
 The preceding commands install the package in development mode so that you can modify

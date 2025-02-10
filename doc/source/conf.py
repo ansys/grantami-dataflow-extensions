@@ -8,10 +8,10 @@ import shutil
 from ansys_sphinx_theme import ansys_favicon, get_version_match
 import jupytext
 
-from ansys.grantami.dataflow_toolkit import __version__
+from ansys.grantami.dataflow_extensions import __version__
 
 # Project information
-project = "ansys-grantami-dataflow_toolkit"
+project = "ansys-grantami-dataflow_extensions"
 now = datetime.datetime.now()
 project_copyright = f"(c) {now.year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
@@ -19,15 +19,15 @@ release = version = __version__
 
 # Select desired logo, theme, and declare the html title
 html_theme = "ansys_sphinx_theme"
-html_short_title = html_title = "PyGranta Data Flow Toolkit"
+html_short_title = html_title = "PyGranta Data Flow Extensions"
 html_favicon = ansys_favicon
 
-cname = os.getenv("DOCUMENTATION_CNAME", "dataflow_toolkit.grantami.docs.pyansys.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "dataflow_extensions.grantami.docs.pyansys.com")
 """The canonical name of the webpage hosting the documentation."""
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "https://github.com/ansys/grantami-dataflow-toolkit",
+    "github_url": "https://github.com/ansys/grantami-dataflow-extensions",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [

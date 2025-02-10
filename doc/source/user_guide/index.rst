@@ -1,6 +1,6 @@
 .. _ref_user_guide:
 
-.. currentmodule:: ansys.grantami.dataflow_toolkit
+.. currentmodule:: ansys.grantami.dataflow_extensions
 
 User guide
 ##########
@@ -9,44 +9,44 @@ Introduction
 ------------
 
 Granta MI Data Flow can trigger Python scripts at the beginning or end of a workflow step. These Python scripts can
-execute custom business logic, including interacting with Granta MI using the Python Scripting Toolkit or PyGranta suite
-of packages. Some typical use cases include:
+execute custom business logic, including interacting with Granta MI systems using the Python Scripting Toolkit or
+PyGranta suite of packages. Some typical use cases include:
 
 - Populating attributes with values computed within the Python script
 - Analyzing data
 - Generating links to other records
 - Interacting with external systems
 
-This package includes the code required to process the state information from Data Flow, to pass log information back to
-Data Flow, and to return execution to Data Flow once the script is complete.
+The ``dataflow-extensions`` package includes the code required to process the state information from Data Flow, to pass
+log information back to Data Flow, and to return execution to Data Flow once the script is complete.
 
-It also includes :ref:`examples <ref_grantami_dataflow_toolkit_examples>` which demonstrate use of the library.
-These examples can be extended to incorporated business logic for specific use cases. In particular, the
-:doc:`../examples/1_Standalone` gives a detailed description of the core components of a typical ``dataflow-toolkit``
+It also includes :ref:`examples <ref_grantami_dataflow_extensions_examples>` which demonstrate use of the library.
+These examples can be extended to incorporate business logic for specific use cases. In particular, the
+:doc:`../examples/1_Standalone` gives a detailed description of the core components of a typical ``dataflow-extensions``
 script.
 
 The rest of this user guide provides more detail around specific aspects of the interaction with Data Flow.
 
 
-Integration with Data Flow
---------------------------
+Integration with MI Data Flow
+-----------------------------
 
 This package is designed to be used with Granta MI Data Flow. The integration works as follows:
 
-#. At a defined point in a workflow Data Flow triggers a Python script and pauses the workflow until the script resumes
-   the workflow.
+#. At a defined point in a workflow MI Data Flow triggers a Python script and pauses the workflow until the script
+   resumes the workflow.
 #. The Python script executes, potentially utilizing additional Ansys or third-party Python packages.
-#. At a defined point in the Python script (generally the end), the Python script instructs Data Flow to resume the
+#. At a defined point in the Python script (generally the end), the Python script instructs MI Data Flow to resume the
    workflow.
 #. The Python script ends.
 
-Data Flow payload
-~~~~~~~~~~~~~~~~~
+MI Data Flow payload
+~~~~~~~~~~~~~~~~~~~~
 
-.. currentmodule:: ansys.grantami.dataflow_toolkit
+.. currentmodule:: ansys.grantami.dataflow_extensions
 
-When Data Flow triggers a Python script, it provides context about the current state of the workflow as a JSON-formatted
-string. This string is referred to as the 'Data Flow payload', and an example is given below:
+When MI Data Flow triggers a Python script, it provides context about the current state of the workflow as a JSON-
+formatted string. This string is referred to as the 'MI Data Flow payload', and an example is given below:
 
 .. code-block:: json
 
@@ -78,18 +78,18 @@ This payload includes the following information:
   * Transition name
 
 * Workflow record reference and table name
-* Data flow server URL
+* MI Data flow web server URL
 * Server authorization information
 * Custom values defined in the workflow definition
 
 .. note::
-   If Data Flow is configured in Basic or OIDC authentication mode, the server authorization information contains an
+   If MI Data Flow is configured in Basic or OIDC authentication mode, the server authorization information contains an
    obfuscated username and password or an OIDC refresh token respectively. In these configurations, the payload should
    be treated as confidential.
 
-When a ``dataflow-toolkit``-based Python script is launched by Data Flow, the :class:`~.MIDataflowIntegration`
+When a ``dataflow-extensions``-based Python script is launched by MI Data Flow, the :class:`~.MIDataflowIntegration`
 constructor automatically parses the payload from ``stdin``. However, when developing and debugging a
-``dataflow-toolkit``-based script, it is recommended to run and debug the script separate to Data Flow by first
+``dataflow-extensions``-based script, it is recommended to run and debug the script separate to Data Flow by first
 generating a Data Flow payload, and then using it to instantiate the :class:`~.MIDataflowIntegration` class. These steps
 are described in `Business logic development best practice`_.
 
@@ -97,68 +97,82 @@ are described in `Business logic development best practice`_.
 Recommended script structure
 ----------------------------
 
-This section introduces the recommended components of a script that makes use of ``dataflow-toolkit``. To see all these
-script components together as a single example, see :doc:`../examples/1_Standalone`.
+These are the recommended components of a script that makes use of ``dataflow-extensions``:
 
-* Logging: Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by Data
-  Flow and logged centrally::
+Logging
+~~~~~~~
 
-     # Create an instance of the root logger
-     logger = logging.getLogger()
-     logger.setLevel(logging.INFO)
+Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by MI Data Flow
+and logged centrally on the Granta MI application server::
 
-     # Add a StreamHandler to write the output to stderr
-     ch = logging.StreamHandler()
-     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-     ch.setFormatter(formatter)
-     logger.addHandler(ch)
+   # Create an instance of the root logger
+   logger = logging.getLogger()
+   logger.setLevel(logging.INFO)
 
-* ``main()``: Instantiates the :class:`~.MIDataflowIntegration` class directly, which parses the data passed into this
-  script via ``stdin`` by Data Flow. Executes the business logic in ``step_logic()``, and resumes the workflow once the
-  business logic has completed::
+   # Add a StreamHandler to write the output to stderr
+   ch = logging.StreamHandler()
+   formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+   ch.setFormatter(formatter)
+   logger.addHandler(ch)
 
-     def main():
-         """
-         Initializes the Data Flow integration module, runs the business logic,
-         and cleans up once execution has completed.
-         """
-         dataflow_integration = MIDataflowIntegration()
 
-         try:
-             step_logic(dataflow_integration)
-             exit_code = 0
-         except Exception:
-             traceback.print_exc()
-             exit_code = 1
-         dataflow_integration.resume_bookmark(exit_code)
+``main()``
+~~~~~~~~~~
 
-* ``testing()``: Instantiates the :class:`~.MIDataflowIntegration` class from a static payload defined within the
-  function. Executes the business logic in ``step_logic()``::
+Instantiates the :class:`~.MIDataflowIntegration` class directly, which parses the data passed into this script via
+``stdin`` by MI Data Flow. Executes the business logic in ``step_logic()``, and resumes the workflow once the business
+logic has completed::
 
-      def testing():
-        """Contains a static copy of a Data Flow data payload for testing purposes"""
+   def main():
+       """
+       Initializes the Data Flow integration module, runs the business logic,
+       and cleans up once execution has completed.
+       """
+       dataflow_integration = MIDataflowIntegration()
 
-        dataflow_payload = { ... }
+       try:
+           step_logic(dataflow_integration)
+           exit_code = 0
+       except Exception:
+           traceback.print_exc()
+           exit_code = 1
+       dataflow_integration.resume_bookmark(exit_code)
 
-        dataflow_integration = MIDataflowIntegration.from_dict_payload(
-          dataflow_payload=dataflow_payload,
-          use_https=False,
-        )
-        step_logic(dataflow_integration)
 
-* ``step_logic()``: Contains the actual business logic for the step. In the initial example, the business logic just
-  logs the payload::
+``testing()``
+~~~~~~~~~~~~~
 
-     def step_logic(dataflow_integration):
-         """Contains the business logic to be executed as part of the workflow.
+Instantiates the :class:`~.MIDataflowIntegration` class from a static payload defined within the function. Executes the
+business logic in ``step_logic()``::
 
-         Replace the code in this module with your custom business logic."""
+   def testing():
+     """Contains a static copy of an MI Data Flow data payload for testing purposes"""
 
-         payload = dataflow_integration.get_payload_as_string(
-             include_credentials=False,
-         )
-         logger.info("Writing dataflow payload.")
-         logger.info(payload)
+     dataflow_payload = { ... }
+
+     dataflow_integration = MIDataflowIntegration.from_dict_payload(
+       dataflow_payload=dataflow_payload,
+       use_https=False,
+     )
+     step_logic(dataflow_integration)
+
+
+``step_logic()``
+~~~~~~~~~~~~~~~~
+
+Contains the actual business logic for the step. In the initial example, the business logic just logs the payload::
+
+   def step_logic(dataflow_integration):
+       """Contains the business logic to be executed as part of the workflow.
+
+       Replace the code in this module with your custom business logic."""
+
+       payload = dataflow_integration.get_payload_as_string(
+           include_credentials=False,
+       )
+       logger.info("Writing dataflow payload.")
+       logger.info(payload)
+
 
 Either ``main()`` or ``testing()`` should be executed when running the script. Python best practice is to use an
 ``if __name__ == "main"`` block, such as::
@@ -167,7 +181,7 @@ Either ``main()`` or ``testing()`` should be executed when running the script. P
        # main()  # Used when running the script as part of a workflow
        testing()  # Used when testing the script manually
 
-In this state, the script runs the ``testing()`` function for testing separately to Data Flow. To switch the code to run
+In this state, the script runs the ``testing()`` function for testing separately to MI Data Flow. To switch the code to run
 the ``main()`` function, un-comment the ``main()`` line and comment the ``testing()`` line::
 
    if __name__ == "__main__":
@@ -176,20 +190,22 @@ the ``main()`` function, un-comment the ``main()`` line and comment the ``testin
 
 This code now expects the payload to be provided via ``stdin``.
 
+To see all these script components together as a single example, see :doc:`../examples/1_Standalone`.
+
 
 Business logic development best practice
 ----------------------------------------
 
-The steps below assume you are proficient in the use of Data Flow Designer and Data Flow Manager, and already have a
-workflow fully defined with all required features apart from Python script execution. For more information on working
-with Data Flow Designer, see the `Granta MI Data Flow Designer documentation
+The steps below assume you are proficient in the use of MI Data Flow Designer and MI Data Flow Manager, and already have
+a workflow fully defined with all required features apart from Python script execution. For more information on working
+with MI Data Flow Designer, see the `Granta MI Data Flow Designer documentation
 <https://ansyshelp.ansys.com/account/secured?returnurl=/Views/Secured/Granta/v251/en/mi_data_flow_designer/index.html>`_.
 
 
-Obtaining a Data Flow payload for a workflow step
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Obtaining an MI Data Flow payload for a workflow step
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The first stage involves copying one of the example scripts and using it to obtain a JSON-formatted Data Flow payload,
+Copy one of the example scripts and using it to obtain a JSON-formatted Data Flow payload,
 which makes development much more straightforward. The steps to obtain the payload are described below:
 
 1. Copy the code block from the :doc:`../examples/1_Standalone` or :doc:`../examples/2_Scripting_Toolkit` to a local
@@ -215,13 +231,13 @@ which makes development much more straightforward. The steps to obtain the paylo
      attribute.
 
 You should now have a JSON-formatted string which contains information specific to your deployment of Granta MI,
-including the Data Flow URL and internal workflow identifiers.
+including the Data Flow web server URL and internal workflow identifiers.
 
 
 Developing business logic
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Now the Data Flow payload has been obtained, it can be used to test your custom business logic separate to the
+Now the MI Data Flow payload has been obtained, it can be used to test your custom business logic separate to the
 workflow. This makes it much faster to re-run the script, and allows running and debugging the script in an IDE. The
 steps to use this payload to develop your custom business logic are described below:
 
@@ -230,13 +246,13 @@ steps to use this payload to develop your custom business logic are described be
 2. Paste the payload JSON into the ``testing()`` function::
 
       def testing():
-        """Contains a static copy of a Data Flow data payload for testing purposes"""
+        """Contains a static copy of an MI Data Flow data payload for testing purposes"""
 
         # Paste payload below
         dataflow_payload = { ... }
 
         # Call MIDataflowIntegration constructor with "dataflow_payload" argument
-        # instead of reading data from Data Flow.
+        # instead of reading data from MI Data Flow.
         dataflow_integration = MIDataflowIntegration.from_dict_payload(
           dataflow_payload=dataflow_payload,
           use_https=False,
@@ -270,31 +286,27 @@ Logging and debugging
 ---------------------
 
 It is generally required to log outputs from scripts to help with debugging and to understand the inner state of the
-script. These use cases apply to this package as well, but because the script is executed as part of Data Flow, the
+script. These use cases apply to this package as well, but because the script is executed as part of MI Data Flow, the
 recommended best practices are different to those of a conventional Python script.
 
 A very simple approach to logging the output of a script is to use the ``print()`` function to write text to the
 terminal. This approach can be used with this package, and any printed messages are visible in the central Data Flow
-log, available at one of the URLs below depending on your Granta MI version:
+log, available at ``http://my.server.name/mi_dataflow/api/logs``.
 
-* MI 2023 R2 or later: ``http://my.server.name/mi_dataflow/api/logs``
-* MI 2023 R1 or earlier: ``http://my.server.name/mi_workflow_2/api/logs``
+However, using the ``print()`` function offers limited control around log format and message filtering. Instead, the
+recommended approach is to use the Python logging module. For more information, see the Python documentation:
 
-However, using the ``print()`` function offers limited control around log format, and message filtering. Instead, the
-recommended approach is to use the Python logging module. See the provided links for the Python
-`logging API documentation`_ and `Logging HOWTO`_.
+* `logging API documentation`_
+* `Logging HOWTO`_.
 
-The internal operations of this package are logged to a logger with the name ``ansys.grantami.dataflow_toolkit``. By
+The internal operations of this package are logged to a logger with the name ``ansys.grantami.dataflow_extensions``. By
 default, these messages are not output. To output the messages generated by this package and to add your own log
 messages, you should:
 
 #. Create a logger for your script.
 #. Attach a handler to the logger.
 
-The following sub-sections provide simple best practice for logging with this package. However, Python logging is
-extremely versatile and it is possible to construct complex logging implementations for your use case. Consult the
-Python API documentation and user guides referenced earlier in this section for a more complete review of the
-capabilities of Python logging.
+The following sub-sections provide simple best practice for logging with this package.
 
 Create a logger
 ~~~~~~~~~~~~~~~
@@ -316,7 +328,9 @@ You can then add log statements to the logger at a certain log level as follows:
    logger.debug("This is a debug message")
    logger.info("This is an info message")
 
-Note that until a log handler is attached, no log messages are emitted.
+.. note::
+
+   Until a log handler is attached, no log messages are emitted.
 
 
 Attach a handler
@@ -326,7 +340,7 @@ There are two main types of handlers provided by the Python logging library: :cl
 :class:`StreamHandler` handlers. A :class:`FileHandler` is used to write log messages to a file on disk, and a
 :class:`StreamHandler` is used to write log messages to ``stderr`` or ``stdout``.
 
-For code using this package, it is best practice to log to ``stderr``, which is collected by Data Flow toolkit and
+For code using this package, it is best practice to log to ``stderr``, which is collected by ``dataflow-extensions`` and
 included in the central Data Flow log. To add a :class:`StreamHandler` handler to the root logger from the previous
 section, use the following code::
 
@@ -352,30 +366,32 @@ It is possible to also log files to disk by using a :class:`FileHandler`. The fo
 
    If you use a :class:`FileHandler` you **must** ensure that each instance of the script writes the logs to different
    file or you may encounter a ``PermissionError``. In certain authentication modes the script executes as the active
-   Data Flow user, and so either multiple users could run the same script concurrently, or may try to append to a file
-   created by a different user.
+   Data Flow user, and so either multiple users could run the same script concurrently, or a user may try to append to a
+   file created by a different user.
 
 
 Additional debugging
 ~~~~~~~~~~~~~~~~~~~~
 
-Additionally, Data Flow creates a working directory on the server in ``C:\windows\TEMP\{workflow id}_{8.3}``, where
-``{workflow_id}`` is the workflow ID provided in Data Flow Designer when uploading the workflow, and ``{8.3}`` is a
+MI Data Flow creates a working directory on the server in ``%WINDIR%\TEMP\{workflow id}_{8.3}``, where
+``{workflow_id}`` is the workflow ID provided in MI Data Flow Designer when uploading the workflow, and ``{8.3}`` is a
 random set of 8 alphanumeric characters, a period, and 3 alphanumeric characters. This can be found by right-clicking
-the active workflow in Data Flow Manager and selecting 'View Log'.
+the active workflow in MI Data Flow Manager and selecting 'View Log'.
 
 This directory includes the two files ``__stderr__`` and ``__stdout__``, which contain the Python stdout and stderr
 streams and are useful when investigating Python failures during workflow execution before the logger has been
 initialized.
 
-It would be possible to create a :class:`FileHandler` to create a log file in this directory. To access this directory,
+You can create a :class:`FileHandler` to create a log file in this directory. To access this directory,
 use the following code::
 
    import os
    working_dir = os.getcwd()
 
-However, note that once the workflow is successfully resumed, this folder and all its contents are deleted. They are
-only persisted if the workflow is manually cancelled in Data Flow Manager.
+.. note::
+
+  When the workflow resumes, this folder and all its contents are deleted. They are only persisted if the workflow is
+  manually cancelled.
 
 .. _logging API documentation: https://docs.python.org/3/library/logging.html
 .. _Logging HOWTO: https://docs.python.org/3/howto/logging.html
@@ -391,52 +407,51 @@ It is common for Python scripts to depend on additional supporting files, for ex
 * Certificate Authority (CA) certificate files
 
 These files can either be stored in a known location on disk and referred to explicitly via an absolute path, or they
-can be added to the workflow definition in Data Flow Designer. There are pros and cons to each method.
+can be added to the workflow definition in MI Data Flow Designer:
 
-Store files externally
-~~~~~~~~~~~~~~~~~~~~~~
+Storing files externally
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. currentmodule:: pathlib
 
-If the file is stored externally (for example in a folder C:\DataflowFiles), then you should use the
-:class:`Path` class to ensure you are using an absolute path, which is independent of the Python working
-directory. For example::
+If the file is stored externally (for example in a folder ``C:\DataflowFiles``), then you should use the :class:`Path`
+class to ensure you are using an absolute path, which is independent of the Python working directory. For example::
 
-   my_path = pathlib.Path("C:\DataflowFiles\my_data.csv")
+   my_path = pathlib.Path(r"C:\DataflowFiles\my_data.csv")
 
 
-.. currentmodule:: ansys.grantami.dataflow_toolkit
+.. currentmodule:: ansys.grantami.dataflow_extensions
 
 Or in the case of providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor::
 
-  my_cert = pathlib.Path(C"\DataflowFiles\my_cert.crt")
+  my_cert = pathlib.Path(r"C:\DataflowFiles\my_cert.crt")
   dataflow = MIDataflowIntegration(certificate_file=my_cert)
 
-The advantage of this approach is that files can easily be shared across workflow definitions, and do not need to be
-uploaded to each one separately. However, the disadvantage is that the files are stored outside of the workflow
-definition, and so does not automatically upload/download these files from the server when using Data Flow Manager.
+* The advantage of this approach is that files can easily be shared across workflow definitions, and do not need to be
+  uploaded to each one separately.
+* The disadvantage is that the files are stored outside of the workflow definition, and do not get automatically
+  uploaded or downloaded from the server when using MI Data Flow Manager.
 
 
-Store files within the workflow definition
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Storing files within the workflow definition
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the file is stored within the workflow definition, then Data Flow makes these files are available on disk at
-script runtime in a Data Flow-managed location. To access files in this location, use the
-:attr:`~.MIDataflowIntegration.supporting_files_dir` property. For example, to access a CSV file which was uploaded as a
-supporting file to Data Flow::
+If the file is stored within the workflow definition, then MI Data Flow makes these files available on disk at
+script runtime. To access these files, use the :attr:`~.MIDataflowIntegration.supporting_files_dir` property. For
+example, to access a CSV file which was uploaded as a supporting file to MI Data Flow::
 
    dataflow = MIDataflowIntegration()
    my_path = dataflow.supporting_files_dir \ "my_data.csv"
 
 
-In the case of providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor, the filename can
-be provided as a string, and the Data Flow Toolkit automatically looks for the file in this location::
+If you are providing a custom CA certificate to the :class:`~.MIDataflowIntegration` constructor, the filename can
+be provided as a string, and ``dataflow-extensions`` automatically looks for the file in this location::
 
   my_cert = "my_cert.crt"
   dataflow = MIDataflowIntegration(certificate_file=my_cert)
 
-The advantage of this approach is that files are managed by Data Flow Designer and are automatically included in the
-workflow definition if it is uploaded/downloaded and transferred to a different system. However, the disadvantage is
+The advantage of this approach is that files are managed by MI Data Flow Designer and are automatically included in the
+workflow definition if it is uploaded or downloaded and transferred to a different system. However, the disadvantage is
 that each workflow definition tracks the supporting files separately, and so every workflow needs to be modified
 separately if a commonly used supporting file is changed.
 

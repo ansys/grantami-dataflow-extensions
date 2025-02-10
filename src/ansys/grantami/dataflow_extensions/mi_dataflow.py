@@ -21,10 +21,10 @@
 # SOFTWARE.
 
 """
-MI Data Flow Toolkit module.
+Granta MI Data Flow Extensions module.
 
-Provides generic functionality for parsing step information provided by Data Flow.
-Allows direct access to this data or supports spawning a Scripting Toolkit session.
+Provides generic functionality for parsing step information provided by MI Data Flow.
+Allows direct access to this data or supports spawning a MI Scripting Toolkit session.
 """
 
 import base64
@@ -68,13 +68,13 @@ class MIDataflowIntegration:
     r"""
     Represents a MI Data Flow step at the point at which the Python script is triggered.
 
-    When this class is instantiated, it parses the data provided by Data Flow, enabling Granta MI API client sessions
+    When this class is instantiated, it parses the data provided by MI Data Flow, enabling Granta MI API client sessions
     to be created.
 
     Parameters
     ----------
     use_https : bool, default ``True``
-        Whether to use HTTPS if supported by the Granta MI server.
+        Whether to use HTTPS if supported by the Granta MI application server.
     verify_ssl : bool, default ``True``
         Whether to verify the SSL certificate CA. Has no effect if ``use_https`` is set to ``False``.
     certificate_file : str | pathlib.Path | None, default ``None``
@@ -83,13 +83,13 @@ class MIDataflowIntegration:
 
         *  The filename of the certificate provided as a string. In this case, the certificate must be added to the
            workflow definition as a supporting file.
-        *  The filename or relative path of the certificate provided as a pathlib.Path object. In this case, the
-           certificate must be added to the workflow definition as a supporting file.
+        *  The filename or relative path of the certificate provided as a :class:`pathlib.Path` object. In this case,
+           the certificate must be added to the workflow definition as a supporting file.
         *  The absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it
            is recommended to store it in a location that will not be modified between workflows.
-        *  ``None``. In this case, the certifi public CA store will be used.
+        *  ``None``. In this case, the `certifi <https://pypi.org/project/certifi/>`_ public CA store will be used.
 
-        If specified, the certificate will be used to verify PyGranta and Data Flow requests. Has no effect if
+        If specified, the certificate will be used to verify PyGranta and MI Data Flow requests. Has no effect if
         ``use_https`` or ``verify_ssl`` are set to ``False``.
 
     Raises
@@ -127,8 +127,8 @@ class MIDataflowIntegration:
 
     >>> data_flow = MIDataflowIntegration(certificate_file="my_cert.crt")
 
-    If the certificate is stored somewhere else on disk, it can be specified by using a pathlib.Path object. In this
-    case, the certificate should not be added to the workflow definition file in Data Flow Designer.
+    If the certificate is stored somewhere else on disk, it can be specified by using a :class:`pathlib.Path` object. In
+    this case, the certificate should not be added to the workflow definition file in Data Flow Designer.
 
     >>> cert = pathlib.Path(r"C:\dataflow_files\certificates\my_cert.crt")
     >>> data_flow = MIDataflowIntegration(certificate_file=cert)
@@ -152,7 +152,7 @@ class MIDataflowIntegration:
 
         # Logger
         logger.info("")
-        logger.info("---------- Initializing new Dataflow Toolkit instance ----------")
+        logger.info("---------- Initializing new Data Flow Extensions instance ----------")
 
         # Get data from data flow. Getting the payload as a sanitized string performs a basic check that we have
         # an expected data structure.

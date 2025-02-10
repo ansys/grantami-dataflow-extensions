@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Python client for Granta MI Server API Dataflow Toolkit."""
+"""Granta MI Data Flow Extensions."""
 
 import importlib.metadata as importlib_metadata
 

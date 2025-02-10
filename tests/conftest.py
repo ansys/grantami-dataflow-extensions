@@ -19,7 +19,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# This import must happen before dataflow_toolkit is imported to correct mock these libraries
+#
+# This import must happen before dataflow_extensions is imported to correctly mock these libraries
 from mocks import record_lists, scripting_toolkit  # isort:skip  # noqa: F401
 
 from copy import deepcopy
@@ -40,8 +41,8 @@ from common import (
 )
 import pytest
 
-from ansys.grantami.dataflow_toolkit import MIDataflowIntegration
-from ansys.grantami.dataflow_toolkit.mi_dataflow import _AuthenticationMode
+from ansys.grantami.dataflow_extensions import MIDataflowIntegration
+from ansys.grantami.dataflow_extensions.mi_dataflow import _AuthenticationMode
 
 
 @dataclass
