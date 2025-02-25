@@ -103,7 +103,7 @@ Logging
 ~~~~~~~
 
 Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by MI Data Flow
-and logged centrally on the Granta MI application server::
+and logged centrally on the Granta MI server::
 
    # Create an instance of the root logger
    logger = logging.getLogger()
