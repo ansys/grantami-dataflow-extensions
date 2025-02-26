@@ -1,4 +1,5 @@
-Granta MI
+Granta
+MI
 PyGranta
 Data Flow
 API
