@@ -3090,14 +3090,14 @@ testing = ["bs4", "coverage", "pygments", "pytest (>=7.1,<8)", "pytest-cov", "py
 
 [[package]]
 name = "sphinx-toolbox"
-version = "3.8.3"
+version = "3.9.0"
 description = "Box of handy tools for Sphinx 🧰 📔"
 optional = false
 python-versions = ">=3.7"
 groups = ["doc"]
 files = [
-    {file = "sphinx_toolbox-3.8.3-py3-none-any.whl", hash = "sha256:bd8d8522065b880a72dcbaa5cdf8faf4671a09e3d79d4775921ae76cb0917ac0"},
-    {file = "sphinx_toolbox-3.8.3.tar.gz", hash = "sha256:09c15b6447a02443e5344f768ff998bcb5cf0aac022fe66e3b21c12b85804670"},
+    {file = "sphinx_toolbox-3.9.0-py3-none-any.whl", hash = "sha256:49024961c7791ad6e9dd39c611f89b5162550afa26ccad087be38388c3dd3c1e"},
+    {file = "sphinx_toolbox-3.9.0.tar.gz", hash = "sha256:9ee0603b090762d6eed4d0ec9fa91445e3ef95d40a584af125308541c1bf7b8d"},
 ]
 
 [package.dependencies]
