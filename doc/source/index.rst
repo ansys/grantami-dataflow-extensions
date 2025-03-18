@@ -48,6 +48,12 @@ and with Granta MI Scripting Toolkit.
       Learn how to contribute to the PyGranta Data Flow Extensions codebase or
       documentation.
 
+   .. grid-item-card:: Changelog :octicon:`log`
+      :padding: 2 2 2 2
+      :link: changelog
+      :link-type: doc
+
+      History of changes to the project.
 
 .. toctree::
    :hidden:
@@ -58,3 +64,4 @@ and with Granta MI Scripting Toolkit.
    api/index
    examples/index
    contributing
+   changelog
