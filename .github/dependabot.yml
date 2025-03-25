@@ -35,7 +35,7 @@ updates:
         - "mypy"
         - "requests-mock"
         - "pre-commit"
-        - "ansys-grantami-recordlists"        
+        - "ansys-grantami-recordlists"
       src-deps:
         patterns:
         - "ansys-openapi-common"
