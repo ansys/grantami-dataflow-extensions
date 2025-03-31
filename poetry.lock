@@ -67,14 +67,14 @@ requests = ">=2.26.0,<3.0.0"
 
 [[package]]
 name = "ansys-openapi-common"
-version = "2.2.0"
+version = "2.2.2"
 description = "Provides a helper to create sessions for use with Ansys OpenAPI clients."
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main", "doc", "tests"]
 files = [
-    {file = "ansys_openapi_common-2.2.0-py3-none-any.whl", hash = "sha256:3b95bd0ee38acd37800179489a451a854d6fe0312a5f0b1182e1407c8ad57e9e"},
-    {file = "ansys_openapi_common-2.2.0.tar.gz", hash = "sha256:176928ec15cfc6690dbb3ba7b806f01046a70b44c898530af390682973282195"},
+    {file = "ansys_openapi_common-2.2.2-py3-none-any.whl", hash = "sha256:c8dcbb00fd5c8624bb6b60a175052e526b06125d9d0aab1e9a0cb94fe486a9e2"},
+    {file = "ansys_openapi_common-2.2.2.tar.gz", hash = "sha256:9d4f9680062ddf5a78776aa384dc6006f277bfa4f75f4204e2b5482e35849518"},
 ]
 
 [package.dependencies]
@@ -1208,7 +1208,7 @@ version = "3.1.6"
 description = "A very fast and expressive template engine."
 optional = false
 python-versions = ">=3.7"
-groups = ["dev", "doc"]
+groups = ["doc"]
 files = [
     {file = "jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"},
     {file = "jinja2-3.1.6.tar.gz", hash = "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d"},
@@ -1404,7 +1404,7 @@ version = "3.0.2"
 description = "Safely add untrusted strings to HTML/XML markup."
 optional = false
 python-versions = ">=3.9"
-groups = ["dev", "doc"]
+groups = ["doc"]
 files = [
     {file = "MarkupSafe-3.0.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:7e94c425039cde14257288fd61dcfb01963e658efbc0ff54f5306b06054700f8"},
     {file = "MarkupSafe-3.0.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:9e2d922824181480953426608b81967de705c3cef4d1af983af849d7bd619158"},
