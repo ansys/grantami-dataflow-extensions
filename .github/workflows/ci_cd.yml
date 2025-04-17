@@ -144,7 +144,7 @@ jobs:
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
     permissions:
       contents: write
       pull-requests: write
