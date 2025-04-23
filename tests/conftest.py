@@ -42,7 +42,7 @@ from common import (
 import pytest
 
 from ansys.grantami.dataflow_extensions import MIDataflowIntegration
-from ansys.grantami.dataflow_extensions.mi_dataflow import _AuthenticationMode
+from ansys.grantami.dataflow_extensions._mi_dataflow import _AuthenticationMode
 
 
 @dataclass

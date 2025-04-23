@@ -24,7 +24,7 @@
 
 import importlib.metadata as importlib_metadata
 
-from .mi_dataflow import MIDataflowIntegration, MissingClientModuleException
+from ._mi_dataflow import MIDataflowIntegration, MissingClientModuleException
 
 __all__ = [
     "MIDataflowIntegration",
