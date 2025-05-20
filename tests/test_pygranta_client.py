@@ -23,6 +23,7 @@
 from unittest.mock import MagicMock, patch
 
 from ansys.grantami.recordlists import Connection as RecordListConnection
+from ansys.openapi.common import OIDCSessionBuilder
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 import pytest
 
@@ -99,8 +100,7 @@ def test_oidc_https(oidc_https, debug_caplog):
 
 
 def test_oidc_https_auth_token(oidc_https, debug_caplog):
-    oidc_builder = MagicMock()
-    oidc_builder.with_access_token = MagicMock()
+    oidc_builder = MagicMock(spec_set=OIDCSessionBuilder)
     with_oidc_mock = MagicMock(return_value=oidc_builder)
 
     with patch("ansys.openapi.common.ApiClientFactory.with_oidc", with_oidc_mock):
