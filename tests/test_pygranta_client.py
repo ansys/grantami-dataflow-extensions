@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from ansys.grantami.recordlists import Connection as RecordListConnection
-from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
+from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 import pytest
 
 # Don't try and merge a test with its associated '_url' test. The act of mocking the
@@ -96,6 +96,16 @@ def test_oidc_https(oidc_https, debug_caplog):
     mock.assert_called_once_with()
     assert _pygranta_client_logged(debug_caplog.text)
     assert "Using OIDC authentication." in debug_caplog.text
+
+
+def test_oidc_https_auth_token(oidc_https, debug_caplog):
+    oidc_builder = MagicMock()
+    oidc_builder.with_access_token = MagicMock()
+    with_oidc_mock = MagicMock(return_value=oidc_builder)
+
+    with patch("ansys.openapi.common.ApiClientFactory.with_oidc", with_oidc_mock):
+        oidc_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
+    oidc_builder.with_access_token.assert_called_once_with(access_token=access_token)
 
 
 def test_invalid_class_raises_exception(windows_https):
