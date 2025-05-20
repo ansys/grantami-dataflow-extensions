@@ -592,7 +592,9 @@ class MIDataflowIntegration:
             return builder.with_autologon()
 
         elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
-            raise NotImplementedError("OIDC authentication is not supported with PyGranta packages.")
+            logger.debug("Using OIDC authentication.")
+            access_token = self._get_oidc_token()
+            return cast(PyGranta_Connection_Class, builder.with_oidc().with_access_token(access_token=access_token))
 
         else:
             raise NotImplementedError()
