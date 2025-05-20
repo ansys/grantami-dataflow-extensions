@@ -551,14 +551,6 @@ class MIDataflowIntegration:
         TypeError
             If the class provided to this method is not a subclass of
             :class:`~ansys.openapi.common.SessionConfiguration`.
-        NotImplementedError
-            If the Granta MI server is configured with OIDC authentication.
-
-        Warnings
-        --------
-        This method does not currently support OIDC. A workaround is to create the client manually and
-        authenticate with a stored OIDC refresh token. See :class:`~ansys.openapi.common.OIDCSessionBuilder`
-        for more details.
 
         Examples
         --------

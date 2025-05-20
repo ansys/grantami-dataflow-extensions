@@ -90,9 +90,12 @@ def test_basic_http_url(basic_http):
     assert client._service_layer_url == HTTP_SL_URL
 
 
-def test_oidc_raises_exception(oidc_https, debug_caplog):
-    with pytest.raises(NotImplementedError, match="OIDC authentication is not supported with PyGranta packages"):
+def test_oidc_https(oidc_https, debug_caplog):
+    with patch.object(RecordListConnection, "with_oidc") as mock:
         oidc_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
+    mock.assert_called_once_with()
+    assert _pygranta_client_logged(debug_caplog.text)
+    assert "Using OIDC authentication." in debug_caplog.text
 
 
 def test_invalid_class_raises_exception(windows_https):
