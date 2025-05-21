@@ -34,7 +34,7 @@ from io import StringIO
 import json
 from pathlib import Path
 import sys
-from typing import Any, Dict, Tuple, Type, TypeVar, cast
+from typing import Any, Dict, Optional, Tuple, Type, TypeVar, cast
 from urllib.parse import urlparse
 import warnings
 
@@ -456,7 +456,56 @@ class MIDataflowIntegration:
         """
         An MI Scripting Toolkit session which can be used to interact with Granta MI.
 
+        .. deprecated:: v0.2
+           This property is deprecated. Use :meth:`.get_scripting_toolkit_session` instead.
+
         Requires a supported version of MI Scripting Toolkit to be installed.
+
+        Returns
+        -------
+        mpy.Session
+            MI Scripting Toolkit session.
+
+        Raises
+        ------
+        MissingClientModuleException
+            If Scripting Toolkit cannot be imported.
+        """
+        warnings.warn("This method is deprecated. Use 'get_scripting_toolkit_session()' instead.")
+
+        if self._mi_session is not None:
+            return self._mi_session
+        try:
+            self._mi_session = self._start_stk_session_from_dataflow_credentials(
+                timeout=None,
+                max_retries=None,
+            )
+        except NameError as e:
+            raise MissingClientModuleException(
+                "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed and try again."
+            ) from e
+        return self._mi_session
+
+    def get_scripting_toolkit_session(
+        self,
+        timeout: Optional[int] = None,
+        max_retries: Optional[int] = None,
+    ) -> "mpy.Session":
+        """
+        Create an MI Scripting Toolkit session which can be used to interact with Granta MI.
+
+        Requires a supported version of MI Scripting Toolkit to be installed.
+
+        Parameters
+        ----------
+        timeout : int, optional
+            The maximum time in milliseconds for the Scripting Toolkit session to wait
+            for a response from Granta MI. See the Scripting Toolkit documentation for
+            default behavior.
+        max_retries : int, optional
+            The maximum number of times for the Scripting Toolkit to retry a request
+            before failing. See the Scripting Toolkit documentation for default
+            behavior.
 
         Returns
         -------
@@ -471,12 +520,69 @@ class MIDataflowIntegration:
         if self._mi_session is not None:
             return self._mi_session
         try:
-            self._mi_session = self._start_stk_session_from_dataflow_credentials()
+            self._mi_session = self._start_stk_session_from_dataflow_credentials(
+                timeout=timeout,
+                max_retries=max_retries,
+            )
         except NameError as e:
             raise MissingClientModuleException(
-                "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed " "and try again."
+                "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed and try again."
             ) from e
         return self._mi_session
+
+    def _start_stk_session_from_dataflow_credentials(
+        self,
+        timeout: int | None,
+        max_retries: int | None,
+    ) -> "mpy.Session":
+        """
+        Create a Scripting Toolkit session based on the Data Flow authentication.
+
+        The credentials provided by Data Flow are re-used, and so explicit credentials are
+        not required.
+
+        Parameters
+        ----------
+        timeout : int | None
+            The maximum time in milliseconds for the Scripting Toolkit session to wait
+            for a response from Granta MI. See the Scripting Toolkit documentation for
+            default behavior.
+        max_retries : int | None
+            The maximum number of times for the Scripting Toolkit to retry a request
+            before failing. See the Scripting Toolkit documentation for default
+            behavior.
+
+        Returns
+        -------
+        mpy.Session
+            A Scripting Toolkit session object.
+        """
+        logger.debug("Creating MI Scripting Toolkit session.")
+
+        session_args = {}
+        if timeout is not None:
+            session_args["timeout"] = timeout
+        if max_retries is not None:
+            session_args["max_retries"] = max_retries
+
+        if self._authentication_mode == _AuthenticationMode.BASIC_AUTHENTICATION:
+            logger.debug("Using Basic authentication.")
+            username, password = self._get_basic_creds()
+            session = mpy.connect(self.service_layer_url, user_name=username, password=password, **session_args)
+
+        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
+            logger.debug("Using Windows authentication.")
+            session = mpy.connect(self.service_layer_url, autologon=True, **session_args)
+
+        elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
+            logger.debug("Using OIDC authentication.")
+            access_token = self._get_oidc_token()
+            session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token, **session_args)
+
+        else:
+            raise NotImplementedError()
+
+        return session
 
     @property
     def supporting_files_dir(self) -> Path:
@@ -493,42 +599,10 @@ class MIDataflowIntegration:
         """
         return self._supporting_files_dir
 
-    def _start_stk_session_from_dataflow_credentials(self) -> "mpy.Session":
-        """
-        Create a Scripting Toolkit session based on the Data Flow authentication.
-
-        The credentials provided by Data Flow are re-used, and so explicit credentials are
-        not required.
-
-        Returns
-        -------
-        mpy.Session
-            A Scripting Toolkit session object.
-        """
-        logger.debug("Creating MI Scripting Toolkit session.")
-
-        if self._authentication_mode == _AuthenticationMode.BASIC_AUTHENTICATION:
-            logger.debug("Using Basic authentication.")
-            username, password = self._get_basic_creds()
-            session = mpy.connect(self.service_layer_url, user_name=username, password=password)
-
-        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
-            logger.debug("Using Windows authentication.")
-            session = mpy.connect(self.service_layer_url, autologon=True)
-
-        elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
-            logger.debug("Using OIDC authentication.")
-            access_token = self._get_oidc_token()
-            session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token)
-
-        else:
-            raise NotImplementedError()
-
-        return session
-
     def configure_pygranta_connection(
         self,
         pygranta_connection_class: Type[PyGranta_Connection_Class],
+        session_configuration: SessionConfiguration = SessionConfiguration(),
     ) -> PyGranta_Connection_Class:
         """
         Configure a PyGranta connection object with credentials provided by Data Flow.
@@ -539,6 +613,11 @@ class MIDataflowIntegration:
             The Connection class to use to create the client object. Must be a **class**, not an
             instance of a class. Must be a PyGranta connection class, which is defined as a subclass
             of the base :class:`~ansys.openapi.common.ApiClientFactory` class.
+        session_configuration : ~ansys.openapi.common.SessionConfiguration, optional
+            Configure the connection to the Granta MI server. The
+            :class:`~ansys.openapi.common.SessionConfiguration` arguments ``verify_ssl`` and
+            ``cert_store_path`` are overridden based on the values specified when
+            instantiating this class.
 
         Returns
         -------
@@ -574,13 +653,13 @@ class MIDataflowIntegration:
         if not issubclass(pygranta_connection_class, ApiClientFactory):
             raise TypeError('"pygranta_connection_class" must be a subclass of ansys.openapi.common.ApiClientFactory')
 
-        config = SessionConfiguration(
-            cert_store_path=str(self._ca_path) if self._ca_path is not None else None,
-            verify_ssl=self._verify_ssl,
-        )
+        session_configuration.verify_ssl = self._verify_ssl
+        if self._ca_path:
+            session_configuration.cert_store_path = str(self._ca_path)
+
         # We rename the first argument from 'api_url' to 'servicelayer_url', so use a positional
         # argument to avoid type errors.
-        builder = pygranta_connection_class(self.service_layer_url, session_configuration=config)
+        builder = pygranta_connection_class(self.service_layer_url, session_configuration=session_configuration)
 
         if self._authentication_mode == _AuthenticationMode.BASIC_AUTHENTICATION:
             logger.debug("Using Basic authentication.")
