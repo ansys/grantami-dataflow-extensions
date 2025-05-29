@@ -99,10 +99,6 @@ class TestClientWithDefaultConfiguration:
             oidc_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
         oidc_builder.with_access_token.assert_called_once_with(access_token=access_token)
 
-    def test_oidc_raises_exception(self, oidc_https, debug_caplog):
-        with pytest.raises(NotImplementedError, match="OIDC authentication is not supported with PyGranta packages"):
-            oidc_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
-
     def test_invalid_class_raises_exception(self, windows_https):
         with pytest.raises(TypeError, match='"pygranta_connection_class" must be a subclass'):
             _ = windows_https.dataflow_integration.configure_pygranta_connection(str)
