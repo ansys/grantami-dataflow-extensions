@@ -104,9 +104,11 @@ class TestScriptingToolkitSession:
 
 
 class TestDeprecatedScriptingToolkit:
+    warning_message = r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."
+
     def test_windows_https_deprecated_property(self, windows_https, debug_caplog):
         mpy_mock.connect.reset_mock()
-        with pytest.warns(match=r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."):
+        with pytest.warns(match=self.warning_message):
             _ = windows_https.dataflow_integration.mi_session
         mpy_mock.connect.assert_called_once_with(
             HTTPS_SL_URL,
@@ -117,7 +119,7 @@ class TestDeprecatedScriptingToolkit:
 
     def test_windows_http(self, windows_http, debug_caplog):
         mpy_mock.connect.reset_mock()
-        with pytest.warns(match=r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."):
+        with pytest.warns(match=self.warning_message):
             _ = windows_http.dataflow_integration.mi_session
         mpy_mock.connect.assert_called_once_with(
             HTTP_SL_URL,
@@ -128,7 +130,7 @@ class TestDeprecatedScriptingToolkit:
 
     def test_basic_https(self, basic_https, debug_caplog):
         mpy_mock.connect.reset_mock()
-        with pytest.warns(match=r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."):
+        with pytest.warns(match=self.warning_message):
             _ = basic_https.dataflow_integration.mi_session
         mpy_mock.connect.assert_called_once_with(
             HTTPS_SL_URL,
@@ -140,7 +142,7 @@ class TestDeprecatedScriptingToolkit:
 
     def test_basic_http(self, basic_http, debug_caplog):
         mpy_mock.connect.reset_mock()
-        with pytest.warns(match=r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."):
+        with pytest.warns(match=self.warning_message):
             _ = basic_http.dataflow_integration.mi_session
         mpy_mock.connect.assert_called_once_with(
             HTTP_SL_URL,
@@ -152,7 +154,7 @@ class TestDeprecatedScriptingToolkit:
 
     def test_oidc_https(self, oidc_https, debug_caplog):
         mpy_mock.connect.reset_mock()
-        with pytest.warns(match=r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."):
+        with pytest.warns(match=self.warning_message):
             _ = oidc_https.dataflow_integration.mi_session
         mpy_mock.connect.assert_called_once_with(
             HTTPS_SL_URL,
