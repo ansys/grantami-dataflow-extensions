@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from ansys.grantami.recordlists import Connection as RecordListConnection
-from ansys.openapi.common import SessionConfiguration
-from common import CERT_PATH_ABSOLUTE, HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME
+from ansys.openapi.common import OIDCSessionBuilder, SessionConfiguration
+from common import CERT_PATH_ABSOLUTE, HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 import pytest
 
 # Don't try and merge a test with its associated '_url' test. The act of mocking the
@@ -83,6 +83,21 @@ class TestClientWithDefaultConfiguration:
     def test_basic_http_url(self, basic_http):
         client = basic_http.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
         assert client._service_layer_url == HTTP_SL_URL
+
+    def test_oidc_https(self, oidc_https, debug_caplog):
+        with patch.object(RecordListConnection, "with_oidc") as mock:
+            oidc_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
+        mock.assert_called_once_with()
+        assert _pygranta_client_logged(debug_caplog.text)
+        assert "Using OIDC authentication." in debug_caplog.text
+
+    def test_oidc_https_auth_token(self, oidc_https, debug_caplog):
+        oidc_builder = MagicMock(spec_set=OIDCSessionBuilder)
+        with_oidc_mock = MagicMock(return_value=oidc_builder)
+
+        with patch("ansys.openapi.common.ApiClientFactory.with_oidc", with_oidc_mock):
+            oidc_https.dataflow_integration.configure_pygranta_connection(RecordListConnection).connect()
+        oidc_builder.with_access_token.assert_called_once_with(access_token=access_token)
 
     def test_oidc_raises_exception(self, oidc_https, debug_caplog):
         with pytest.raises(NotImplementedError, match="OIDC authentication is not supported with PyGranta packages"):

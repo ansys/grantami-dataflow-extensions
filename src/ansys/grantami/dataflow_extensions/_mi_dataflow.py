@@ -630,14 +630,6 @@ class MIDataflowIntegration:
         TypeError
             If the class provided to this method is not a subclass of
             :class:`~ansys.openapi.common.SessionConfiguration`.
-        NotImplementedError
-            If the Granta MI server is configured with OIDC authentication.
-
-        Warnings
-        --------
-        This method does not currently support OIDC. A workaround is to create the client manually and
-        authenticate with a stored OIDC refresh token. See :class:`~ansys.openapi.common.OIDCSessionBuilder`
-        for more details.
 
         Examples
         --------
@@ -671,7 +663,9 @@ class MIDataflowIntegration:
             return builder.with_autologon()
 
         elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
-            raise NotImplementedError("OIDC authentication is not supported with PyGranta packages.")
+            logger.debug("Using OIDC authentication.")
+            access_token = self._get_oidc_token()
+            return cast(PyGranta_Connection_Class, builder.with_oidc().with_access_token(access_token=access_token))
 
         else:
             raise NotImplementedError()
