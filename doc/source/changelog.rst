@@ -9,6 +9,70 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.2.0 <https://github.com/ansys/grantami-dataflow-extensions/releases/tag/v0.2.0>`_ - June 06, 2025
+====================================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Support OIDC authentication with PyGranta clients
+          - `#123 <https://github.com/ansys/grantami-dataflow-extensions/pull/123>`_
+
+        * - Allow the configuration of PyGranta and Scripting Toolkit sessions
+          - `#124 <https://github.com/ansys/grantami-dataflow-extensions/pull/124>`_
+
+
+  .. tab-item:: Dependencies
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - chore(deps): bump actions/download-artifact from 4.2.1 to 4.3.0 in the actions group
+          - `#118 <https://github.com/ansys/grantami-dataflow-extensions/pull/118>`_
+
+        * - chore(deps): bump ansys-openapi-common from 2.2.2 to 2.3.0 in the src-deps group
+          - `#119 <https://github.com/ansys/grantami-dataflow-extensions/pull/119>`_
+
+        * - chore(deps-dev): bump jupytext from 1.16.7 to 1.17.1 in the doc-deps group
+          - `#120 <https://github.com/ansys/grantami-dataflow-extensions/pull/120>`_
+
+        * - chore(deps-dev): bump the doc-deps group with 2 updates
+          - `#121 <https://github.com/ansys/grantami-dataflow-extensions/pull/121>`_, `#125 <https://github.com/ansys/grantami-dataflow-extensions/pull/125>`_
+
+        * - Update tornado to v6.5
+          - `#122 <https://github.com/ansys/grantami-dataflow-extensions/pull/122>`_
+
+        * - chore(deps-dev): bump the dev-deps group with 2 updates
+          - `#126 <https://github.com/ansys/grantami-dataflow-extensions/pull/126>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - chore: update CHANGELOG for v0.1.0
+          - `#117 <https://github.com/ansys/grantami-dataflow-extensions/pull/117>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Prepare 0.2.0 release
+          - `#128 <https://github.com/ansys/grantami-dataflow-extensions/pull/128>`_
+
+
 `0.1.0 <https://github.com/ansys/grantami-dataflow-extensions/releases/tag/v0.1.0>`_ - April 28, 2025
 =====================================================================================================
 
