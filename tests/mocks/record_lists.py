@@ -20,11 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from ansys.grantami.recordlists import Connection, RecordList, RecordListsApiClient
+from ansys.grantami.recordlists import Connection, RecordList
+from ansys.grantami.recordlists._connection import _RecordListsApiClient2025R2
 
 
 def connect(self):
-    return RecordListsApiClient(
+    return _RecordListsApiClient2025R2(
         session=None,
         service_layer_url=self._base_service_layer_url,
         configuration=None,
@@ -63,5 +64,5 @@ def add_items_to_list(self, record_list, items):
     pass
 
 
-RecordListsApiClient.get_all_lists = get_all_lists
-RecordListsApiClient.add_items_to_list = add_items_to_list
+_RecordListsApiClient2025R2.get_all_lists = get_all_lists
+_RecordListsApiClient2025R2.add_items_to_list = add_items_to_list

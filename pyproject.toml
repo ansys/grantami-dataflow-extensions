@@ -51,7 +51,7 @@ sphinx-toolbox = "^4.0.0"
 sphinx-design = "^0.6.0"
 sphinx-autoapi = "^3.1.0a2"
 sphinxcontrib-napoleon = "^0.7.0"
-ansys-grantami-recordlists = "^1.2"  # Required to build examples
+ansys-grantami-recordlists = "^2.0"  # Required to build examples
 
 [tool.poetry.group.tests.dependencies]
 pytest = "^8.0.2"
@@ -59,7 +59,7 @@ pytest-cov = "^6.0.0"
 requests-mock = "^1.10.0"
 pre-commit = "^4.0.0"
 mypy = "^1.8.0"
-ansys-grantami-recordlists = "^1.2"
+ansys-grantami-recordlists = "^2.0"
 ansys-openapi-common = { version = "*", extras=["oidc"] }
 
 [tool.coverage.run]
