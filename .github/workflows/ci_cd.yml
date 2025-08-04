@@ -24,7 +24,7 @@ jobs:
     name: "Check library vulnerabilities"
     runs-on: windows-latest
     steps:
-      - uses: ansys/actions/check-vulnerabilities@cec6bfde73d4b4483d3e0074d49dfbb42d82929c  # Fix branch
+      - uses: ansys/actions/check-vulnerabilities@5b561628da538994c5920cf862e5f4dcdb6a3513  # Fix branch
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
