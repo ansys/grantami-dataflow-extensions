@@ -147,6 +147,7 @@ class MIDataflowIntegration:
     ) -> None:
         # Define properties
         self._supporting_files_dir = Path(sys.path[0])
+        self._requests_timeout: int = 30
 
         self._mi_session: mpy.Session | None = None
 
@@ -759,6 +760,7 @@ class MIDataflowIntegration:
                 data=response_data,
                 headers=headers,
                 verify=verify_argument,
+                timeout=self._requests_timeout,
             )
         elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
             response = requests.post(
@@ -767,6 +769,7 @@ class MIDataflowIntegration:
                 auth=HttpNegotiateAuth(),
                 headers=headers,
                 verify=verify_argument,
+                timeout=self._requests_timeout,
             )
         else:
             raise NotImplementedError()
