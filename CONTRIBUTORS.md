@@ -7,6 +7,7 @@
 ## Individual Contributors
 
 * [Doug Addy](https://github.com/da1910)
+* [Edouard Coussoux](https://github.com/ecoussoux-ansys)
 * [Esther Prosperi](https://github.com/EstherProsperi)
 * [Ludovic Steinbach](https://github.com/ludovicsteinbach)
 * [Revathy Venugopal](https://github.com/Revathyvenugopal162)
