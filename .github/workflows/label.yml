@@ -33,7 +33,7 @@ jobs:
     steps:
 
     - name: Label based on changed files and branch names
-      uses: actions/labeler@v5
+      uses: actions/labeler@v6
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
