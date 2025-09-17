@@ -60,6 +60,8 @@ jobs:
         dependencies: "pandoc"
         sphinxopts: "-n -W --keep-going"
         skip-dependencies-cache: true
+        optional-dependencies-name: ""
+        group-dependencies-name: "doc"
 
   build-wheelhouse:
     name: "Build wheelhouse for latest Python versions"
