@@ -54,7 +54,7 @@ sphinxcontrib-napoleon = "^0.7.0"
 ansys-grantami-recordlists = "^2.0"  # Required to build examples
 
 [tool.poetry.group.tests.dependencies]
-pytest = "^8.0.2"
+pytest = "^9.0.0"
 pytest-cov = "^7.0.0"
 requests-mock = "^1.10.0"
 pre-commit = "^4.0.0"
