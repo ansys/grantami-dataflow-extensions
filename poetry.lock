@@ -1961,14 +1961,14 @@ test = ["pep440", "pre-commit", "pytest", "testpath"]
 
 [[package]]
 name = "nbsphinx"
-version = "0.9.7"
+version = "0.9.8"
 description = "Jupyter Notebook Tools for Sphinx"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 groups = ["doc"]
 files = [
-    {file = "nbsphinx-0.9.7-py3-none-any.whl", hash = "sha256:7292c3767fea29e405c60743eee5393682a83982ab202ff98f5eb2db02629da8"},
-    {file = "nbsphinx-0.9.7.tar.gz", hash = "sha256:abd298a686d55fa894ef697c51d44f24e53aa312dadae38e82920f250a5456fe"},
+    {file = "nbsphinx-0.9.8-py3-none-any.whl", hash = "sha256:92d95ee91784e56bc633b60b767a6b6f23a0445f891e24641ce3c3f004759ccf"},
+    {file = "nbsphinx-0.9.8.tar.gz", hash = "sha256:d0765908399a8ee2b57be7ae881cf2ea58d66db3af7bbf33e6eb48f83bea5495"},
 ]
 
 [package.dependencies]
@@ -1976,7 +1976,7 @@ docutils = ">=0.18.1"
 jinja2 = "*"
 nbconvert = ">=5.3,<5.4 || >5.4"
 nbformat = "*"
-sphinx = ">=1.8,<8.2"
+sphinx = ">=1.8,<8.2.0 || >8.2.0,<8.2.1 || >8.2.1"
 traitlets = ">=5"
 
 [[package]]
@@ -2005,14 +2005,14 @@ files = [
 
 [[package]]
 name = "numpydoc"
-version = "1.9.0"
+version = "1.10.0"
 description = "Sphinx extension to support docstrings in Numpy format"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["doc"]
 files = [
-    {file = "numpydoc-1.9.0-py3-none-any.whl", hash = "sha256:8a2983b2d62bfd0a8c470c7caa25e7e0c3d163875cdec12a8a1034020a9d1135"},
-    {file = "numpydoc-1.9.0.tar.gz", hash = "sha256:5fec64908fe041acc4b3afc2a32c49aab1540cf581876f5563d68bb129e27c5b"},
+    {file = "numpydoc-1.10.0-py3-none-any.whl", hash = "sha256:3149da9874af890bcc2a82ef7aae5484e5aa81cb2778f08e3c307ba6d963721b"},
+    {file = "numpydoc-1.10.0.tar.gz", hash = "sha256:3f7970f6eee30912260a6b31ac72bba2432830cd6722569ec17ee8d3ef5ffa01"},
 ]
 
 [package.dependencies]
@@ -2831,6 +2831,18 @@ pyspnego = ">=0.4.0"
 requests = ">=2.0.0"
 
 [[package]]
+name = "roman"
+version = "5.2"
+description = "Integer to Roman numerals converter"
+optional = false
+python-versions = ">=3.10"
+groups = ["doc"]
+files = [
+    {file = "roman-5.2-py3-none-any.whl", hash = "sha256:89d3b47400388806d06ff77ea77c79ab080bc127820dea6bf34e1f1c1b8e676e"},
+    {file = "roman-5.2.tar.gz", hash = "sha256:275fe9f46290f7d0ffaea1c33251b92b8e463ace23660508ceef522e7587cb6f"},
+]
+
+[[package]]
 name = "rpds-py"
 version = "0.25.1"
 description = "Python bindings to Rust's persistent data structures (rpds)"
@@ -3284,14 +3296,14 @@ testing = ["bs4", "coverage", "pygments", "pytest (>=7.1,<8)", "pytest-cov", "py
 
 [[package]]
 name = "sphinx-toolbox"
-version = "4.0.0"
+version = "4.1.0"
 description = "Box of handy tools for Sphinx 🧰 📔"
 optional = false
 python-versions = ">=3.7"
 groups = ["doc"]
 files = [
-    {file = "sphinx_toolbox-4.0.0-py3-none-any.whl", hash = "sha256:c700937baee505e440d44d46bc47ccd036ec282ae61b04e40342944128721117"},
-    {file = "sphinx_toolbox-4.0.0.tar.gz", hash = "sha256:48c31451db2e2d8c71c03939e72a19ef7bc92ca7850a62db63fc7bb8395b6785"},
+    {file = "sphinx_toolbox-4.1.0-py3-none-any.whl", hash = "sha256:9024a7482b92ecf4572f83940c87ae26c2eca3ca49ff3df5f59806e88da958f6"},
+    {file = "sphinx_toolbox-4.1.0.tar.gz", hash = "sha256:5da890f4bb0cacea4f1cf6cef182c5be480340d0ead43c905f51f7e5aacfc19c"},
 ]
 
 [package.dependencies]
@@ -3304,6 +3316,7 @@ docutils = ">=0.16"
 domdf-python-tools = ">=2.9.0"
 filelock = ">=3.8.0"
 html5lib = ">=1.1"
+roman = ">4.0"
 "ruamel.yaml" = ">=0.16.12"
 sphinx = ">=3.2.0"
 sphinx-autodoc-typehints = ">=1.11.1"
