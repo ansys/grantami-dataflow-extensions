@@ -35,7 +35,9 @@ class ScriptingToolkitVersionConfig:
         raw_value = os.getenv(self.ENV_VAR, "latest")
         self.version: str = raw_value if raw_value else "latest"
         if self.version not in self.ALLOWED_VERSIONS:
-            raise ValueError(f"{self.ENV_VAR} must be one of {self.ALLOWED_VERSIONS}, " f"but got '{self.version}'.")
+            raise ValueError(
+                f"{self.ENV_VAR} must be one of {self.ALLOWED_VERSIONS}, but got '{self.version}'."
+            )
 
     def requires_version(self, *versions: str) -> bool:
         """Check if current version matches any of the specified versions."""
