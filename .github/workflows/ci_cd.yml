@@ -86,7 +86,7 @@ jobs:
       id-token: write  # Required for Sigstore
     strategy:
        matrix:
-           python-version: ['3.10', '3.11', '3.12', '3.13']
+           python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
     steps:
       - uses: ansys/actions/build-wheelhouse@41f86da4c9ead510db9135e428e33df9cc6f92e1  # v10.2.3
         with:
@@ -101,7 +101,7 @@ jobs:
     needs: code-style
     strategy:
        matrix:
-           python-version: ['3.10', '3.11', '3.12', '3.13']
+           python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
     steps:
       - uses: ansys/actions/tests-pytest@41f86da4c9ead510db9135e428e33df9cc6f92e1  # v10.2.3
         with:
