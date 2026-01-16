@@ -108,14 +108,3 @@ OIDCSessionBuilder = MockOIDCSessionBuilder
 _SessionBuilder = MockSessionBuilder
 
 sys.modules["ansys.grantami.core"] = scripting_toolkit
-SessionBuilder = Mock(side_effect=_create_session_builder)
-
-# Attach to module
-scripting_toolkit.SessionConfiguration = SessionConfiguration
-scripting_toolkit.SessionBuilder = SessionBuilder
-
-# Export mocks for direct access in tests
-OIDCSessionBuilder = MockOIDCSessionBuilder
-_SessionBuilder = MockSessionBuilder
-
-sys.modules["ansys.grantami.core"] = scripting_toolkit
