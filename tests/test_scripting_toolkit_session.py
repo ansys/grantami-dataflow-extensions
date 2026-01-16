@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from unittest.mock import ANY
+
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 from mocks.scripting_toolkit import (
     OIDCSessionBuilder,
@@ -53,18 +55,11 @@ class TestScriptingToolkitSession:
         kwargs = self._kwargs(timeout, retries)
         _ = windows_https.dataflow_integration.get_scripting_toolkit_session(**kwargs)
 
-        # Verify SessionConfiguration was called with the right parameters
         SessionConfiguration.assert_called_once_with(
             timeout=timeout,
             max_retries=retries,
         )
-
-        # Verify SessionBuilder was called with the right URL and configuration
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL  # First positional arg is URL
-
-        # Verify with_autologon was called for Windows authentication
+        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_autologon.assert_called_once()
 
         assert _scripting_toolkit_logged(debug_caplog.text)
@@ -79,11 +74,7 @@ class TestScriptingToolkitSession:
             timeout=timeout,
             max_retries=retries,
         )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
+        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_autologon.assert_called_once()
 
         assert _scripting_toolkit_logged(debug_caplog.text)
@@ -98,12 +89,7 @@ class TestScriptingToolkitSession:
             timeout=timeout,
             max_retries=retries,
         )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
-        # Verify with_credentials was called with correct username/password
+        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_credentials.assert_called_once_with(
             username=USERNAME,
             password=PASSWORD,
@@ -121,11 +107,7 @@ class TestScriptingToolkitSession:
             timeout=timeout,
             max_retries=retries,
         )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
+        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_credentials.assert_called_once_with(
             username=USERNAME,
             password=PASSWORD,
@@ -143,12 +125,7 @@ class TestScriptingToolkitSession:
             timeout=timeout,
             max_retries=retries,
         )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
-        # Verify OIDC flow: with_oidc() then with_access_token()
+        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_oidc.assert_called_once()
         OIDCSessionBuilder.with_access_token.assert_called_once_with(token=access_token)
 
@@ -172,10 +149,7 @@ class TestDeprecatedScriptingToolkit:
         with pytest.warns(match=self.warning_message):
             _ = windows_https.dataflow_integration.mi_session
 
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
+        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_autologon.assert_called_once()
 
         assert _scripting_toolkit_logged(debug_caplog.text)
@@ -186,10 +160,7 @@ class TestDeprecatedScriptingToolkit:
         with pytest.warns(match=self.warning_message):
             _ = windows_http.dataflow_integration.mi_session
 
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
+        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_autologon.assert_called_once()
 
         assert _scripting_toolkit_logged(debug_caplog.text)
@@ -200,10 +171,7 @@ class TestDeprecatedScriptingToolkit:
         with pytest.warns(match=self.warning_message):
             _ = basic_https.dataflow_integration.mi_session
 
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
+        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_credentials.assert_called_once_with(
             username=USERNAME,
             password=PASSWORD,
@@ -217,10 +185,7 @@ class TestDeprecatedScriptingToolkit:
         with pytest.warns(match=self.warning_message):
             _ = basic_http.dataflow_integration.mi_session
 
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
+        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_credentials.assert_called_once_with(
             username=USERNAME,
             password=PASSWORD,
@@ -234,10 +199,7 @@ class TestDeprecatedScriptingToolkit:
         with pytest.warns(match=self.warning_message):
             _ = oidc_https.dataflow_integration.mi_session
 
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
+        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
         _SessionBuilder.with_oidc.assert_called_once()
         OIDCSessionBuilder.with_access_token.assert_called_once_with(token=access_token)
 

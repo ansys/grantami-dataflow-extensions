@@ -24,43 +24,11 @@ import sys
 from types import ModuleType
 from unittest.mock import Mock
 
+from .common import create_mock_session
+
 scripting_toolkit = ModuleType("ansys.grantami.core")
 
 scripting_toolkit.__version__ = "5.1.0"
-
-
-def _create_mock_session():
-    """Create a mock Session object with the expected methods."""
-    session = Mock()
-
-    def get_db(*args, **kwargs):
-        db = Mock()
-
-        def get_record_by_id(*args, **kwargs):
-            record = Mock()
-            record.attributes = {}
-
-            attribute = Mock()
-            attribute.name = "Additional Processing Notes"
-            attribute.value = ""
-            record.attributes["Additional Processing Notes"] = attribute
-
-            def set_attributes(*args, **kwargs):
-                pass
-
-            record.set_attributes = set_attributes
-            return record
-
-        db.get_record_by_id = get_record_by_id
-        return db
-
-    session.get_db = get_db
-
-    def update(*args, **kwargs):
-        pass
-
-    session.update = update
-    return session
 
 
 # Create mock classes that track calls
@@ -84,7 +52,7 @@ class MockOIDCSessionBuilder:
 
     def _with_access_token(self, token):
         MockOIDCSessionBuilder.with_access_token(token=token)
-        return _create_mock_session()
+        return create_mock_session()
 
 
 class MockSessionBuilder:
@@ -101,11 +69,11 @@ class MockSessionBuilder:
 
     def _with_autologon(self):
         MockSessionBuilder.with_autologon()
-        return _create_mock_session()
+        return create_mock_session()
 
     def _with_credentials(self, username, password, domain=None, store_password=False):
         MockSessionBuilder.with_credentials(username=username, password=password)
-        return _create_mock_session()
+        return create_mock_session()
 
     def _with_oidc(self):
         MockSessionBuilder.with_oidc()
@@ -129,6 +97,17 @@ def _create_session_builder(service_layer_url, session_configuration=None):
 SessionConfiguration = Mock(side_effect=MockSessionConfiguration)
 
 # Create mock for SessionBuilder that tracks calls
+SessionBuilder = Mock(side_effect=_create_session_builder)
+
+# Attach to module
+scripting_toolkit.SessionConfiguration = SessionConfiguration
+scripting_toolkit.SessionBuilder = SessionBuilder
+
+# Export mocks for direct access in tests
+OIDCSessionBuilder = MockOIDCSessionBuilder
+_SessionBuilder = MockSessionBuilder
+
+sys.modules["ansys.grantami.core"] = scripting_toolkit
 SessionBuilder = Mock(side_effect=_create_session_builder)
 
 # Attach to module

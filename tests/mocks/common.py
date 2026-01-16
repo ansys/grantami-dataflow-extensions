@@ -20,23 +20,35 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import sys
-from types import ModuleType
+"""Common mock utilities shared across Scripting Toolkit version mocks."""
+
 from unittest.mock import Mock
 
-from .common import create_mock_session
 
-scripting_toolkit_4_x = ModuleType("GRANTA_MIScriptingToolkit")
+def create_mock_record():
+    """Create a mock Record object."""
+    record = Mock()
+    record.attributes = {}
 
-mpy = Mock()
-mpy.__version__ = "4.0.0"
+    attribute = Mock()
+    attribute.name = "Additional Processing Notes"
+    attribute.value = ""
+    record.attributes["Additional Processing Notes"] = attribute
+
+    record.set_attributes = Mock()
+    return record
 
 
-def connect(*args, **kwargs):
-    return create_mock_session()
+def create_mock_database():
+    """Create a mock Database object with get_record_by_id method."""
+    db = Mock()
+    db.get_record_by_id = Mock(side_effect=lambda *args, **kwargs: create_mock_record())
+    return db
 
 
-mpy.connect = Mock(wraps=connect)
-scripting_toolkit_4_x.granta = mpy
-
-sys.modules["GRANTA_MIScriptingToolkit"] = scripting_toolkit_4_x
+def create_mock_session():
+    """Create a mock Session object with get_db and update methods."""
+    session = Mock()
+    session.get_db = Mock(side_effect=lambda *args, **kwargs: create_mock_database())
+    session.update = Mock()
+    return session
