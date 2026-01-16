@@ -561,20 +561,21 @@ class MIDataflowIntegration:
         mpy.Session
             A Scripting Toolkit session object.
         """
-
         if mpy.__version__ >= "5.0.0":
             logger.debug("Using new Scripting Toolkit SessionBuilder API.")
-            return self._start_stk_session_from_dataflow_credentials_with_session_builder(timeout=timeout, max_retries=max_retries)
+            return self._start_stk_session_from_dataflow_credentials_with_session_builder(
+                timeout=timeout, max_retries=max_retries
+            )
         else:
             logger.debug("Using legacy Scripting Toolkit connect API.")
-            return self._start_stk_session_from_dataflow_credentials_with_connect(timeout=timeout, max_retries=max_retries)
-
-        raise NotImplementedError("Could not determine which Scripting Toolkit API to use.")
+            return self._start_stk_session_from_dataflow_credentials_with_connect(
+                timeout=timeout, max_retries=max_retries
+            )
 
     def _start_stk_session_from_dataflow_credentials_with_connect(
-            self,
-            timeout: int | None,
-            max_retries: int | None,
+        self,
+        timeout: int | None,
+        max_retries: int | None,
     ) -> "mpy.Session":
         """
         Create a Scripting Toolkit session based on the Data Flow authentication.
@@ -626,9 +627,9 @@ class MIDataflowIntegration:
         return session
 
     def _start_stk_session_from_dataflow_credentials_with_session_builder(
-            self,
-            timeout: int | None,
-            max_retries: int | None,
+        self,
+        timeout: int | None,
+        max_retries: int | None,
     ) -> "mpy.Session":
         """
         Create a Scripting Toolkit session based on the Data Flow authentication.
