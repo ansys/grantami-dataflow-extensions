@@ -70,6 +70,9 @@ show_missing = true
 
 [tool.pytest.ini_options]
 filterwarnings = "error"
+markers = [
+    "scripting_toolkit_version(*versions): mark test to run only for specific Scripting Toolkit versions",
+]
 
 [tool.pydocstyle]
 convention = "numpy"

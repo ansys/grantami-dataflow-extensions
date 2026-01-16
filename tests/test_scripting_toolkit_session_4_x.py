@@ -21,137 +21,79 @@
 # SOFTWARE.
 
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
-from mocks.scripting_toolkit import (
-    OIDCSessionBuilder,
-    SessionBuilder,
-    SessionConfiguration,
-    _SessionBuilder,
-)
+from mocks.scripting_toolkit_4_x import mpy as mpy_4_x_mock
 import pytest
 
 timeout_params = pytest.mark.parametrize("timeout", [None, 1_000_000])
 max_retries_params = pytest.mark.parametrize("retries", [None, 10])
 
-pytestmark = pytest.mark.scripting_toolkit_version("latest")
 
-
-def _reset_mocks():
-    """Reset all mocks before each test."""
-    SessionBuilder.reset_mock()
-    SessionConfiguration.reset_mock()
-    _SessionBuilder.with_autologon.reset_mock()
-    _SessionBuilder.with_credentials.reset_mock()
-    _SessionBuilder.with_oidc.reset_mock()
-    OIDCSessionBuilder.with_access_token.reset_mock()
+pytestmark = pytest.mark.scripting_toolkit_version("4.x")
 
 
 @timeout_params
 @max_retries_params
 class TestScriptingToolkitSession:
     def test_windows_https(self, timeout, retries, windows_https, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         kwargs = self._kwargs(timeout, retries)
         _ = windows_https.dataflow_integration.get_scripting_toolkit_session(**kwargs)
-
-        # Verify SessionConfiguration was called with the right parameters
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTPS_SL_URL,
+            autologon=True,
+            **kwargs,
         )
-
-        # Verify SessionBuilder was called with the right URL and configuration
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL  # First positional arg is URL
-
-        # Verify with_autologon was called for Windows authentication
-        _SessionBuilder.with_autologon.assert_called_once()
-
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Windows authentication." in debug_caplog.text
 
     def test_windows_http(self, timeout, retries, windows_http, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         kwargs = self._kwargs(timeout, retries)
         _ = windows_http.dataflow_integration.get_scripting_toolkit_session(**kwargs)
-
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTP_SL_URL,
+            autologon=True,
+            **kwargs,
         )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
-        _SessionBuilder.with_autologon.assert_called_once()
-
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Windows authentication." in debug_caplog.text
 
     def test_basic_https(self, timeout, retries, basic_https, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         kwargs = self._kwargs(timeout, retries)
         _ = basic_https.dataflow_integration.get_scripting_toolkit_session(**kwargs)
-
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
-        )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
-        # Verify with_credentials was called with correct username/password
-        _SessionBuilder.with_credentials.assert_called_once_with(
-            username=USERNAME,
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTPS_SL_URL,
+            user_name=USERNAME,
             password=PASSWORD,
+            **kwargs,
         )
-
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Basic authentication." in debug_caplog.text
 
     def test_basic_http(self, timeout, retries, basic_http, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         kwargs = self._kwargs(timeout, retries)
         _ = basic_http.dataflow_integration.get_scripting_toolkit_session(**kwargs)
-
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
-        )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
-        _SessionBuilder.with_credentials.assert_called_once_with(
-            username=USERNAME,
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTP_SL_URL,
+            user_name=USERNAME,
             password=PASSWORD,
+            **kwargs,
         )
-
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Basic authentication." in debug_caplog.text
 
     def test_oidc_https(self, timeout, retries, oidc_https, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         kwargs = self._kwargs(timeout, retries)
         _ = oidc_https.dataflow_integration.get_scripting_toolkit_session(**kwargs)
-
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTPS_SL_URL,
+            oidc=True,
+            auth_token=access_token,
+            **kwargs,
         )
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
-        # Verify OIDC flow: with_oidc() then with_access_token()
-        _SessionBuilder.with_oidc.assert_called_once()
-        OIDCSessionBuilder.with_access_token.assert_called_once_with(token=access_token)
-
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using OIDC authentication." in debug_caplog.text
 
@@ -168,79 +110,60 @@ class TestDeprecatedScriptingToolkit:
     warning_message = r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."
 
     def test_windows_https_deprecated_property(self, windows_https, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         with pytest.warns(match=self.warning_message):
             _ = windows_https.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
-        _SessionBuilder.with_autologon.assert_called_once()
-
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTPS_SL_URL,
+            autologon=True,
+        )
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Windows authentication." in debug_caplog.text
 
     def test_windows_http(self, windows_http, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         with pytest.warns(match=self.warning_message):
             _ = windows_http.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
-        _SessionBuilder.with_autologon.assert_called_once()
-
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTP_SL_URL,
+            autologon=True,
+        )
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Windows authentication." in debug_caplog.text
 
     def test_basic_https(self, basic_https, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         with pytest.warns(match=self.warning_message):
             _ = basic_https.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
-        _SessionBuilder.with_credentials.assert_called_once_with(
-            username=USERNAME,
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTPS_SL_URL,
+            user_name=USERNAME,
             password=PASSWORD,
         )
-
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Basic authentication." in debug_caplog.text
 
     def test_basic_http(self, basic_http, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         with pytest.warns(match=self.warning_message):
             _ = basic_http.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTP_SL_URL
-
-        _SessionBuilder.with_credentials.assert_called_once_with(
-            username=USERNAME,
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTP_SL_URL,
+            user_name=USERNAME,
             password=PASSWORD,
         )
-
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Basic authentication." in debug_caplog.text
 
     def test_oidc_https(self, oidc_https, debug_caplog):
-        _reset_mocks()
+        mpy_4_x_mock.connect.reset_mock()
         with pytest.warns(match=self.warning_message):
             _ = oidc_https.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once()
-        call_args = SessionBuilder.call_args
-        assert call_args[0][0] == HTTPS_SL_URL
-
-        _SessionBuilder.with_oidc.assert_called_once()
-        OIDCSessionBuilder.with_access_token.assert_called_once_with(token=access_token)
-
+        mpy_4_x_mock.connect.assert_called_once_with(
+            HTTPS_SL_URL,
+            oidc=True,
+            auth_token=access_token,
+        )
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using OIDC authentication." in debug_caplog.text
 

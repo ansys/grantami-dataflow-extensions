@@ -24,13 +24,13 @@ import sys
 from types import ModuleType
 from unittest.mock import Mock
 
-scripting_toolkit = ModuleType("GRANTA_MIScriptingToolkit")
+scripting_toolkit = ModuleType("ansys.grantami.core")
 
-mpy = Mock()
-mpy.__version__ = "4.0.0"
+scripting_toolkit.__version__ = "5.1.0"
 
 
-def connect(*args, **kwargs):
+def _create_mock_session():
+    """Create a mock Session object with the expected methods."""
     session = Mock()
 
     def get_db(*args, **kwargs):
@@ -63,7 +63,80 @@ def connect(*args, **kwargs):
     return session
 
 
-mpy.connect = Mock(wraps=connect)
-scripting_toolkit.granta = mpy
+# Create mock classes that track calls
+class MockSessionConfiguration:
+    """Mock for SessionConfiguration class."""
 
-sys.modules["GRANTA_MIScriptingToolkit"] = scripting_toolkit
+    def __init__(self, timeout=300000, max_retries=0, **kwargs):
+        self.timeout = timeout
+        self.max_retries = max_retries
+
+
+class MockOIDCSessionBuilder:
+    """Mock for OIDCSessionBuilder class."""
+
+    # Class-level mock to track calls
+    with_access_token = Mock()
+
+    def __init__(self, service_layer_url, session_configuration):
+        self._service_layer_url = service_layer_url
+        self._session_configuration = session_configuration
+
+    def _with_access_token(self, token):
+        MockOIDCSessionBuilder.with_access_token(token=token)
+        return _create_mock_session()
+
+
+class MockSessionBuilder:
+    """Mock for SessionBuilder class."""
+
+    # Class-level mocks to track calls
+    with_autologon = Mock()
+    with_credentials = Mock()
+    with_oidc = Mock()
+
+    def __init__(self, service_layer_url, session_configuration=None):
+        self._service_layer_url = service_layer_url
+        self._session_configuration = session_configuration or MockSessionConfiguration()
+
+    def _with_autologon(self):
+        MockSessionBuilder.with_autologon()
+        return _create_mock_session()
+
+    def _with_credentials(self, username, password, domain=None, store_password=False):
+        MockSessionBuilder.with_credentials(username=username, password=password)
+        return _create_mock_session()
+
+    def _with_oidc(self):
+        MockSessionBuilder.with_oidc()
+        oidc_builder = MockOIDCSessionBuilder(self._service_layer_url, self._session_configuration)
+        # Replace instance method with one that calls class-level mock
+        oidc_builder.with_access_token = oidc_builder._with_access_token
+        return oidc_builder
+
+
+def _create_session_builder(service_layer_url, session_configuration=None):
+    """Factory function to create MockSessionBuilder with proper method binding."""
+    builder = MockSessionBuilder(service_layer_url, session_configuration)
+    # Replace instance methods with ones that call class-level mocks
+    builder.with_autologon = builder._with_autologon
+    builder.with_credentials = builder._with_credentials
+    builder.with_oidc = builder._with_oidc
+    return builder
+
+
+# Create mock for SessionConfiguration that tracks calls
+SessionConfiguration = Mock(side_effect=MockSessionConfiguration)
+
+# Create mock for SessionBuilder that tracks calls
+SessionBuilder = Mock(side_effect=_create_session_builder)
+
+# Attach to module
+scripting_toolkit.SessionConfiguration = SessionConfiguration
+scripting_toolkit.SessionBuilder = SessionBuilder
+
+# Export mocks for direct access in tests
+OIDCSessionBuilder = MockOIDCSessionBuilder
+_SessionBuilder = MockSessionBuilder
+
+sys.modules["ansys.grantami.core"] = scripting_toolkit
