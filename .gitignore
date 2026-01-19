@@ -234,3 +234,6 @@ fabric.properties
 
 # Override default ipython exclusion
 !.ipython/*
+
+# Pycharm
+.idea/
