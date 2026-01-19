@@ -30,6 +30,7 @@ Allows direct access to this data or supports spawning a MI Scripting Toolkit se
 import base64
 import copy
 import enum
+from functools import cached_property
 from io import StringIO
 import json
 from pathlib import Path
@@ -820,6 +821,30 @@ class MIDataflowIntegration:
         """
         return cast(str, data["WorkflowId"])
 
+    @cached_property
+    def _api_session(self) -> requests.Session:
+        """
+        Create and configure a requests session for use with the Data Flow API.
+
+        Returns
+        -------
+        requests.Session
+            A requests session configured for the Data Flow API.
+        """
+        session = requests.Session()
+        session.verify = self._verify_ssl if self._ca_path is None else self._ca_path
+
+        if self._authentication_mode in [
+            _AuthenticationMode.OIDC_AUTHENTICATION,
+            _AuthenticationMode.BASIC_AUTHENTICATION,
+        ]:
+            session.headers.update({"Authorization": self._df_data["AuthorizationHeader"]})
+        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
+            session.auth = HttpNegotiateAuth()
+        else:
+            raise NotImplementedError()
+        return session
+
     def resume_bookmark(self, exit_code: str | int) -> None:
         """
         Call the Data Flow API to allow the MI Data Flow step to continue.
@@ -830,42 +855,20 @@ class MIDataflowIntegration:
             An exit code to inform Data Flow of success or otherwise of the business logic script.
         """
         logger.debug(f"Returning control to MI Data Flow with exit code {exit_code}")
-        headers = {"Content-Type": "application/json"}
-        response_data = json.dumps(
-            {
-                "Values": {"ExitCode": exit_code},
-                "WorkflowDefinitionName": self._df_data["WorkflowDefinitionId"],
-                "TransitionName": self._df_data["TransitionName"],
-            }
-        ).encode("utf-8")
+        request_data = {
+            "Values": {"ExitCode": exit_code},
+            "WorkflowDefinitionName": self._df_data["WorkflowDefinitionId"],
+            "TransitionName": self._df_data["TransitionName"],
+        }
 
-        verify_argument = self._verify_ssl if self._ca_path is None else self._ca_path
         logger.debug(f"Resuming bookmark using URL {self._dataflow_url}")
 
         request_url = f"{self._dataflow_url}/api/workflows/{self._get_workflow_id(self._df_data)}"
-        if self._authentication_mode in [
-            _AuthenticationMode.OIDC_AUTHENTICATION,
-            _AuthenticationMode.BASIC_AUTHENTICATION,
-        ]:
-            headers["Authorization"] = self._df_data["AuthorizationHeader"]
-            response = requests.post(
-                url=request_url,
-                data=response_data,
-                headers=headers,
-                verify=verify_argument,
-                timeout=self._requests_timeout,
-            )
-        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
-            response = requests.post(
-                url=request_url,
-                data=response_data,
-                auth=HttpNegotiateAuth(),
-                headers=headers,
-                verify=verify_argument,
-                timeout=self._requests_timeout,
-            )
-        else:
-            raise NotImplementedError()
+        response = self._api_session.post(
+            url=request_url,
+            json=request_data,
+            timeout=self._requests_timeout,
+        )
         response.raise_for_status()
         logger.info("---------------- Workflow successfully resumed -----------------")
 
@@ -880,41 +883,18 @@ class MIDataflowIntegration:
         level : str
             The log level. One of: ``Verbose``, ``Debug``, ``Info``, ``Warn``, ``Error``, ``Fatal``.
         """
-        headers = {"Content-Type": "application/json"}
-        request_data = json.dumps(
-            {
-                "Message": msg,
-                "Level": level,
-                "WorkflowId": self._get_workflow_id(self._df_data),
-            }
-        ).encode("utf-8")
-
-        verify_argument = self._verify_ssl if self._ca_path is None else self._ca_path
+        request_data = {
+            "Message": msg,
+            "Level": level,
+            "WorkflowId": self._get_workflow_id(self._df_data),
+        }
 
         request_url = f"{self._dataflow_url}/api/logs"
-        if self._authentication_mode in [
-            _AuthenticationMode.OIDC_AUTHENTICATION,
-            _AuthenticationMode.BASIC_AUTHENTICATION,
-        ]:
-            headers["Authorization"] = self._df_data["AuthorizationHeader"]
-            response = requests.put(
-                url=request_url,
-                data=request_data,
-                headers=headers,
-                verify=verify_argument,
-                timeout=self._requests_timeout,
-            )
-        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
-            response = requests.put(
-                url=request_url,
-                data=request_data,
-                auth=HttpNegotiateAuth(),
-                headers=headers,
-                verify=verify_argument,
-                timeout=self._requests_timeout,
-            )
-        else:
-            raise NotImplementedError()
+        response = self._api_session.put(
+            url=request_url,
+            json=request_data,
+            timeout=self._requests_timeout,
+        )
         response.raise_for_status()
 
 
