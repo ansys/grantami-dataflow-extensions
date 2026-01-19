@@ -533,6 +533,150 @@ class TestResumeBookmark:
         return exit_code_logged and url_logged
 
 
+@pytest.mark.parametrize(
+    ["message", "level"],
+    [
+        ("Test log message - Verbose", "Verbose"),
+        ("Test log message - Debug", "Debug"),
+        ("Test log message - Info", "Info"),
+        ("Test log message - Warn", "Warn"),
+        ("Test log message - Error", "Error"),
+        ("Test log message - Fatal", "Fatal"),
+    ],
+)
+class TestApiLog:
+    def test_windows_https(self, requests_mock, windows_https, message, level):
+        requests_mock.put(f"{HTTPS_URL}/api/logs")
+        windows_https.dataflow_integration.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level)
+
+    def test_windows_https_disable_https(self, requests_mock, windows_https_use_https_false, message, level):
+        requests_mock.put(f"{HTTP_URL}/api/logs")
+        windows_https_use_https_false.dataflow_integration.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, https=False, verify=False)
+
+    def test_windows_https_disable_verification(self, requests_mock, windows_https_verify_false, message, level):
+        requests_mock.put(f"{HTTPS_URL}/api/logs")
+        windows_https_verify_false.dataflow_integration.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, verify=False)
+
+    def test_windows_https_custom_cert(self, requests_mock, windows_https_custom_cert, message, level):
+        requests_mock.put(f"{HTTPS_URL}/api/logs")
+        windows_https_custom_cert.dataflow_integration.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, verify=CERT_PATH_ABSOLUTE)
+
+    def test_windows_http(self, requests_mock, windows_http, message, level):
+        requests_mock.put(f"{HTTP_URL}/api/logs")
+        windows_http.dataflow_integration.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, https=False, verify=False)
+
+    @pytest.mark.parametrize("fixture_name, auth", [("basic_https", "basic"), ("oidc_https", "oidc")])
+    def test_credentialed_https(
+        self,
+        requests_mock,
+        fixture_name,
+        auth: Literal["basic", "oidc"],
+        request,
+        message,
+        level,
+    ):
+        df = request.getfixturevalue(fixture_name).dataflow_integration
+        requests_mock.put(f"{HTTPS_URL}/api/logs")
+        df.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, auth=auth)
+
+    def test_basic_https_disable_https(self, requests_mock, basic_https_use_https_false, message, level):
+        requests_mock.put(f"{HTTP_URL}/api/logs")
+        basic_https_use_https_false.dataflow_integration.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, https=False, verify=False, auth="basic")
+
+    @pytest.mark.parametrize(
+        "fixture_name, auth",
+        [("basic_https_verify_false", "basic"), ("oidc_https_verify_false", "oidc")],
+    )
+    def test_credentialed_https_disable_verification(
+        self,
+        requests_mock,
+        fixture_name,
+        auth: Literal["basic", "oidc"],
+        request,
+        message,
+        level,
+    ):
+        df = request.getfixturevalue(fixture_name).dataflow_integration
+        requests_mock.put(f"{HTTPS_URL}/api/logs")
+        df.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, verify=False, auth=auth)
+
+    @pytest.mark.parametrize(
+        "fixture_name, auth",
+        [("basic_https_custom_cert", "basic"), ("oidc_https_custom_cert", "oidc")],
+    )
+    def test_credentialed_https_custom_cert(
+        self, requests_mock, fixture_name, auth: Literal["basic", "oidc"], request, message, level
+    ):
+        df = request.getfixturevalue(fixture_name).dataflow_integration
+        requests_mock.put(f"{HTTPS_URL}/api/logs")
+        df.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, verify=CERT_PATH_ABSOLUTE, auth=auth)
+
+    def test_basic_http(self, requests_mock, basic_http, message, level):
+        requests_mock.put(f"{HTTP_URL}/api/logs")
+        basic_http.dataflow_integration.log_msg_to_instance(message, level)
+
+        assert requests_mock.call_count == 1
+        request = requests_mock.request_history[0]
+        self._verify_request(request, message, level, https=False, verify=False, auth="basic")
+
+    def _verify_request(
+        self,
+        request,
+        message: str,
+        level: str,
+        *,
+        https: bool = True,
+        verify: bool | str = True,
+        auth: Literal["basic", "oidc"] | None = None,
+    ):
+        assert request.scheme == "https" if https else "http"
+        assert request.verify == verify
+        if auth == "basic":
+            assert request.headers["Authorization"] == basic_header
+        elif auth == "oidc":
+            assert request.headers["Authorization"] == oidc_header
+        data = request.json()
+        assert data["Message"] == message
+        assert data["Level"] == level
+        assert data["WorkflowId"] == WORKFLOW_ID
+
+
 @pytest.mark.parametrize("fixture_name", ["basic_http", "basic_https", "windows_http", "windows_https", "oidc_https"])
 def test_supporting_files(fixture_name, request):
     df = request.getfixturevalue(fixture_name).dataflow_integration

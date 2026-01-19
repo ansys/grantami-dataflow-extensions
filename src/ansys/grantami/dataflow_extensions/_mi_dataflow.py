@@ -34,7 +34,7 @@ from io import StringIO
 import json
 from pathlib import Path
 import sys
-from typing import Any, Dict, Optional, Tuple, Type, TypeVar, cast
+from typing import Any, Dict, Literal, Optional, Tuple, Type, TypeVar, cast
 from urllib.parse import urlparse
 import warnings
 
@@ -57,6 +57,7 @@ except ImportError:
 from ._logger import logger
 
 PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClientFactory)
+ApiLogLevel = Literal["Debug", "Info", "Warn", "Error", "Fatal"]
 
 
 class _AuthenticationMode(enum.Enum):
@@ -867,6 +868,54 @@ class MIDataflowIntegration:
             raise NotImplementedError()
         response.raise_for_status()
         logger.info("---------------- Workflow successfully resumed -----------------")
+
+    def log_msg_to_instance(self, msg: str, level: ApiLogLevel) -> None:
+        """
+        Log a message to the Data Flow instance via the Data Flow API.
+
+        Parameters
+        ----------
+        msg : str
+            The message to log.
+        level : str
+            The log level. One of: ``Verbose``, ``Debug``, ``Info``, ``Warn``, ``Error``, ``Fatal``.
+        """
+        headers = {"Content-Type": "application/json"}
+        request_data = json.dumps(
+            {
+                "Message": msg,
+                "Level": level,
+                "WorkflowId": self._get_workflow_id(self._df_data),
+            }
+        ).encode("utf-8")
+
+        verify_argument = self._verify_ssl if self._ca_path is None else self._ca_path
+
+        request_url = f"{self._dataflow_url}/api/logs"
+        if self._authentication_mode in [
+            _AuthenticationMode.OIDC_AUTHENTICATION,
+            _AuthenticationMode.BASIC_AUTHENTICATION,
+        ]:
+            headers["Authorization"] = self._df_data["AuthorizationHeader"]
+            response = requests.put(
+                url=request_url,
+                data=request_data,
+                headers=headers,
+                verify=verify_argument,
+                timeout=self._requests_timeout,
+            )
+        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
+            response = requests.put(
+                url=request_url,
+                data=request_data,
+                auth=HttpNegotiateAuth(),
+                headers=headers,
+                verify=verify_argument,
+                timeout=self._requests_timeout,
+            )
+        else:
+            raise NotImplementedError()
+        response.raise_for_status()
 
 
 class MissingClientModuleException(ImportError):  # noqa: N818
