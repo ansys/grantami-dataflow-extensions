@@ -622,7 +622,7 @@ class MIDataflowIntegration:
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token, **session_args)
 
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(f"Unsupported authentication mode {self._authentication_mode.name}")
 
         return session
 
@@ -673,7 +673,7 @@ class MIDataflowIntegration:
             session = session_builder.with_oidc().with_access_token(token=access_token)
 
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(f"Unsupported authentication mode {self._authentication_mode.name}")
 
         return session
 
@@ -761,7 +761,7 @@ class MIDataflowIntegration:
             return cast(PyGranta_Connection_Class, builder.with_oidc().with_access_token(access_token=access_token))
 
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(f"Unsupported authentication mode {self._authentication_mode.name}")
 
     def _get_basic_creds(self) -> Tuple[str, str]:
         """
