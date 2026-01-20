@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 
-mock_path = Path(__file__).parents[3] / "tests/mocks"
+tests_path = Path(__file__).parents[3] / "tests"
 
-sys.path.insert(1, str(mock_path))
-import scripting_toolkit  # noqa: E402 F401  # isort: skip
+sys.path.insert(1, str(tests_path))
+from mocks import scripting_toolkit  # noqa: E402 F401  # isort: skip

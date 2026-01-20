@@ -47,9 +47,12 @@ except ImportError:
     pass
 
 try:
-    from GRANTA_MIScriptingToolkit import granta as mpy  # type: ignore
+    import ansys.grantami.core as mpy  # type: ignore
 except ImportError:
-    pass
+    try:
+        from GRANTA_MIScriptingToolkit import granta as mpy  # type: ignore
+    except ImportError:
+        pass
 
 from ._logger import logger
 
@@ -558,6 +561,44 @@ class MIDataflowIntegration:
         mpy.Session
             A Scripting Toolkit session object.
         """
+        if mpy.__version__ >= "5.0.0":
+            logger.debug("Using new Scripting Toolkit SessionBuilder API.")
+            return self._start_stk_session_from_dataflow_credentials_with_session_builder(
+                timeout=timeout, max_retries=max_retries
+            )
+        else:
+            logger.debug("Using legacy Scripting Toolkit connect API.")
+            return self._start_stk_session_from_dataflow_credentials_with_connect(
+                timeout=timeout, max_retries=max_retries
+            )
+
+    def _start_stk_session_from_dataflow_credentials_with_connect(
+        self,
+        timeout: int | None,
+        max_retries: int | None,
+    ) -> "mpy.Session":
+        """
+        Create a Scripting Toolkit session based on the Data Flow authentication.
+
+        Use the legacy connect API. The credentials provided by Data Flow are re-used,
+        and so explicit credentials are not required.
+
+        Parameters
+        ----------
+        timeout : int | None
+            The maximum time in milliseconds for the Scripting Toolkit session to wait
+            for a response from Granta MI. See the Scripting Toolkit documentation for
+            default behavior.
+        max_retries : int | None
+            The maximum number of times for the Scripting Toolkit to retry a request
+            before failing. See the Scripting Toolkit documentation for default
+            behavior.
+
+        Returns
+        -------
+        mpy.Session
+            A Scripting Toolkit session object.
+        """
         logger.debug("Creating MI Scripting Toolkit session.")
 
         session_args = {}
@@ -581,7 +622,58 @@ class MIDataflowIntegration:
             session = mpy.connect(self.service_layer_url, oidc=True, auth_token=access_token, **session_args)
 
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(f"Unsupported authentication mode {self._authentication_mode.name}")
+
+        return session
+
+    def _start_stk_session_from_dataflow_credentials_with_session_builder(
+        self,
+        timeout: int | None,
+        max_retries: int | None,
+    ) -> "mpy.Session":
+        """
+        Create a Scripting Toolkit session based on the Data Flow authentication.
+
+        Use the SessionBuilder API. The credentials provided by Data Flow are re-used,
+        and so explicit credentials are not required.
+
+        Parameters
+        ----------
+        timeout : int | None
+            The maximum time in milliseconds for the Scripting Toolkit session to wait
+            for a response from Granta MI. See the Scripting Toolkit documentation for
+            default behavior.
+        max_retries : int | None
+            The maximum number of times for the Scripting Toolkit to retry a request
+            before failing. See the Scripting Toolkit documentation for default
+            behavior.
+
+        Returns
+        -------
+        mpy.Session
+            A Scripting Toolkit session object.
+        """
+        logger.debug("Creating MI Scripting Toolkit session.")
+
+        session_configuration = mpy.SessionConfiguration(timeout=timeout, max_retries=max_retries)
+        session_builder = mpy.SessionBuilder(self.service_layer_url, session_configuration=session_configuration)
+
+        if self._authentication_mode == _AuthenticationMode.BASIC_AUTHENTICATION:
+            logger.debug("Using Basic authentication.")
+            username, password = self._get_basic_creds()
+            session = session_builder.with_credentials(username=username, password=password)
+
+        elif self._authentication_mode == _AuthenticationMode.INTEGRATED_WINDOWS_AUTHENTICATION:
+            logger.debug("Using Windows authentication.")
+            session = session_builder.with_autologon()
+
+        elif self._authentication_mode == _AuthenticationMode.OIDC_AUTHENTICATION:
+            logger.debug("Using OIDC authentication.")
+            access_token = self._get_oidc_token()
+            session = session_builder.with_oidc().with_access_token(token=access_token)
+
+        else:
+            raise NotImplementedError(f"Unsupported authentication mode {self._authentication_mode.name}")
 
         return session
 
@@ -669,7 +761,7 @@ class MIDataflowIntegration:
             return cast(PyGranta_Connection_Class, builder.with_oidc().with_access_token(access_token=access_token))
 
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(f"Unsupported authentication mode {self._authentication_mode.name}")
 
     def _get_basic_creds(self) -> Tuple[str, str]:
         """
