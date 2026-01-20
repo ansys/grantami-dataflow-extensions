@@ -102,10 +102,13 @@ jobs:
     strategy:
        matrix:
            python-version: ['3.10', '3.11', '3.12', '3.13']
+           scripting-toolkit-version: ['latest', '4.x']
     steps:
       - uses: ansys/actions/tests-pytest@41f86da4c9ead510db9135e428e33df9cc6f92e1  # v10.2.3
         with:
           python-version: ${{ matrix.python-version }}
+        env:
+          SCRIPTING_TOOLKIT_TEST_VERSION: ${{ matrix.scripting-toolkit-version }}
 
   build-library:
     name: "Build library"

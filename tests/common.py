@@ -21,7 +21,29 @@
 # SOFTWARE.
 
 from base64 import b64encode
+import os
 from pathlib import Path
+
+
+class ScriptingToolkitVersionConfig:
+    """Centralized configuration for Scripting Toolkit version-based testing."""
+
+    ALLOWED_VERSIONS = {"4.x", "latest"}
+    ENV_VAR = "SCRIPTING_TOOLKIT_TEST_VERSION"
+
+    def __init__(self):
+        raw_value = os.getenv(self.ENV_VAR, "latest")
+        self.version: str = raw_value if raw_value else "latest"
+        if self.version not in self.ALLOWED_VERSIONS:
+            raise ValueError(f"{self.ENV_VAR} must be one of {self.ALLOWED_VERSIONS}, but got '{self.version}'.")
+
+    def requires_version(self, *versions: str) -> bool:
+        """Check if current version matches any of the specified versions."""
+        return self.version in versions
+
+
+SCRIPTING_TOOLKIT_CONFIG = ScriptingToolkitVersionConfig()
+
 
 CERT_FILE = "test_cert.crt"
 CERT_PATH_ABSOLUTE = Path(__file__).parent / CERT_FILE

@@ -20,9 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# This import must happen before dataflow_extensions is imported to correctly mock these libraries
-from mocks import record_lists, scripting_toolkit  # isort:skip  # noqa: F401
-
 from copy import deepcopy
 from dataclasses import dataclass
 import json
@@ -33,6 +30,7 @@ from common import (
     CERT_FILE,
     HTTP_URL,
     HTTPS_URL,
+    SCRIPTING_TOOLKIT_CONFIG,
     TRANSITION_NAME,
     WORKFLOW_DEFINITION_ID,
     WORKFLOW_ID,
@@ -41,8 +39,31 @@ from common import (
 )
 import pytest
 
+# This import must happen before dataflow_extensions is imported to correctly mock these libraries
+from mocks import record_lists  # isort:skip  # noqa: F401
+
+if SCRIPTING_TOOLKIT_CONFIG.requires_version("latest"):
+    from mocks import scripting_toolkit  # isort:skip  # noqa: F401
+elif SCRIPTING_TOOLKIT_CONFIG.requires_version("4.x"):
+    from mocks import scripting_toolkit_4_x  # isort:skip  # noqa: F401
+
 from ansys.grantami.dataflow_extensions import MIDataflowIntegration
 from ansys.grantami.dataflow_extensions._mi_dataflow import _AuthenticationMode
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip tests that don't match the current Scripting Toolkit version."""
+    for item in items:
+        marker = item.get_closest_marker("scripting_toolkit_version")
+        if marker:
+            required_versions = marker.args
+            if not SCRIPTING_TOOLKIT_CONFIG.requires_version(*required_versions):
+                item.add_marker(
+                    pytest.mark.skip(
+                        reason=f"Test requires Scripting Toolkit version in {required_versions}, "
+                        f"current: {SCRIPTING_TOOLKIT_CONFIG.version}"
+                    )
+                )
 
 
 @dataclass

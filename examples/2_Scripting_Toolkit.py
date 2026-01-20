@@ -129,7 +129,7 @@ def step_logic(dataflow_integration):
     Replace the code in this module with your custom business logic.
     """
     payload = dataflow_integration.get_payload_as_dict()
-    mi_session = dataflow_integration.mi_session
+    mi_session = dataflow_integration.get_scripting_toolkit_session()
 
     db_key = payload["Record"]["Database"]
     db = mi_session.get_db(db_key=db_key)
