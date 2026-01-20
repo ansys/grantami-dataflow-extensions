@@ -116,6 +116,15 @@ and logged centrally on the Granta MI server::
    logger.addHandler(ch)
 
 
+Alternatively, use :meth:`~.MIDataflowIntegration.log_msg_to_instance` to log a message directly on the instance via the API::
+
+   dataflow_integration = MIDataflowIntegration()
+   dataflow_integration.log_msg_to_instance("Script started", level="Info")
+
+Log messages created this way can be read from the Dashboard in MI Data Flow Manager and in the central Data Flow log.
+Contrary to the previous approach, these messages are available immediately, rather than when the script completes, and
+therefore can be used to report progress during long-running scripts.
+
 ``main()``
 ~~~~~~~~~~
 
