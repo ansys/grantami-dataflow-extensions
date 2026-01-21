@@ -874,7 +874,10 @@ class MIDataflowIntegration:
 
     def log_msg_to_instance(self, msg: str, level: ApiLogLevel) -> None:
         """
-        Log a message to the Data Flow instance via the Data Flow API.
+        Log a message to the workflow instance.
+
+        The message is emitted via the Data Flow API and associated with the current workflow instance. It will be
+        immediately be visible in the Data Flow logs.
 
         Parameters
         ----------
