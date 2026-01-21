@@ -6,4 +6,7 @@ API reference
 .. autoclass:: ansys.grantami.dataflow_extensions.MIDataflowIntegration
    :members:
 
+.. autoclass:: ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler
+   :exclude-members: emit
+
 .. autoclass:: ansys.grantami.dataflow_extensions.MissingClientModuleException

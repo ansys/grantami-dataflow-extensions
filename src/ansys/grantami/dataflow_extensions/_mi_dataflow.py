@@ -63,16 +63,11 @@ PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClient
 ApiLogLevel = Literal["Debug", "Info", "Warn", "Error", "Fatal"]
 
 
-class MIDataflowApiLogHandler(logging.Handler):
+class MIDataflowApiLogHandler(logging.Handler):  # numpydoc ignore=PR01
     """
-    A logging handler which sends log messages to MI Data Flow API.
+    A logging handler which sends log messages to the Data Flow API.
 
     Only provides support for standard log levels.
-
-    Parameters
-    ----------
-    callback : Callable[[str, ApiLogLevel], None]
-        A callback function which accepts a log message and log level.
     """
 
     _level_map: dict[int, ApiLogLevel] = {
