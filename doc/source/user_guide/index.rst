@@ -129,9 +129,9 @@ Direct logging via API
 
 Recommended for scripts expected to run for a few minutes or more.
 
-Log messages can be sent directly to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`. In this case,
-log messages are immediately visible for the workflow instance via the Dashboard and are also logged in the
-central Data Flow logs. This can be useful to report progress during long-running scripts. For example::
+Log messages can be sent directly to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`. Log messages
+sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
+also in the central Data Flow logs. This can be useful to report progress during long-running scripts. For example::
 
    dataflow_integration = MIDataflowIntegration()
    dataflow_integration.log_msg_to_instance("Script started", level="Info")

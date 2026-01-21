@@ -876,8 +876,8 @@ class MIDataflowIntegration:
         """
         Log a message to the workflow instance.
 
-        The message is emitted via the Data Flow API and associated with the current workflow instance. It will be
-        immediately be visible in the Data Flow logs.
+        The message is emitted via the Data Flow API and associated with the current workflow instance. The message
+        will be visible immediately in the Data Flow logs.
 
         Parameters
         ----------
