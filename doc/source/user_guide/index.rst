@@ -102,8 +102,17 @@ These are the recommended components of a script that makes use of ``dataflow-ex
 Logging
 ~~~~~~~
 
+This package supports two approaches to logging.
+
+Stream logging
+++++++++++++++
+
+Recommended for simple, short-running scripts.
+
+``stdout`` and ``stderr`` are collected by MI Data Flow and included in the central Data Flow log.
+
 Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by MI Data Flow
-and logged centrally on the Granta MI server::
+and logged centrally on the Granta MI server once the script execution has completed::
 
    # Create an instance of the root logger
    logger = logging.getLogger()
@@ -115,6 +124,17 @@ and logged centrally on the Granta MI server::
    ch.setFormatter(formatter)
    logger.addHandler(ch)
 
+Direct logging via API
+++++++++++++++++++++++
+
+Recommended for scripts expected to run for a few minutes or more.
+
+Log messages can be sent directly to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`. Log messages
+sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
+also in the central Data Flow logs. This can be useful to report progress during long-running scripts. For example::
+
+   dataflow_integration = MIDataflowIntegration()
+   dataflow_integration.log_msg_to_instance("Script started", level="Info")
 
 ``main()``
 ~~~~~~~~~~
