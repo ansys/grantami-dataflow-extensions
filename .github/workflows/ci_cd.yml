@@ -58,7 +58,6 @@ jobs:
         run:
           uv run mypy ./src
 
-
   doc-style:
     name: "Documentation style"
     runs-on: ubuntu-latest
