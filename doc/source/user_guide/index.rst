@@ -402,7 +402,7 @@ This method returns a :class:`~.MIDataflowApiLogHandler` that can be used with t
 
 Log records emitted at standard Python log levels (via :meth:`logging.Logger.debug`, :meth:`logging.Logger.info`, etc)
 are mapped to supported Data Flow log levels. Log records emitted with a custom Python log level are not supported by
-the :class:`~.MIDataflowApiLogHandler`, but support could be extended by subclassing.
+the :class:`~.MIDataflowApiLogHandler`, but support could be extended by defining a subclass.
 
 .. warning::
    It is recommended not to attach the :class:`~.MIDataflowApiLogHandler` to the root logger, otherwise all log records
