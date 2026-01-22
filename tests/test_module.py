@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import json
+import logging
 from pathlib import Path
 import sys
 from typing import Literal
@@ -675,6 +676,63 @@ class TestApiLog:
         assert data["Message"] == message
         assert data["Level"] == level
         assert data["WorkflowId"] == WORKFLOW_ID
+
+
+class TestApiLogHandler:
+    @pytest.fixture
+    def test_logger(self):
+        logger = logging.getLogger("test_logger")
+        # do not filter any records by level
+        # Not using logging.NOTSET as that would search for a parent logger with a set level
+        logger.setLevel(1)
+        # Remove all existing handlers to avoid contamination between tests
+        logger.handlers = []
+        return logger
+
+    @pytest.mark.parametrize(
+        ["logging_method", "expected_payload_level"],
+        [
+            (logging.Logger.debug, "Debug"),
+            (logging.Logger.info, "Info"),
+            (logging.Logger.warning, "Warn"),
+            (logging.Logger.error, "Error"),
+            (logging.Logger.critical, "Fatal"),
+            (logging.Logger.fatal, "Fatal"),
+        ],
+    )
+    @pytest.mark.parametrize(
+        ["fixture_name", "expected_url_root"],
+        [
+            ("basic_http", HTTP_URL),
+            ("basic_https", HTTPS_URL),
+            ("windows_http", HTTP_URL),
+            ("windows_https", HTTPS_URL),
+            ("oidc_https", HTTPS_URL),
+        ],
+    )
+    def test_api_log_handler(
+        self,
+        fixture_name,
+        expected_url_root,
+        request,
+        requests_mock,
+        logging_method,
+        expected_payload_level,
+        test_logger,
+    ):
+        df = request.getfixturevalue(fixture_name).dataflow_integration
+        api_log_handler = df.get_api_log_handler()
+
+        api_log_handler.setLevel(1)
+        test_logger.addHandler(api_log_handler)
+
+        requests_mock.put(f"{expected_url_root}/api/logs")
+        logging_method(test_logger, "Test message")
+
+        assert requests_mock.call_count == 1
+        request_data = requests_mock.request_history[0].json()
+        assert request_data["Message"] == "Test message"
+        assert request_data["Level"] == expected_payload_level
 
 
 @pytest.mark.parametrize("fixture_name", ["basic_http", "basic_https", "windows_http", "windows_https", "oidc_https"])
