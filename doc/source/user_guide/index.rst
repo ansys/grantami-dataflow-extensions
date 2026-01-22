@@ -99,43 +99,6 @@ Recommended script structure
 
 These are the recommended components of a script that makes use of ``dataflow-extensions``:
 
-Logging
-~~~~~~~
-
-This package supports two approaches to logging.
-
-Stream logging
-++++++++++++++
-
-Recommended for simple, short-running scripts.
-
-``stdout`` and ``stderr`` are collected by MI Data Flow and included in the central Data Flow log.
-
-Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by MI Data Flow
-and logged centrally on the Granta MI server once the script execution has completed::
-
-   # Create an instance of the root logger
-   logger = logging.getLogger()
-   logger.setLevel(logging.INFO)
-
-   # Add a StreamHandler to write the output to stderr
-   ch = logging.StreamHandler()
-   formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-   ch.setFormatter(formatter)
-   logger.addHandler(ch)
-
-Direct logging via API
-++++++++++++++++++++++
-
-Recommended for scripts expected to run for a few minutes or more.
-
-Log messages can be sent directly to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`. Log messages
-sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
-also in the central Data Flow logs. This can be useful to report progress during long-running scripts. For example::
-
-   dataflow_integration = MIDataflowIntegration()
-   dataflow_integration.log_msg_to_instance("Script started", level="Info")
-
 ``main()``
 ~~~~~~~~~~
 
@@ -309,11 +272,64 @@ It is generally required to log outputs from scripts to help with debugging and 
 script. These use cases apply to this package as well, but because the script is executed as part of MI Data Flow, the
 recommended best practices are different to those of a conventional Python script.
 
-A very simple approach to logging the output of a script is to use the ``print()`` function to write text to the
-terminal. This approach can be used with this package, and any printed messages are visible in the central Data Flow
-log, available at ``http://my.server.name/mi_dataflow/api/logs``.
+This package supports multiple approaches to logging, summarized in the table below and detailed in the following sections:
 
-However, using the ``print()`` function offers limited control around log format and message filtering. Instead, the
+.. list-table::
+   :header-rows: 1
+
+   * - Type
+     - Details
+     - Usage options
+
+   * - Standard streams: ``stdout`` and ``stderr``
+     - Recommended for general logging.
+
+       * ``stdout`` and ``stderr`` are collected by MI Data Flow on script completion and included in the central Data Flow log.
+       * ``stdout`` and ``stderr`` are available as files in the working directory on the server for additional debugging.
+
+     - * Use the built-in Python logging module with a :class:`logging.StreamHandler`.
+       * Use  the built-in :func:`print` function.
+
+   * - Direct logging via API
+     - Recommended for specific logging in scripts expected to run for a few minutes or more.
+
+       Log messages can be sent directly to MI Data Flow via the API. Log messages
+       sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
+       also in the central Data Flow logs. This can be useful to report progress during long-running scripts.
+     - * Individual log messages can be sent to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`.
+       * :meth:`~.MIDataflowIntegration.get_api_log_handler` returns a custom :class:`~.MIDataflowApiLogHandler` that
+         can be used the standard logging library to send log records to the Data Flow API.
+
+Logs can be found in the following locations:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Type
+     - Location
+
+   * - Data Flow central logs
+     - * Via the API at ``http://my.server.name/mi_dataflow/api/logs``
+       * On the server, in the ``ProgramData`` folder
+   * - Individual workflow instance logs
+     - * Available in the Dashboard UI for the workflow instance.
+       * Available in the working directory associated with the run. See `Additional debugging`_.
+
+
+Stream logging
+~~~~~~~~~~~~~~
+
+Using :func:`print()`
++++++++++++++++++++++
+
+A very simple approach to logging the output of a script is to use the :func:`print` function to write text to the
+terminal. This approach can be used with this package, and any printed messages are visible in the central Data Flow
+log.
+
+Using the ``logging`` library
++++++++++++++++++++++++++++++
+
+Using the :func:`print` function offers limited control around log format and message filtering. Instead, the
 recommended approach is to use the Python logging module. For more information, see the Python documentation:
 
 * `logging API documentation`_
@@ -326,10 +342,90 @@ messages, you should:
 #. Create a logger for your script.
 #. Attach a handler to the logger.
 
-The following sub-sections provide simple best practice for logging with this package.
+Recommended for simple, short-running scripts.
+
+``stdout`` and ``stderr`` are collected by MI Data Flow and included in the central Data Flow log.
+
+Use the built-in Python logging module to create a logger and write to ``stderr``, which is collected by MI Data Flow
+and logged centrally on the Granta MI server once the script execution has completed::
+
+   # Create an instance of the root logger
+   logger = logging.getLogger()
+   logger.setLevel(logging.INFO)
+
+   # Add a StreamHandler to write the output to stderr
+   ch = logging.StreamHandler()
+   formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+   ch.setFormatter(formatter)
+   logger.addHandler(ch)
+
+Direct logging via API
+~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible to send log messages directly to MI Data Flow via the Data Flow API. This is useful for long-running scripts
+where it is desirable to see progress messages in the Data Flow Dashboard before the script has completed and the
+standard streams are collected.
+
+This package provides two mechanisms to send log messages directly to MI Data Flow:
+
+Individual logs
++++++++++++++++
+
+Log messages can be sent directly to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`. Log messages
+sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
+also in the central Data Flow logs. This can be useful to report progress during long-running scripts. For example::
+
+   dataflow_integration = MIDataflowIntegration()
+   dataflow_integration.log_msg_to_instance("Script started", level="Info")
+
+The ``level`` argument corresponds to the supported log levels by the Data Flow API.
+
+Using a logging handler
++++++++++++++++++++++++
+
+A custom logging handler is provided by this package via the :meth:`~.MIDataflowIntegration.get_api_log_handler` method.
+This method returns a :class:`~.MIDataflowApiLogHandler` that can be used with the standard logging library::
+
+   dataflow_integration = MIDataflowIntegration()
+
+   # Create logger
+   api_logger = logging.getLogger("api_logger")
+   api_logger.setLevel(logging.INFO)
+   # Create API log handler
+   api_log_handler = dataflow_integration.get_api_log_handler()
+   api_log_handler.setLevel(logging.INFO)
+   # Add the handler to the logger
+   api_logger.addHandler(api_log_handler)
+
+   # Log messages
+   api_logger.info("Long running task: 50% complete.") # <- this message is sent to the Data Flow logs via HTTP request
+
+Log records emitted at standard Python log levels (via :meth:`logging.Logger.debug`, :meth:`logging.Logger.info`, etc)
+are mapped to supported Data Flow log levels. Log records emitted with a custom Python log level are not supported by
+the :class:`~.MIDataflowApiLogHandler`, but support could be extended by subclassing.
+
+.. warning::
+   It is recommended not to attach the :class:`~.MIDataflowApiLogHandler` to the root logger, otherwise all log records
+   emitted by the script, the ``dataflow-extensions`` package, or any dependencies that implement logging, will be sent
+   to the Data Flow API as individual HTTP requests.
+
+   When using the :class:`~.MIDataflowApiLogHandler`, use a separate, named logger instead.
+
+
+Logging best practices
+~~~~~~~~~~~~~~~~~~~~~~
+
+In the context of running Python scripts MI Data Flow, it is recommended that the script run by MI Data Flow configures
+a root logger that captures all log messages, and attaches a :class:`StreamHandler` to write log messages to
+``stderr``, which is collected by MI Data Flow and included in the central Data Flow log on script completion.
+
+This ensures that log messages generated by both the script and this package are captured and logged centrally.
+
+If additional custom logging is required, additional handlers can be attached to the root logger or to specific loggers
+as required.
 
 Create a logger
-~~~~~~~~~~~~~~~
++++++++++++++++
 
 Python ``logger`` objects are hierarchical, and messages are passed from lower level ``logger`` objects to higher level
 ones. The root of the logger hierarchy is the *root logger*, and contains all messages logged by all loggers in a Python
@@ -352,13 +448,10 @@ You can then add log statements to the logger at a certain log level as follows:
 
    Until a log handler is attached, no log messages are emitted.
 
+Attach a stream handler
++++++++++++++++++++++++
 
-Attach a handler
-~~~~~~~~~~~~~~~~
-
-There are two main types of handlers provided by the Python logging library: :class:`FileHandler` handlers and
-:class:`StreamHandler` handlers. A :class:`FileHandler` is used to write log messages to a file on disk, and a
-:class:`StreamHandler` is used to write log messages to ``stderr`` or ``stdout``.
+A :class:`StreamHandler` is used to write log messages to ``stderr`` or ``stdout``.
 
 For code using this package, it is best practice to log to ``stderr``, which is collected by ``dataflow-extensions`` and
 included in the central Data Flow log. To add a :class:`StreamHandler` handler to the root logger from the previous
@@ -368,6 +461,10 @@ section, use the following code::
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     logger.addHandler(ch)
+
+
+Additional file logging
++++++++++++++++++++++++
 
 It is possible to also log files to disk by using a :class:`FileHandler`. The following example shows creating a
 :class:`FileHandler` handler with a filename based on the current timestamp with 1 second precision::
