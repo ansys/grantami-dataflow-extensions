@@ -55,7 +55,7 @@ jobs:
           skip-install: false
 
       - name: Type check library
-        run:
+        run: |
           uv tool install mypy
           mypy ./src
 
