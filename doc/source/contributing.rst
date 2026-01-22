@@ -15,8 +15,8 @@ The following contribution information is specific to PyGranta Data Flow Extensi
 Developer environment setup
 ===========================
 
-PyGranta Data Flow Extensions uses `Poetry`_ for packaging and dependency management.
-Installation information is available in the Poetry documentation.
+PyGranta RecordLists uses `uv`_ for packaging and dependency management. Installation
+information is available in the `uv` documentation.
 
 Installing PyGranta Data Flow Extensions in developer mode allows you to modify and
 enhance the source.
@@ -33,7 +33,7 @@ run the tests, build the documentation, and build the package.
 
     git clone https://github.com/ansys/grantami-dataflow-extensions
     cd grantami-dataflow-extensions
-    poetry install --with doc
+    uv sync --group doc
 
 Additional tools
 -----------------
@@ -48,7 +48,7 @@ encouraged to install this tool with this command:
 
 .. code:: bash
 
-    python -m pip install pre-commit && pre-commit install
+    uv tool install pre-commit && pre-commit install
 
 
 Code formatting and styling
@@ -115,7 +115,7 @@ If you have general questions about the PyAnsys ecosystem, email `pyansys.core@a
 If your question is specific to PyGranta Data Flow Extensions, ask your question in an issue as described in
 the previous paragraph.
 
-.. _Poetry: https://python-poetry.org/
+.. _uv: https://docs.astral.sh/uv/
 .. _pre-commit: https://pre-commit.com/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 .. _jupytext: https://jupytext.readthedocs.io/en/latest/

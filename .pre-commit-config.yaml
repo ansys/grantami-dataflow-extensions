@@ -1,5 +1,4 @@
 repos:
-
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.7.4
   hooks:
@@ -10,7 +9,7 @@ repos:
   rev: v2.3.0
   hooks:
   - id: codespell
-    args: ["--ignore-words", "doc/styles/Vocab/ANSYS/accept.txt", "--skip", "poetry.lock"]
+    args: ["--ignore-words", "doc/styles/Vocab/ANSYS/accept.txt", "--skip", "uv.lock"]
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v5.0.0
@@ -40,13 +39,3 @@ repos:
   hooks:
   - id: numpydoc-validation
     exclude: "^(tests/)|^(.github/)|^(examples/)|^(.ipython/)|^(doc)"
-
-- repo: local
-  hooks:
-  - id: mypy-code
-    name: "mypy: checks on code"
-    entry: "python -m mypy"
-    language: system
-    types: [python]
-    require_serial: true
-    files: "^(src/)"
