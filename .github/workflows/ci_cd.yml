@@ -56,7 +56,7 @@ jobs:
 
       - name: Type check library
         run: |
-          uv tool install mypy
+          uv sync --group tests
           mypy ./src
 
   doc-style:
