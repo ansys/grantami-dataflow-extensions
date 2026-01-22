@@ -33,7 +33,7 @@ jobs:
           token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
           python-package-name: ${{ env.LIBRARY_NAME }}
           dev-mode: ${{ github.ref != 'refs/heads/main' }}
-          use-uv: false
+          use-uv: true
 
   actions-security:
     name: "Check actions security"
@@ -45,6 +45,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           auditing-level: 'high'
           trust-ansys-actions: true
+
+      - name: Type check library
+        run:
+          uv run mypy ./src
 
   code-style:
     name: "Code style"
@@ -107,6 +111,8 @@ jobs:
       - uses: ansys/actions/tests-pytest@41f86da4c9ead510db9135e428e33df9cc6f92e1  # v10.2.3
         with:
           python-version: ${{ matrix.python-version }}
+          group-dependencies-name: "tests"
+          use-uv: true
         env:
           SCRIPTING_TOOLKIT_TEST_VERSION: ${{ matrix.scripting-toolkit-version }}
 
