@@ -15,7 +15,7 @@ The following contribution information is specific to PyGranta Data Flow Extensi
 Developer environment setup
 ===========================
 
-PyGranta RecordLists uses `uv`_ for packaging and dependency management. Installation
+PyGranta Data Flow Extensions uses `uv`_ for packaging and dependency management. Installation
 information is available in the `uv` documentation.
 
 Installing PyGranta Data Flow Extensions in developer mode allows you to modify and
