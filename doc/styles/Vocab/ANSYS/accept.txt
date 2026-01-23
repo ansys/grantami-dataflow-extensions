@@ -10,3 +10,4 @@ mypy
 stdout
 stderr
 Extensions
+uv
