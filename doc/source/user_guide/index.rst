@@ -429,6 +429,7 @@ If additional custom logging is required, additional handlers can be attached to
 as required.
 
 .. warning::
+   Using :class:`FileHandler` objects with Data Flow Python scripts is not recommended.
 
    If you use a :class:`FileHandler` you **must** ensure that each instance of the script writes the logs to different
    file or you may encounter a ``PermissionError``. In certain authentication modes the script executes as the active
@@ -473,11 +474,10 @@ section, use the following code::
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
-Direct API logging (Optional)
-+++++++++++++++++++++++++++++
+Direct logging (Optional)
++++++++++++++++++++++++++
 
-To send log messages directly to MI Data Flow, choose the appropriate approach from the `Direct logging`_ section above,
-depending on the requirements of your script.
+To send log messages directly to MI Data Flow, see the `Direct logging`_ section.
 
 
 Python script working directory
