@@ -96,7 +96,12 @@ class MIDataflowApiLogHandler(logging.Handler):  # numpydoc ignore=PR01
         ApiLogLevel
             The corresponding ApiLogLevel string.
         """
-        return self._level_map[level]
+        try:
+            return self._level_map[level]
+        except KeyError as e:
+            raise KeyError(
+                f"Log level {level} is not supported. MIDataflowApiLogHandler only supports standard log levels."
+            ) from e
 
     def emit(self, record: logging.LogRecord) -> None:
         """

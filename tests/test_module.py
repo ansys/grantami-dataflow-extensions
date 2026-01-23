@@ -734,6 +734,14 @@ class TestApiLogHandler:
         assert request_data["Message"] == "Test message"
         assert request_data["Level"] == expected_payload_level
 
+    def test_api_log_handler_invalid_level_raises_exception(self, basic_http, test_logger):
+        df = basic_http.dataflow_integration
+        api_log_handler = df.get_api_log_handler()
+        test_logger.addHandler(api_log_handler)
+
+        with pytest.raises(KeyError, match="Log level 45 is not supported"):
+            test_logger.log(45, "This is a test message with an invalid level")
+
 
 @pytest.mark.parametrize("fixture_name", ["basic_http", "basic_https", "windows_http", "windows_https", "oidc_https"])
 def test_supporting_files(fixture_name, request):
