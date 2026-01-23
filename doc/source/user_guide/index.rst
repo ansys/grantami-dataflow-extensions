@@ -281,21 +281,22 @@ This package supports multiple approaches to logging, summarized in the table be
      - Details
      - Usage options
 
-   * - Stream logging
+   * - `Stream logging`_
      - Recommended for general logging.
 
-       The ``stdout`` and ``stderr`` streams are collected by MI Data Flow on script completion and included in the central Data Flow log. The streams are also available as files in the script working directory on the Granta MI server.
+       The ``stdout`` and ``stderr`` streams are collected by MI Data Flow on script completion and included in the
+       central Data Flow log. The streams are also available as files in the script working directory on the Granta MI server.
 
      - * Use the built-in Python logging module with a :class:`logging.StreamHandler`.
        * Use the built-in :func:`print` function.
 
-   * - Direct logging
+   * - `Direct logging`_
      - Recommended for specific logging in scripts expected to run for a few minutes or more.
 
        Log messages can be sent directly to MI Data Flow via the Data Flow API. Log messages
        sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
        also in the central Data Flow logs.
-       
+
        This allows the script to report progress during execution.
      - * Send individual log messages to MI Data Flow using :meth:`~.MIDataflowIntegration.log_msg_to_instance`.
        * Use :meth:`~.MIDataflowIntegration.get_api_log_handler` to return a custom :class:`~.MIDataflowApiLogHandler` that
@@ -314,7 +315,7 @@ Logs are found in the following locations:
        * On the Granta MI server in the ``ProgramData`` folder
    * - Individual workflow instance logs
      - * Available in the Dashboard UI for the workflow instance.
-       * Available in the working directory associated with the run. See `Additional debugging`_.
+       * Available in the working directory associated with the run. See `Additional file logging`_.
 
 
 Stream logging
@@ -360,7 +361,7 @@ and logged centrally on the Granta MI server once the script execution has compl
    logger.addHandler(ch)
 
 Direct logging
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 It is possible to send log messages directly to MI Data Flow via the Data Flow API. This is useful for long-running scripts
 where it is desirable to see progress messages in the Data Flow Dashboard before the script has completed and the
@@ -369,7 +370,7 @@ standard streams are collected.
 This package provides two mechanisms to send log messages directly to MI Data Flow:
 
 Individual messages
-+++++++++++++++
++++++++++++++++++++
 
 Log messages can be sent directly to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`. Log messages
 sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
@@ -407,11 +408,10 @@ the :class:`~.MIDataflowApiLogHandler`. Support can be added by defining a subcl
 .. warning::
    Do not attach the :class:`~.MIDataflowApiLogHandler` to the root logger. Instead, use a separate named
    logger.
-   
+
    If the :class:`~.MIDataflowApiLogHandler` is attached to the root logger, all log records
    emitted by the Python instance will be sent to the Data Flow API as individual HTTP requests. This includes
    the ``dataflow-extensions`` package and any other Python dependencies that implement logging.
-
 
 
 Logging best practices
@@ -468,7 +468,7 @@ section, use the following code::
 
 
 Additional file logging
-+++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~
 
 It is possible to also log files to disk by using a :class:`FileHandler`. The following example shows creating a
 :class:`FileHandler` handler with a filename based on the current timestamp with 1 second precision::
@@ -490,9 +490,6 @@ It is possible to also log files to disk by using a :class:`FileHandler`. The fo
    Data Flow user, and so either multiple users could run the same script concurrently, or a user may try to append to a
    file created by a different user.
 
-
-Additional debugging
-~~~~~~~~~~~~~~~~~~~~
 
 MI Data Flow creates a working directory on the server in ``%WINDIR%\TEMP\{workflow id}_{8.3}``, where
 ``{workflow_id}`` is the workflow ID provided in MI Data Flow Designer when uploading the workflow, and ``{8.3}`` is a
