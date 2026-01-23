@@ -474,7 +474,7 @@ section, use the following code::
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
-Direct logging (Optional)
+Direct logging (optional)
 +++++++++++++++++++++++++
 
 To send log messages directly to MI Data Flow, see the `Direct logging`_ section.
