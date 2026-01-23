@@ -466,6 +466,11 @@ section, use the following code::
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
+Direct API logging
+++++++++++++++++++
+
+If direct logging is required, choose the appropriate approach from the `Direct logging`_ section above.
+
 
 Additional file logging
 ~~~~~~~~~~~~~~~~~~~~~~~
