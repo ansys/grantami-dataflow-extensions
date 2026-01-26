@@ -294,7 +294,7 @@ This package supports multiple approaches to logging, summarized in the table be
      - Recommended for specific logging in scripts expected to run for a few minutes or more.
 
        Log messages can be sent directly to MI Data Flow via the Data Flow API. Log messages
-       sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
+       sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the MI Data Flow Manager Dashboard, and
        also in the central Data Flow logs.
 
        This allows the script to report progress during execution.
@@ -314,7 +314,7 @@ Logs are found in the following locations:
      - * Via the API at ``http://my.server.name/mi_dataflow/api/logs``
        * On the Granta MI server in the ``ProgramData`` folder
    * - Individual workflow instance logs
-     - * Available in the Dashboard UI for the workflow instance.
+     - * Available in the MI Data Flow Manager Dashboard for the workflow instance.
        * Available in the working directory associated with the run. See `Python script working directory`_.
 
 
@@ -364,7 +364,7 @@ Direct logging
 ~~~~~~~~~~~~~~
 
 It is possible to send log messages directly to MI Data Flow via the Data Flow API. This is useful for long-running scripts
-where it is desirable to see progress messages in the Data Flow Dashboard before the script has completed and the
+where it is desirable to see progress messages in the MI Data Flow Manager Dashboard before the script has completed and the
 standard streams are collected.
 
 This package provides two mechanisms to send log messages directly to MI Data Flow:
