@@ -28,11 +28,13 @@ Allows direct access to this data or supports spawning a MI Scripting Toolkit se
 """
 
 import base64
+from collections.abc import Callable
 import copy
 import enum
 from functools import cached_property
 from io import StringIO
 import json
+import logging
 from pathlib import Path
 import sys
 from typing import Any, Dict, Literal, Optional, Tuple, Type, TypeVar, cast
@@ -59,6 +61,60 @@ from ._logger import logger
 
 PyGranta_Connection_Class = TypeVar("PyGranta_Connection_Class", bound=ApiClientFactory)
 ApiLogLevel = Literal["Debug", "Info", "Warn", "Error", "Fatal"]
+
+
+class MIDataflowApiLogHandler(logging.Handler):  # numpydoc ignore=PR01
+    """
+    A logging handler which sends log messages to the Data Flow API.
+
+    Only provides support for standard log levels.
+    """
+
+    _level_map: dict[int, ApiLogLevel] = {
+        logging.FATAL: "Fatal",
+        logging.ERROR: "Error",
+        logging.WARNING: "Warn",
+        logging.INFO: "Info",
+        logging.DEBUG: "Debug",
+    }
+
+    def __init__(self, callback: Callable[[str, ApiLogLevel], None]) -> None:
+        super().__init__()
+        self._callback = callback
+
+    def _resolve_level_name(self, level: int) -> ApiLogLevel:
+        """
+        Resolve a Python logging level number to an ApiLogLevel string.
+
+        Parameters
+        ----------
+        level : int
+            The Python logging level number.
+
+        Returns
+        -------
+        ApiLogLevel
+            The corresponding ApiLogLevel string.
+        """
+        try:
+            return self._level_map[level]
+        except KeyError as e:
+            raise KeyError(
+                f"Log level {level} is not supported. MIDataflowApiLogHandler only supports standard log levels."
+            ) from e
+
+    def emit(self, record: logging.LogRecord) -> None:
+        """
+        Emit a log record to the MI Data Flow API.
+
+        Parameters
+        ----------
+        record : logging.LogRecord
+            The log record to emit.
+        """
+        msg = self.format(record)
+        level = self._resolve_level_name(record.levelno)
+        self._callback(msg, level)
 
 
 class _AuthenticationMode(enum.Enum):
@@ -899,6 +955,24 @@ class MIDataflowIntegration:
             timeout=self._requests_timeout,
         )
         response.raise_for_status()
+
+    def get_api_log_handler(
+        self, handler_type: Type["MIDataflowApiLogHandler"] = MIDataflowApiLogHandler
+    ) -> "MIDataflowApiLogHandler":
+        """
+        Get a logging handler which logs messages to the Data Flow instance via the Data Flow API.
+
+        Parameters
+        ----------
+        handler_type : Type[MIDataflowApiLogHandler], default ``MIDataflowApiLogHandler``
+            The logging handler class to instantiate.
+
+        Returns
+        -------
+        MIDataflowApiLogHandler
+            A logging handler which logs messages to the Data Flow instance.
+        """
+        return handler_type(self.log_msg_to_instance)
 
 
 class MissingClientModuleException(ImportError):  # noqa: N818

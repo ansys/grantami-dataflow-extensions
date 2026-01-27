@@ -24,9 +24,10 @@
 
 import importlib.metadata as importlib_metadata
 
-from ._mi_dataflow import MIDataflowIntegration, MissingClientModuleException
+from ._mi_dataflow import MIDataflowApiLogHandler, MIDataflowIntegration, MissingClientModuleException
 
 __all__ = [
+    "MIDataflowApiLogHandler",
     "MIDataflowIntegration",
     "MissingClientModuleException",
 ]
