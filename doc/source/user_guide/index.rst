@@ -78,7 +78,7 @@ This payload includes the following information:
   * Transition name
 
 * Workflow record reference and table name
-* MI Data flow web server URL
+* MI Data Flow server access URL
 * Server authorization information
 * Custom values defined in the workflow definition
 
