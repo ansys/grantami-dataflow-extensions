@@ -373,8 +373,8 @@ Individual messages
 +++++++++++++++++++
 
 Log messages can be sent directly to MI Data Flow via :meth:`~.MIDataflowIntegration.log_msg_to_instance`. Log messages
-sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the Dashboard, and
-also in the central Data Flow logs. This can be useful to report progress during long-running scripts. For example::
+sent to MI Data Flow are available immediately.
+This can be useful to report progress during long-running scripts. For example::
 
    dataflow_integration = MIDataflowIntegration()
    dataflow_integration.log_msg_to_instance("Script started", level="Info")
