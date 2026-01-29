@@ -56,8 +56,7 @@ jobs:
 
       - name: Type check library
         run: |
-          uv sync --group tests
-          uv run mypy ./src
+          uv run --frozen mypy ./src
 
   doc-style:
     name: "Documentation style"
