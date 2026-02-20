@@ -31,7 +31,7 @@ wheels = [
 
 [[package]]
 name = "ansys-grantami-dataflow-extensions"
-version = "0.3.0rc0"
+version = "0.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "ansys-openapi-common" },
