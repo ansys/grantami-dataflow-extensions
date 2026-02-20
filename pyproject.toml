@@ -7,7 +7,7 @@ packages = ["src/ansys"]
 
 [project]
 name = "ansys-grantami-dataflow-extensions"
-version = "0.3.0.dev0"
+version = "0.4.0.dev0"
 description = "Productivity package for use with Granta MI Dataflow."
 license = "MIT"
 authors = [
