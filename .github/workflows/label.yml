@@ -58,6 +58,7 @@ jobs:
           - [enhancement](https://github.com/ansys/grantami-dataflow-extensions/pulls?q=label%3Aenhancement+)
           - [maintenance](https://github.com/ansys/grantami-dataflow-extensions/pulls?q=label%3Amaintenance+)
 
+  # This change in a workflow file should be result in the PR labelled as maintenance
   changelog-fragment:
     name: "Create changelog fragment"
     needs: "labeler"
