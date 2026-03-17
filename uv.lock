@@ -103,16 +103,16 @@ tests = [
 
 [[package]]
 name = "ansys-grantami-recordlists"
-version = "2.0.1"
+version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ansys-grantami-serverapi-openapi" },
     { name = "ansys-openapi-common" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7f/1c/0898f6cbe35788d677e510df876ac02c3964835a62477dd25a8467667a30/ansys_grantami_recordlists-2.0.1.tar.gz", hash = "sha256:08a562ed34caa59c9a75bf86e0c12bd8adbf9c9098ebc2823eb513289d79f95c", size = 22408, upload-time = "2025-07-29T16:32:11.893Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fe/4a/a7571db2a330adb4bc5369b47e2f07aac4a49d8b39aac7b1f318ebfcc49a/ansys_grantami_recordlists-2.1.0.tar.gz", hash = "sha256:dd10e8974b062c82f7455eb691ff63a9126e9e2b18e39f50690459522f3f0d36", size = 205503, upload-time = "2026-03-05T12:49:50.106Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5e/6e/d11bb6be7750f8ceb1a22901fc4caa9a687aa4c80bc46c25f5de2b0f4f52/ansys_grantami_recordlists-2.0.1-py3-none-any.whl", hash = "sha256:90a7cc325f07dabe7d741f4f4875152a1385003a75af014126c171e8405b5486", size = 23964, upload-time = "2025-07-29T16:32:10.437Z" },
+    { url = "https://files.pythonhosted.org/packages/5f/eb/a8e75d563066ade096cde5bc49ff913c5f0a237879521f9d9a8d54fe9504/ansys_grantami_recordlists-2.1.0-py3-none-any.whl", hash = "sha256:564802bb483fd3638cd7b288e545fcaa08d3406d9760d2e588942906b8335b85", size = 24620, upload-time = "2026-03-05T12:49:48.533Z" },
 ]
 
 [[package]]
