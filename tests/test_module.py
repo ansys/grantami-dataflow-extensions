@@ -518,7 +518,8 @@ class TestResumeBookmark:
         auth: Literal["basic", "oidc"] | None = None,
     ):
         assert request.scheme == "https" if https else "http"
-        assert request.verify == verify
+        expected_verify = str(verify) if isinstance(verify, Path) else verify
+        assert request.verify == expected_verify
         if auth == "basic":
             assert request.headers["Authorization"] == basic_header
         elif auth == "oidc":
@@ -667,7 +668,8 @@ class TestApiLog:
         auth: Literal["basic", "oidc"] | None = None,
     ):
         assert request.scheme == "https" if https else "http"
-        assert request.verify == verify
+        expected_verify = str(verify) if isinstance(verify, Path) else verify
+        assert request.verify == expected_verify
         if auth == "basic":
             assert request.headers["Authorization"] == basic_header
         elif auth == "oidc":
