@@ -42,7 +42,7 @@ from urllib.parse import urlparse
 import warnings
 
 from ansys.openapi.common import ApiClientFactory, SessionConfiguration
-import requests  # type: ignore[import-untyped]
+import requests
 
 try:
     from requests_negotiate_sspi import HttpNegotiateAuth  # type: ignore
@@ -255,8 +255,8 @@ class MIDataflowIntegration:
                 "configured on the Granta MI server."
             )
         self._https_enabled = use_https and server_supports_https
-        self._verify_ssl = self._https_enabled  # Verify if HTTPS is enabled unless explicitly disabled
-        self._ca_path = None  # Use public certs by default
+        self._verify_ssl: bool = self._https_enabled  # Verify if HTTPS is enabled unless explicitly disabled
+        self._ca_path: Path | None = None  # Use public certs by default
 
         if certificate_file is not None and not isinstance(certificate_file, (Path, str)):
             raise TypeError(
@@ -888,7 +888,7 @@ class MIDataflowIntegration:
             A requests session configured for the Data Flow API.
         """
         session = requests.Session()
-        session.verify = self._verify_ssl if self._ca_path is None else self._ca_path
+        session.verify = self._verify_ssl if self._ca_path is None else str(self._ca_path)
 
         if self._authentication_mode in [
             _AuthenticationMode.OIDC_AUTHENTICATION,
@@ -942,7 +942,7 @@ class MIDataflowIntegration:
         level : str
             The log level. One of: ``Verbose``, ``Debug``, ``Info``, ``Warn``, ``Error``, ``Fatal``.
         """
-        request_data = {
+        request_data: dict[str, Any] = {
             "Message": msg,
             "Level": level,
             "WorkflowId": self._get_workflow_id(self._df_data),
