@@ -154,7 +154,7 @@ oidc = [
 
 [[package]]
 name = "ansys-sphinx-theme"
-version = "1.7.2"
+version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "importlib-metadata" },
@@ -164,9 +164,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "sphinx" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7b/bc/756f3247fb35109ce44a6515fe0c21ac3cab29cc7889d88626b26440acdf/ansys_sphinx_theme-1.7.2.tar.gz", hash = "sha256:849768cfac9c1c32bf4211de99db9c3f82535b607ac6813b76040cd0d78f78c4", size = 1011160, upload-time = "2026-03-02T15:57:56.977Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/87/4a/c8095d3c073ef4fdd1795f84a03fd379d149f351b74e3fad2602aeb30ca8/ansys_sphinx_theme-1.8.0.tar.gz", hash = "sha256:cc10b3cfbf742602a1cef6c3606227392d7bf8417d2f1561928ab791e852823c", size = 1021973, upload-time = "2026-05-19T08:18:05.16Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/da/87/c238d338e1a3feed8242ed06a62362452b1363a9f094c06b5ea5365b1e91/ansys_sphinx_theme-1.7.2-py3-none-any.whl", hash = "sha256:9cf2aba62eede436b3ef4431dd9e20d22eb3601150ee5daa68977a98a212126c", size = 1607116, upload-time = "2026-03-02T15:57:54.896Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/bc/903221a893df2181b0a1ffc8323b05582afd6e7f5099a24be88df2ecd1bb/ansys_sphinx_theme-1.8.0-py3-none-any.whl", hash = "sha256:09f7291999eb46cf010cfda0b20c36aa9e4a2796e8721efcda93978cba499cf3", size = 1627020, upload-time = "2026-05-19T08:18:02.959Z" },
 ]
 
 [[package]]
@@ -1182,7 +1182,7 @@ wheels = [
 
 [[package]]
 name = "jupytext"
-version = "1.19.2"
+version = "1.19.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "markdown-it-py" },
@@ -1192,9 +1192,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/72/3a/4f13fcba0ed05965a48fca197d89fb8c78c4b61051dc0c9ee9ed92e77a8d/jupytext-1.19.2.tar.gz", hash = "sha256:da6198a42406a09142b6b26ebc46a3ec7077f525222a8f12b1811a0e289a2216", size = 4309931, upload-time = "2026-05-10T17:10:40.345Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ef/2d/15624c3d9440d85a280ff13d2d23afd989802f25470ac59932f4fef6f0c6/jupytext-1.19.3.tar.gz", hash = "sha256:713c3ed4441afe0f31474d28ea2e6b61a268c04c40fd78e5ccfd7f7ac9e9f766", size = 4305350, upload-time = "2026-05-17T09:09:29.294Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4c/65/b4b86e5fa07543bfbbcdc6c9f7f9f561e66a5f3539992e3009973f2b1314/jupytext-1.19.2-py3-none-any.whl", hash = "sha256:8a31e896c7e9215841783aade24336e945543057e1c2d7f00b22f9e870348688", size = 170653, upload-time = "2026-05-10T17:10:38.418Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/ec/d9be3bd1db141e76b2f525c265f70e66edd30a51a3307d8edf0ef1909c54/jupytext-1.19.3-py3-none-any.whl", hash = "sha256:acf75492f80895ad8e664fd8db1708b617008dd0e71c341a1abc3d0d07310ed0", size = 170579, upload-time = "2026-05-17T09:09:27.478Z" },
 ]
 
 [[package]]
