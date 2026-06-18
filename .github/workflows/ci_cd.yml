@@ -77,10 +77,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: "Run Ansys documentation building action"
-      uses: ansys/actions/doc-build@12ca08fd7f0caa52076cca15c5621482646f8560  # v10.3.1
+      uses: ansys/actions/doc-build@d946b24b9a765f4169bcc94afdb27bd1a0533741  # v10.3.2
       with:
         check-links: false
-        dependencies: "pandoc"
+        dependencies: "pandoc --version=3.9.0.2"
         sphinxopts: "-n -W --keep-going"
         skip-dependencies-cache: true
         group-dependencies-name: "doc"
