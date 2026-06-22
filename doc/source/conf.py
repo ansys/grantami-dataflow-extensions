@@ -84,6 +84,8 @@ numpydoc_validation_checks = {
 
 # sphinx
 add_module_names = False
+# Disable colorrows to avoid infinite recursion with MiKTeX 26.5+ (Sphinx 8.1.x bug)
+latex_table_style = ["booktabs"]
 
 # sphinx.ext.autodoc
 autodoc_typehints = "description"  # Remove typehints from signatures in docs
