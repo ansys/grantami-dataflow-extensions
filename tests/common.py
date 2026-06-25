@@ -1,4 +1,4 @@
-# Copyright (C) 2025 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -57,7 +57,7 @@ HTTPS_SL_URL = HTTPS_URL.replace("dataflow", "servicelayer")
 
 WORKFLOW_ID = "67eb55ff-363a-42c7-9793-df363f1ecc83"
 WORKFLOW_DEFINITION_ID = "Example; Version=1.0.0.0"
-TRANSITION_NAME = "Python_83e51914-3752-40d0-8350-c096674873e2"
+TRANSITION_NAME = "Python_83e51914 - 3752-40d0-8350-c096674873e2"
 
 USERNAME = "username"
 PASSWORD = "secret_password"
