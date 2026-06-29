@@ -600,7 +600,7 @@ class MIDataflowIntegration:
         """
         Create a Scripting Toolkit session based on the Data Flow authentication.
 
-        The credentials provided by Data Flow are re-used, and so explicit credentials are
+        The credentials provided by Data Flow are reused, and so explicit credentials are
         not required.
 
         Parameters
@@ -638,7 +638,7 @@ class MIDataflowIntegration:
         """
         Create a Scripting Toolkit session based on the Data Flow authentication.
 
-        Use the legacy connect API. The credentials provided by Data Flow are re-used,
+        Use the legacy connect API. The credentials provided by Data Flow are reused,
         and so explicit credentials are not required.
 
         Parameters
@@ -692,7 +692,7 @@ class MIDataflowIntegration:
         """
         Create a Scripting Toolkit session based on the Data Flow authentication.
 
-        Use the SessionBuilder API. The credentials provided by Data Flow are re-used,
+        Use the SessionBuilder API. The credentials provided by Data Flow are reused,
         and so explicit credentials are not required.
 
         Parameters
