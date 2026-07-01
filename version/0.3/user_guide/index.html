@@ -1,0 +1,1257 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>User guide &#8212; PyGranta Data Flow Extensions</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles\ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../_static/documentation_options.js?v=f129cdf0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://dataflow-extensions.grantami.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="../api/index.html" />
+    <link rel="prev" title="Getting started" href="../getting_started/index.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  <link rel="canonical" href="https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/user_guide/index.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="https://docs.pyansys.com/">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="PyGranta Data Flow Extensions - Home"/>
+    <img src="../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="PyGranta Data Flow Extensions - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html" title="PyGranta Data Flow Extensions home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/grantami-dataflow-extensions" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+    
+<!--
+  Announcement Version Loader
+  Dynamically loads the announcement.html content into the announcement_msg div.
+-->
+<div id="announcement_msg" aria-live="polite"></div>
+<script>
+  // Fetch and inject the announcement HTML content
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status} Announcement.html file not found, Please ignore this, if you are in dev/stable documentation`);
+      }
+      return response.text();
+    })
+    .then((text) => {
+      var msgDiv = document.getElementById("announcement_msg");
+      if (msgDiv) {
+        msgDiv.innerHTML = text;
+      }
+    })
+    .catch((error) => {
+      // Log only unexpected fetch errors
+      if (!(error.message && error.message.startsWith("HTTP error: 404"))) {
+        console.error(`Fetch problem: ${error.message} Announcement.html could not be loaded.`);
+      }
+    });
+</script>
+  
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html" title="PyGranta Data Flow Extensions home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/grantami-dataflow-extensions" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+       
+    <li class="breadcrumb-item">
+      <a href="https://grantami.docs.pyansys.com/" class="nav-link">PyGranta</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">User guide</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="user-guide">
+<span id="ref-user-guide"></span><h1>User guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Granta MI Data Flow can trigger Python scripts at the beginning or end of a workflow step. These Python scripts can
+execute custom business logic, including interacting with Granta MI systems using the Granta MI Scripting Toolkit or
+PyGranta suite of packages. Some typical use cases include:</p>
+<ul class="simple">
+<li><p>Populating attributes with values computed within the Python script</p></li>
+<li><p>Analyzing data</p></li>
+<li><p>Generating links to other records</p></li>
+<li><p>Interacting with external systems</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code> package includes the code required to process the state information from Data Flow, to pass
+log information back to Data Flow, and to return execution to Data Flow once the script is complete.</p>
+<p>It also includes <a class="reference internal" href="../examples/index.html#ref-grantami-dataflow-extensions-examples"><span class="std std-ref">examples</span></a> which demonstrate use of the library.
+These examples can be extended to incorporate business logic for specific use cases. In particular, the
+<a class="reference internal" href="../examples/1_Standalone.html"><span class="doc">Standalone example</span></a> gives a detailed description of the core components of a typical <code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code>
+script.</p>
+<p>The rest of this user guide provides more detail around specific aspects of the interaction with Data Flow.</p>
+</section>
+<section id="integration-with-mi-data-flow">
+<h2>Integration with MI Data Flow<a class="headerlink" href="#integration-with-mi-data-flow" title="Link to this heading">#</a></h2>
+<p>This package is designed to be used with Granta MI Data Flow. The integration works as follows:</p>
+<ol class="arabic simple">
+<li><p>At a defined point in a workflow MI Data Flow triggers a Python script and pauses the workflow until the script
+resumes the workflow.</p></li>
+<li><p>The Python script executes, potentially utilizing additional Ansys or third-party Python packages.</p></li>
+<li><p>At a defined point in the Python script (generally the end), the Python script instructs MI Data Flow to resume the
+workflow.</p></li>
+<li><p>The Python script ends.</p></li>
+</ol>
+<section id="mi-data-flow-payload">
+<h3>MI Data Flow payload<a class="headerlink" href="#mi-data-flow-payload" title="Link to this heading">#</a></h3>
+<p>When MI Data Flow triggers a Python script, it provides context about the current state of the workflow as a JSON-
+formatted string. This string is referred to as the ‘MI Data Flow payload’, and an example is given below:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;WorkflowId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;67eb55ff-363a-42c7-9793-df363f1ecc83&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;WorkflowDefinitionId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Example; Version=1.0.0.0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;TransitionName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Python_83e51914-3752-40d0-8350-c096674873e2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Record&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;Database&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MI_Training&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;Table&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Metals Pedigree&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;RecordHistoryGuid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;d2f51a3d-c274-4a1e-b7c9-8ba2976202cc&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;WorkflowUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://my_server_name/mi_dataflow&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;AuthorizationHeader&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ClientCredentialType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Windows&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Attributes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;Record&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;Value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;d2f51a3d-c274-4a1e-b7c9-8ba2976202cc+MI_Training&quot;</span><span class="p">]},</span>
+<span class="w">        </span><span class="nt">&quot;TransitionId&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;Value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9f1bf6e7-0b05-4cd3-ac61-1d2d11a1d351&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;CustomValues&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This payload includes the following information:</p>
+<ul class="simple">
+<li><p>Internal data flow identifiers, including:</p>
+<ul>
+<li><p>Workflow ID</p></li>
+<li><p>Workflow definition ID</p></li>
+<li><p>Transition name</p></li>
+</ul>
+</li>
+<li><p>Workflow record reference and table name</p></li>
+<li><p>MI Data Flow server access URL</p></li>
+<li><p>Server authorization information</p></li>
+<li><p>Custom values defined in the workflow definition</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If MI Data Flow is configured in Basic or OIDC authentication mode, the server authorization information contains an
+obfuscated username and password or an OIDC refresh token respectively. In these configurations, the payload should
+be treated as confidential.</p>
+</div>
+<p>When a <code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code>-based Python script is launched by MI Data Flow, the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowIntegration</span></code></a>
+constructor automatically parses the payload from <code class="docutils literal notranslate"><span class="pre">stdin</span></code>. However, when developing and debugging a
+<code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code>-based script, it is recommended to run and debug the script separate to Data Flow by first
+generating a Data Flow payload, and then using it to instantiate the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowIntegration</span></code></a> class. These steps
+are described in <a class="reference internal" href="#business-logic-development-best-practice">Business logic development best practice</a>.</p>
+</section>
+</section>
+<section id="recommended-script-structure">
+<h2>Recommended script structure<a class="headerlink" href="#recommended-script-structure" title="Link to this heading">#</a></h2>
+<p>These are the recommended components of a script that makes use of <code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code>:</p>
+<section id="main">
+<h3><code class="docutils literal notranslate"><span class="pre">main()</span></code><a class="headerlink" href="#main" title="Link to this heading">#</a></h3>
+<p>Instantiates the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowIntegration</span></code></a> class directly, which parses the data passed into this script via
+<code class="docutils literal notranslate"><span class="pre">stdin</span></code> by MI Data Flow. Executes the business logic in <code class="docutils literal notranslate"><span class="pre">step_logic()</span></code>, and resumes the workflow once the business
+logic has completed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes the Data Flow integration module, runs the business logic,</span>
+<span class="sd">    and cleans up once execution has completed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataflow_integration</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">step_logic</span><span class="p">(</span><span class="n">dataflow_integration</span><span class="p">)</span>
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">dataflow_integration</span><span class="o">.</span><span class="n">resume_bookmark</span><span class="p">(</span><span class="n">exit_code</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="testing">
+<h3><code class="docutils literal notranslate"><span class="pre">testing()</span></code><a class="headerlink" href="#testing" title="Link to this heading">#</a></h3>
+<p>Instantiates the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowIntegration</span></code></a> class from a static payload defined within the function. Executes the
+business logic in <code class="docutils literal notranslate"><span class="pre">step_logic()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">testing</span><span class="p">():</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Contains a static copy of an MI Data Flow data payload for testing purposes&quot;&quot;&quot;</span>
+
+  <span class="n">dataflow_payload</span> <span class="o">=</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+  <span class="n">dataflow_integration</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="o">.</span><span class="n">from_dict_payload</span><span class="p">(</span>
+    <span class="n">dataflow_payload</span><span class="o">=</span><span class="n">dataflow_payload</span><span class="p">,</span>
+    <span class="n">use_https</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">step_logic</span><span class="p">(</span><span class="n">dataflow_integration</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-logic">
+<h3><code class="docutils literal notranslate"><span class="pre">step_logic()</span></code><a class="headerlink" href="#step-logic" title="Link to this heading">#</a></h3>
+<p>Contains the actual business logic for the step. In the initial example, the business logic just logs the payload:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">step_logic</span><span class="p">(</span><span class="n">dataflow_integration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains the business logic to be executed as part of the workflow.</span>
+
+<span class="sd">    Replace the code in this module with your custom business logic.&quot;&quot;&quot;</span>
+
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">dataflow_integration</span><span class="o">.</span><span class="n">get_payload_as_string</span><span class="p">(</span>
+        <span class="n">include_credentials</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing dataflow payload.&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Either <code class="docutils literal notranslate"><span class="pre">main()</span></code> or <code class="docutils literal notranslate"><span class="pre">testing()</span></code> should be executed when running the script. Python best practice is to use an
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;main&quot;</span></code> block, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># main()  # Used when running the script as part of a workflow</span>
+    <span class="n">testing</span><span class="p">()</span>  <span class="c1"># Used when testing the script manually</span>
+</pre></div>
+</div>
+<p>In this state, the script runs the <code class="docutils literal notranslate"><span class="pre">testing()</span></code> function for testing separately to MI Data Flow. To switch the code to run
+the <code class="docutils literal notranslate"><span class="pre">main()</span></code> function, un-comment the <code class="docutils literal notranslate"><span class="pre">main()</span></code> line and comment the <code class="docutils literal notranslate"><span class="pre">testing()</span></code> line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>  <span class="c1"># Used when running the script as part of a workflow</span>
+    <span class="c1"># testing()  # Used when testing the script manually</span>
+</pre></div>
+</div>
+<p>This code now expects the payload to be provided via <code class="docutils literal notranslate"><span class="pre">stdin</span></code>.</p>
+<p>To see all these script components together as a single example, see <a class="reference internal" href="../examples/1_Standalone.html"><span class="doc">Standalone example</span></a>.</p>
+</section>
+</section>
+<section id="business-logic-development-best-practice">
+<h2>Business logic development best practice<a class="headerlink" href="#business-logic-development-best-practice" title="Link to this heading">#</a></h2>
+<p>The steps below assume you are proficient in the use of MI Data Flow Designer and MI Data Flow Manager, and already have
+a workflow fully defined with all required features apart from Python script execution. For more information on working
+with MI Data Flow Designer, see the <a class="reference external" href="https://ansyshelp.ansys.com/account/secured?returnurl=/Views/Secured/Granta/v252/en/mi_data_flow_designer/index.html">Granta MI Data Flow Designer documentation</a>.</p>
+<section id="obtaining-an-mi-data-flow-payload-for-a-workflow-step">
+<h3>Obtaining an MI Data Flow payload for a workflow step<a class="headerlink" href="#obtaining-an-mi-data-flow-payload-for-a-workflow-step" title="Link to this heading">#</a></h3>
+<p>Copy one of the example scripts and using it to obtain a JSON-formatted Data Flow payload,
+which makes development much more straightforward. The steps to obtain the payload are described below:</p>
+<ol class="arabic">
+<li><p>Copy the code block from the <a class="reference internal" href="../examples/1_Standalone.html"><span class="doc">Standalone example</span></a> or <a class="reference internal" href="../examples/2_Scripting_Toolkit.html"><span class="doc">Granta MI Scripting Toolkit example</span></a> to a local
+<code class="docutils literal notranslate"><span class="pre">.py</span></code> file.</p>
+<ul class="simple">
+<li><p>If you are starting from the Scripting Toolkit example, you <strong>must</strong> make sure that Scripting Toolkit is installed.</p></li>
+<li><p>If you plan to develop PyGranta-based business logic, start from the Standalone example.</p></li>
+</ul>
+</li>
+<li><p>Switch the script to ‘main’ mode by commenting <code class="docutils literal notranslate"><span class="pre">testing()</span></code> in the <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code> block and
+un-commenting <code class="docutils literal notranslate"><span class="pre">main()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>  <span class="c1"># Used when running the script as part of a workflow</span>
+    <span class="c1"># testing()  # Used when testing the script manually</span>
+</pre></div>
+</div>
+</li>
+<li><p>Upload the script into MI Data Flow Designer, and add it to the Start or End Script sections for the relevant step.</p></li>
+<li><p>Run the workflow step once in MI Data Flow Manager.</p></li>
+<li><p>Obtain the payload:</p>
+<ul class="simple">
+<li><p>If you started from the Standalone example, obtain the payload from the Data Flow log. See
+<a class="reference internal" href="#ref-user-guide-logging"><span class="std std-ref">Logging and debugging</span></a> for log file locations.</p></li>
+<li><p>If you started from the Scripting Toolkit example, obtain the payload from the <code class="docutils literal notranslate"><span class="pre">Additional</span> <span class="pre">Processing</span> <span class="pre">Notes</span></code>
+attribute.</p></li>
+</ul>
+</li>
+</ol>
+<p>You should now have a JSON-formatted string which contains information specific to your deployment of Granta MI,
+including the Data Flow web server URL and internal workflow identifiers.</p>
+</section>
+<section id="developing-business-logic">
+<h3>Developing business logic<a class="headerlink" href="#developing-business-logic" title="Link to this heading">#</a></h3>
+<p>Now the MI Data Flow payload has been obtained, it can be used to test your custom business logic separate to the
+workflow. This makes it much faster to re-run the script, and allows running and debugging the script in an IDE. The
+steps to use this payload to develop your custom business logic are described below:</p>
+<ol class="arabic">
+<li><p>Optional: If you are planning to develop a PyGranta-based script, replace the code you copied previously with the
+<a class="reference internal" href="../examples/3_RecordLists.html"><span class="doc">PyGranta RecordLists example</span></a>, and modify the PyGranta library as required.</p></li>
+<li><p>Paste the payload JSON into the <code class="docutils literal notranslate"><span class="pre">testing()</span></code> function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">testing</span><span class="p">():</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Contains a static copy of an MI Data Flow data payload for testing purposes&quot;&quot;&quot;</span>
+
+  <span class="c1"># Paste payload below</span>
+  <span class="n">dataflow_payload</span> <span class="o">=</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+  <span class="c1"># Call MIDataflowIntegration constructor with &quot;dataflow_payload&quot; argument</span>
+  <span class="c1"># instead of reading data from MI Data Flow.</span>
+  <span class="n">dataflow_integration</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="o">.</span><span class="n">from_dict_payload</span><span class="p">(</span>
+    <span class="n">dataflow_payload</span><span class="o">=</span><span class="n">dataflow_payload</span><span class="p">,</span>
+    <span class="n">use_https</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">step_logic</span><span class="p">(</span><span class="n">dataflow_integration</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See the documentation for the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_payload_as_string" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_payload_as_string"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_payload_as_string()</span></code></a> and
+<a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_payload_as_dict" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_payload_as_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_payload_as_dict()</span></code></a> methods for more information, including how to handle Basic and
+OIDC authentication.</p>
+</li>
+<li><p>Switch back to ‘testing’ mode by commenting <code class="docutils literal notranslate"><span class="pre">main()</span></code> in the <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code> block and
+un-commenting <code class="docutils literal notranslate"><span class="pre">testing()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># main()  # Used when running the script as part of a workflow</span>
+    <span class="n">testing</span><span class="p">()</span>  <span class="c1"># Used when testing the script manually</span>
+</pre></div>
+</div>
+</li>
+<li><p>Add your specific logic to the <code class="docutils literal notranslate"><span class="pre">step_logic</span></code> function and test locally.</p></li>
+<li><p>Once the business logic is implemented, switch back to <code class="docutils literal notranslate"><span class="pre">main()</span></code> in the in the <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code>
+block, re-upload the file into MI Data Flow Designer, and re-add it to the Start or End Script sections.</p></li>
+<li><p>Update the workflow and test from within MI Data Flow Manager.</p></li>
+</ol>
+<p>Repeat steps 3 to 6 as required.</p>
+</section>
+</section>
+<section id="logging-and-debugging">
+<span id="ref-user-guide-logging"></span><h2>Logging and debugging<a class="headerlink" href="#logging-and-debugging" title="Link to this heading">#</a></h2>
+<p>It is generally required to log outputs from scripts to help with debugging and to understand the inner state of the
+script. These use cases apply to this package as well, but because the script is executed as part of MI Data Flow, the
+recommended best practices are different to those of a conventional Python script.</p>
+<p>This package supports multiple approaches to logging, summarized in the table below and detailed in the corresponding sections:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Details</p></th>
+<th class="head"><p>Usage options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#stream-logging">Stream logging</a></p></td>
+<td><p>Recommended for general logging.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code> streams are collected by MI Data Flow on script completion and included in the
+central Data Flow log. The streams are also available as files in the script working directory on the Granta MI server.</p>
+</td>
+<td><ul class="simple">
+<li><p>Use the built-in Python logging module with a <a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.StreamHandler" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.StreamHandler</span></code></a>.</p></li>
+<li><p>Use the built-in <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> function.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#direct-logging">Direct logging</a></p></td>
+<td><p>Recommended for specific logging in scripts expected to run for a few minutes or more.</p>
+<p>Log messages can be sent directly to MI Data Flow via the Data Flow API. Log messages
+sent to MI Data Flow are available immediately, and can be viewed both for the workflow instance via the MI Data Flow Manager Dashboard, and
+also in the central Data Flow logs.</p>
+<p>This allows the script to report progress during execution.</p>
+</td>
+<td><ul class="simple">
+<li><p>Send individual log messages to MI Data Flow using <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.log_msg_to_instance" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration.log_msg_to_instance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">log_msg_to_instance()</span></code></a>.</p></li>
+<li><p>Use <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_api_log_handler" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_api_log_handler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_api_log_handler()</span></code></a> to return a custom <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler" title="ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowApiLogHandler</span></code></a> that
+sends log records to MI Data Flow.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Logs are found in the following locations:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Location</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Data Flow central logs</p></td>
+<td><ul class="simple">
+<li><p>Via the API at <code class="docutils literal notranslate"><span class="pre">http://my.server.name/mi_dataflow/api/logs</span></code></p></li>
+<li><p>On the Granta MI server in the <code class="docutils literal notranslate"><span class="pre">ProgramData</span></code> folder</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Individual workflow instance logs</p></td>
+<td><ul class="simple">
+<li><p>Available in the MI Data Flow Manager Dashboard for the workflow instance.</p></li>
+<li><p>Available in the working directory associated with the run. See <a class="reference internal" href="#python-script-working-directory">Python script working directory</a>.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="stream-logging">
+<h3>Stream logging<a class="headerlink" href="#stream-logging" title="Link to this heading">#</a></h3>
+<section id="using-print">
+<h4>Using <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a><a class="headerlink" href="#using-print" title="Link to this heading">#</a></h4>
+<p>A very simple approach to logging the output of a script is to use the <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> function to write text to the
+terminal. This approach can be used with this package, and any printed messages are visible in the central Data Flow
+log after the script terminates.</p>
+</section>
+<section id="using-the-logging-library">
+<h4>Using the <code class="docutils literal notranslate"><span class="pre">logging</span></code> library<a class="headerlink" href="#using-the-logging-library" title="Link to this heading">#</a></h4>
+<p>Using the <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> function offers limited control around log format and message filtering. Instead, the
+recommended approach is to use the Python logging module. For more information, see the Python documentation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/logging.html">logging API documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/howto/logging.html">Logging HOWTO</a>.</p></li>
+</ul>
+<p>The internal operations of this package are logged to a logger with the name <code class="docutils literal notranslate"><span class="pre">ansys.grantami.dataflow_extensions</span></code>. By
+default, these messages are not output. To output the messages generated by this package and to add your own log
+messages, you should:</p>
+<ol class="arabic simple">
+<li><p>Create a logger for your script.</p></li>
+<li><p>Attach a handler to the logger.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code> are collected by MI Data Flow and included in the central Data Flow log.</p>
+<p>Use the built-in Python logging module to create a logger and write to <code class="docutils literal notranslate"><span class="pre">stderr</span></code>, which is collected by MI Data Flow
+and logged centrally on the Granta MI server once the script execution has completed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an instance of the root logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="c1"># Add a StreamHandler to write the output to stderr</span>
+<span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="direct-logging">
+<h3>Direct logging<a class="headerlink" href="#direct-logging" title="Link to this heading">#</a></h3>
+<p>It is possible to send log messages directly to MI Data Flow via the Data Flow API. This is useful for long-running scripts
+where it is desirable to see progress messages in the MI Data Flow Manager Dashboard before the script has completed and the
+standard streams are collected.</p>
+<p>This package provides two mechanisms to send log messages directly to MI Data Flow:</p>
+<section id="individual-messages">
+<h4>Individual messages<a class="headerlink" href="#individual-messages" title="Link to this heading">#</a></h4>
+<p>Log messages can be sent directly to MI Data Flow via <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.log_msg_to_instance" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration.log_msg_to_instance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">log_msg_to_instance()</span></code></a>. Log messages
+sent to MI Data Flow are available immediately.
+This can be useful to report progress during long-running scripts. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dataflow_integration</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="p">()</span>
+<span class="n">dataflow_integration</span><span class="o">.</span><span class="n">log_msg_to_instance</span><span class="p">(</span><span class="s2">&quot;Script started&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;Info&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">level</span></code> argument corresponds to the supported log levels by the Data Flow API.</p>
+</section>
+<section id="using-a-logging-handler">
+<h4>Using a logging handler<a class="headerlink" href="#using-a-logging-handler" title="Link to this heading">#</a></h4>
+<p>A custom logging handler is provided by this package via the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_api_log_handler" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_api_log_handler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_api_log_handler()</span></code></a> method.
+This method returns a <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler" title="ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowApiLogHandler</span></code></a> that can be used with the standard logging library:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dataflow_integration</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="p">()</span>
+
+<span class="c1"># Create logger</span>
+<span class="n">api_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;api_logger&quot;</span><span class="p">)</span>
+<span class="n">api_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="c1"># Create API log handler</span>
+<span class="n">api_log_handler</span> <span class="o">=</span> <span class="n">dataflow_integration</span><span class="o">.</span><span class="n">get_api_log_handler</span><span class="p">()</span>
+<span class="n">api_log_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="c1"># Add the handler to the logger</span>
+<span class="n">api_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">api_log_handler</span><span class="p">)</span>
+
+<span class="c1"># Log messages</span>
+<span class="n">api_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Long running task: 50</span><span class="si">% c</span><span class="s2">omplete.&quot;</span><span class="p">)</span> <span class="c1"># &lt;- this message is sent to the Data Flow logs via an HTTP request</span>
+</pre></div>
+</div>
+<p>Log records emitted at standard Python log levels (for example <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger.debug" title="(in Python v3.14)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">logging.Logger.debug()</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger.info" title="(in Python v3.14)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">logging.Logger.info()</span></code></a>)
+are mapped to supported MI Data Flow log levels. By default, log records emitted with a custom Python log level are not
+supported by <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler" title="ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowApiLogHandler</span></code></a>, but support can be added by defining a subclass with custom log levels.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not attach the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler" title="ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowApiLogHandler</span></code></a> to the root logger. Instead, use a separate named
+logger.</p>
+<p>If the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler" title="ansys.grantami.dataflow_extensions.MIDataflowApiLogHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowApiLogHandler</span></code></a> is attached to the root logger, all log records
+emitted by the Python instance will be sent to the Data Flow API as individual HTTP requests. This includes
+the <code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code> package and any other Python dependencies that implement logging.</p>
+</div>
+</section>
+</section>
+<section id="logging-best-practices">
+<h3>Logging best practices<a class="headerlink" href="#logging-best-practices" title="Link to this heading">#</a></h3>
+<p>The script run by MI Data Flow should configure a root logger that captures all log messages, and should attach a
+<a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.StreamHandler" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamHandler</span></code></a> to write log messages to <code class="docutils literal notranslate"><span class="pre">stderr</span></code>. <code class="docutils literal notranslate"><span class="pre">stderr</span></code> is collected by MI Data Flow and included in the
+central Data Flow log on script completion.</p>
+<p>This ensures that log messages generated by both the script and this package are captured and logged centrally.</p>
+<p>If additional custom logging is required, additional handlers can be attached to the root logger or to specific loggers
+as required.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using <a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.FileHandler" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileHandler</span></code></a> objects with Data Flow Python scripts is not recommended.</p>
+<p>If you use a <a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.FileHandler" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileHandler</span></code></a> you <strong>must</strong> ensure that each instance of the script writes the logs to different
+file or you may encounter a <code class="docutils literal notranslate"><span class="pre">PermissionError</span></code>. In certain authentication modes the script executes as the active
+Data Flow user, and so either multiple users could run the same script concurrently, or a user may try to append to a
+file created by a different user.</p>
+</div>
+<section id="create-a-logger">
+<h4>Create a logger<a class="headerlink" href="#create-a-logger" title="Link to this heading">#</a></h4>
+<p>Python <code class="docutils literal notranslate"><span class="pre">logger</span></code> objects are hierarchical, and messages are passed from lower level <code class="docutils literal notranslate"><span class="pre">logger</span></code> objects to higher level
+ones. The root of the logger hierarchy is the <em>root logger</em>, and contains all messages logged by all loggers in a Python
+instance.</p>
+<p>For single-module scripts generally used with this script, it is recommended to use the root logger directly to ensure
+that all log messages are included in the output. To create an instance of the root logger and have it capture log
+messages of <code class="docutils literal notranslate"><span class="pre">logging.DEBUG</span></code> level and higher, use the following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can then add log statements to the logger at a certain log level as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;This is a debug message&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;This is an info message&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Until a log handler is attached, no log messages are emitted.</p>
+</div>
+</section>
+<section id="attach-a-stream-handler">
+<h4>Attach a stream handler<a class="headerlink" href="#attach-a-stream-handler" title="Link to this heading">#</a></h4>
+<p>A <a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.StreamHandler" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamHandler</span></code></a> is used to write log messages to <code class="docutils literal notranslate"><span class="pre">stderr</span></code> or <code class="docutils literal notranslate"><span class="pre">stdout</span></code>.</p>
+<p>For code using this package, it is best practice to log to <code class="docutils literal notranslate"><span class="pre">stderr</span></code>, which is collected by <code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code> and
+included in the central Data Flow log. To add a <a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.StreamHandler" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamHandler</span></code></a> handler to the root logger from the previous
+section, use the following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="direct-logging-optional">
+<h4>Direct logging (optional)<a class="headerlink" href="#direct-logging-optional" title="Link to this heading">#</a></h4>
+<p>To send log messages directly to MI Data Flow, see the <a class="reference internal" href="#direct-logging">Direct logging</a> section.</p>
+</section>
+</section>
+<section id="python-script-working-directory">
+<h3>Python script working directory<a class="headerlink" href="#python-script-working-directory" title="Link to this heading">#</a></h3>
+<p>MI Data Flow creates a working directory on the server in <code class="docutils literal notranslate"><span class="pre">%WINDIR%\TEMP\{workflow</span> <span class="pre">id}_{8.3}</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">{workflow_id}</span></code> is the workflow ID provided in MI Data Flow Designer when uploading the workflow, and <code class="docutils literal notranslate"><span class="pre">{8.3}</span></code> is a
+random set of 8 alphanumeric characters, a period, and 3 alphanumeric characters. This can be found by right-clicking
+the active workflow in MI Data Flow Manager and selecting ‘View Log’.</p>
+<p>This directory includes the two files <code class="docutils literal notranslate"><span class="pre">__stderr__</span></code> and <code class="docutils literal notranslate"><span class="pre">__stdout__</span></code>, which contain the Python stdout and stderr
+streams and are useful when investigating Python failures during workflow execution before the logger has been
+initialized.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When the workflow resumes, this folder and all its contents are deleted. They are only persisted if the workflow is
+manually cancelled.</p>
+</div>
+</section>
+</section>
+<section id="supporting-files">
+<h2>Supporting files<a class="headerlink" href="#supporting-files" title="Link to this heading">#</a></h2>
+<p>It is common for Python scripts to depend on additional supporting files, for example:</p>
+<ul class="simple">
+<li><p>Additional Python submodules</p></li>
+<li><p>Data files, such as JSON or CSV files</p></li>
+<li><p>Certificate Authority (CA) certificate files</p></li>
+</ul>
+<p>These files can either be stored in a known location on disk and referred to explicitly via an absolute path, or they
+can be added to the workflow definition in MI Data Flow Designer:</p>
+<section id="storing-files-externally">
+<h3>Storing files externally<a class="headerlink" href="#storing-files-externally" title="Link to this heading">#</a></h3>
+<p>If the file is stored externally (for example in a folder <code class="docutils literal notranslate"><span class="pre">C:\DataflowFiles</span></code>), then you should use the <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>
+class to ensure you are using an absolute path, which is independent of the Python working directory. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\DataflowFiles\my_data.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or in the case of providing a custom CA certificate to the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowIntegration</span></code></a> constructor:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_cert</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\DataflowFiles\my_cert.crt&quot;</span><span class="p">)</span>
+<span class="n">dataflow</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="p">(</span><span class="n">certificate_file</span><span class="o">=</span><span class="n">my_cert</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The advantage of this approach is that files can easily be shared across workflow definitions, and do not need to be
+uploaded to each one separately.</p></li>
+<li><p>The disadvantage is that the files are stored outside of the workflow definition, and do not get automatically
+uploaded or downloaded from the server when using MI Data Flow Manager.</p></li>
+</ul>
+</section>
+<section id="storing-files-within-the-workflow-definition">
+<h3>Storing files within the workflow definition<a class="headerlink" href="#storing-files-within-the-workflow-definition" title="Link to this heading">#</a></h3>
+<p>If the file is stored within the workflow definition, then MI Data Flow makes these files available on disk at
+script runtime. To access these files, use the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.supporting_files_dir" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration.supporting_files_dir"><code class="xref py py-attr docutils literal notranslate"><span class="pre">supporting_files_dir</span></code></a> property. For
+example, to access a CSV file which was uploaded as a supporting file to MI Data Flow:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dataflow</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="p">()</span>
+<span class="n">my_path</span> <span class="o">=</span> <span class="n">dataflow</span><span class="o">.</span><span class="n">supporting_files_dir</span> \ <span class="s2">&quot;my_data.csv&quot;</span>
+</pre></div>
+</div>
+<p>If you are providing a custom CA certificate to the <a class="reference internal" href="../api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration" title="ansys.grantami.dataflow_extensions.MIDataflowIntegration"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDataflowIntegration</span></code></a> constructor, the filename can
+be provided as a string, and <code class="docutils literal notranslate"><span class="pre">dataflow-extensions</span></code> automatically looks for the file in this location:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_cert</span> <span class="o">=</span> <span class="s2">&quot;my_cert.crt&quot;</span>
+<span class="n">dataflow</span> <span class="o">=</span> <span class="n">MIDataflowIntegration</span><span class="p">(</span><span class="n">certificate_file</span><span class="o">=</span><span class="n">my_cert</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The advantage of this approach is that files are managed by MI Data Flow Designer and are automatically included in the
+workflow definition if it is uploaded or downloaded and transferred to a different system. However, the disadvantage is
+that each workflow definition tracks the supporting files separately, and so every workflow needs to be modified
+separately if a commonly used supporting file is changed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This property depends on the use of the <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> property, specifically that <code class="docutils literal notranslate"><span class="pre">sys.path[0]</span></code> refers
+to the location of the executing script. If you intend to use supporting files with your Python scripts, you must
+not prepend additional paths to the <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> property.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-with-mi-data-flow">Integration with MI Data Flow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mi-data-flow-payload">MI Data Flow payload</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-script-structure">Recommended script structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing"><code class="docutils literal notranslate"><span class="pre">testing()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-logic"><code class="docutils literal notranslate"><span class="pre">step_logic()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#business-logic-development-best-practice">Business logic development best practice</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-an-mi-data-flow-payload-for-a-workflow-step">Obtaining an MI Data Flow payload for a workflow step</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#developing-business-logic">Developing business logic</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logging-and-debugging">Logging and debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-logging">Stream logging</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-print">Using <code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-logging-library">Using the <code class="docutils literal notranslate"><span class="pre">logging</span></code> library</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-logging">Direct logging</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#individual-messages">Individual messages</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-logging-handler">Using a logging handler</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logging-best-practices">Logging best practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-logger">Create a logger</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attach-a-stream-handler">Attach a stream handler</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-logging-optional">Direct logging (optional)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-script-working-directory">Python script working directory</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supporting-files">Supporting files</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#storing-files-externally">Storing files externally</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#storing-files-within-the-workflow-definition">Storing files within the workflow definition</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user_guide/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"keys": ["title", "text", "objectID"], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2026 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.7.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
