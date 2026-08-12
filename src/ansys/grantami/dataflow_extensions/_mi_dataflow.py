@@ -537,15 +537,15 @@ class MIDataflowIntegration:
 
         if self._mi_session is not None:
             return self._mi_session
-        try:
-            self._mi_session = self._start_stk_session_from_dataflow_credentials(
-                timeout=None,
-                max_retries=None,
-            )
-        except NameError as e:
+
+        if mpy is None:
             raise MissingClientModuleException(
                 "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed and try again."
-            ) from e
+            )
+        self._mi_session = self._start_stk_session_from_dataflow_credentials(
+            timeout=None,
+            max_retries=None,
+        )
         return self._mi_session
 
     def get_scripting_toolkit_session(
@@ -581,15 +581,14 @@ class MIDataflowIntegration:
         """
         if self._mi_session is not None:
             return self._mi_session
-        try:
-            self._mi_session = self._start_stk_session_from_dataflow_credentials(
-                timeout=timeout,
-                max_retries=max_retries,
-            )
-        except NameError as e:
+        if mpy is None:
             raise MissingClientModuleException(
                 "Could not find Scripting Toolkit. Ensure Scripting Toolkit is installed and try again."
-            ) from e
+            )
+        self._mi_session = self._start_stk_session_from_dataflow_credentials(
+            timeout=timeout,
+            max_retries=max_retries,
+        )
         return self._mi_session
 
     def _start_stk_session_from_dataflow_credentials(
