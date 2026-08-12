@@ -7,10 +7,10 @@ mpy.__version__ = "5.1.0"
 
 
 class SessionConfiguration:
-
     def __init__(self, timeout=300000, max_retries=0, **kwargs):
         self.timeout = timeout
         self.max_retries = max_retries
+
 
 ATTRIBUTE_NAME = "Additional Processing Notes"
 
@@ -20,15 +20,18 @@ class Attribute:
         self.name = name
         self.value = value
 
+
 class Record:
     attributes = {ATTRIBUTE_NAME: Attribute(ATTRIBUTE_NAME, "")}
 
     def set_attributes(self, *args, **kwargs):
         pass
 
+
 class Database:
     def get_record_by_id(self, *args, **kwargs):
         return Record()
+
 
 class Session:
     def get_db(self, *args, **kwargs) -> Database:
@@ -37,8 +40,8 @@ class Session:
     def update(self, *args, **kwargs):
         pass
 
-class SessionBuilder:
 
+class SessionBuilder:
     def __init__(self, service_layer_url, session_configuration=None):
         self._service_layer_url = service_layer_url
         self._session_configuration = session_configuration
