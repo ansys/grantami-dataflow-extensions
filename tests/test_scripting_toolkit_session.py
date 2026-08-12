@@ -20,77 +20,70 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from unittest.mock import ANY
+
+from unittest.mock import Mock
 
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
-from mocks.scripting_toolkit import (
-    OIDCSessionBuilder,
-    SessionBuilder,
-    SessionConfiguration,
-    _SessionBuilder,
-)
 import pytest
 
-timeout_params = pytest.mark.parametrize("timeout", [None, 1_000_000])
-max_retries_params = pytest.mark.parametrize("retries", [None, 10])
+from ansys.grantami.dataflow_extensions import MIDataflowIntegration
 
 pytestmark = pytest.mark.scripting_toolkit_version("latest")
 
 
-def _reset_mocks():
-    """Reset all mocks before each test."""
-    SessionBuilder.reset_mock()
-    SessionConfiguration.reset_mock()
-    _SessionBuilder.with_autologon.reset_mock()
-    _SessionBuilder.with_credentials.reset_mock()
-    _SessionBuilder.with_oidc.reset_mock()
-    OIDCSessionBuilder.with_access_token.reset_mock()
+@pytest.fixture
+def mock_stk(monkeypatch):
+    mock_module = Mock()
+    mock_module.__version__ = "5.1.0"
+    monkeypatch.setattr("ansys.grantami.dataflow_extensions._mi_dataflow.mpy", mock_module)
+    return mock_module
 
 
-@timeout_params
-@max_retries_params
+@pytest.mark.parametrize("timeout", [None, 1_000_000])
+@pytest.mark.parametrize("retries", [None, 10])
 class TestScriptingToolkitSession:
-    def test_windows_https(self, timeout, retries, windows_https, debug_caplog):
-        _reset_mocks()
+    @pytest.mark.parametrize(
+        ["test_case_name", "expected_url"],
+        [
+            ("windows_https", HTTPS_SL_URL),
+            ("windows_http", HTTP_SL_URL),
+        ],
+    )
+    def test_windows(self, timeout, retries, test_case_name, debug_caplog, mock_stk, request, expected_url):
         kwargs = self._kwargs(timeout, retries)
-        _ = windows_https.dataflow_integration.get_scripting_toolkit_session(**kwargs)
+        test_case = request.getfixturevalue(test_case_name)
+        _ = test_case.dataflow_integration.get_scripting_toolkit_session(**kwargs)
 
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
+        mock_stk.SessionConfiguration.assert_called_once_with(timeout=timeout, max_retries=retries)
+        session_configuration_instance = mock_stk.SessionConfiguration.return_value
+        mock_stk.SessionBuilder.assert_called_once_with(
+            expected_url, session_configuration=session_configuration_instance
         )
-        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_autologon.assert_called_once()
+        builder_instance = mock_stk.SessionBuilder.return_value
+        builder_instance.with_autologon.assert_called_once()
 
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Windows authentication." in debug_caplog.text
 
-    def test_windows_http(self, timeout, retries, windows_http, debug_caplog):
-        _reset_mocks()
+    @pytest.mark.parametrize(
+        ["test_case_name", "expected_url"],
+        [
+            ("basic_https", HTTPS_SL_URL),
+            ("basic_http", HTTP_SL_URL),
+        ],
+    )
+    def test_basic(self, timeout, retries, test_case_name, debug_caplog, request, expected_url, mock_stk):
+        test_case = request.getfixturevalue(test_case_name)
         kwargs = self._kwargs(timeout, retries)
-        _ = windows_http.dataflow_integration.get_scripting_toolkit_session(**kwargs)
+        _ = test_case.dataflow_integration.get_scripting_toolkit_session(**kwargs)
 
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
+        mock_stk.SessionConfiguration.assert_called_once_with(timeout=timeout, max_retries=retries)
+        session_configuration_instance = mock_stk.SessionConfiguration.return_value
+        mock_stk.SessionBuilder.assert_called_once_with(
+            expected_url, session_configuration=session_configuration_instance
         )
-        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_autologon.assert_called_once()
-
-        assert _scripting_toolkit_logged(debug_caplog.text)
-        assert "Using Windows authentication." in debug_caplog.text
-
-    def test_basic_https(self, timeout, retries, basic_https, debug_caplog):
-        _reset_mocks()
-        kwargs = self._kwargs(timeout, retries)
-        _ = basic_https.dataflow_integration.get_scripting_toolkit_session(**kwargs)
-
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
-        )
-        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_credentials.assert_called_once_with(
+        builder_instance = mock_stk.SessionBuilder.return_value
+        builder_instance.with_credentials.assert_called_once_with(
             username=USERNAME,
             password=PASSWORD,
         )
@@ -98,36 +91,26 @@ class TestScriptingToolkitSession:
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using Basic authentication." in debug_caplog.text
 
-    def test_basic_http(self, timeout, retries, basic_http, debug_caplog):
-        _reset_mocks()
+    @pytest.mark.parametrize(
+        ["test_case_name", "expected_url"],
+        [
+            ("oidc_https", HTTPS_SL_URL),
+        ],
+    )
+    def test_oidc_https(self, timeout, retries, test_case_name, debug_caplog, request, expected_url, mock_stk):
+        test_case = request.getfixturevalue(test_case_name)
         kwargs = self._kwargs(timeout, retries)
-        _ = basic_http.dataflow_integration.get_scripting_toolkit_session(**kwargs)
+        _ = test_case.dataflow_integration.get_scripting_toolkit_session(**kwargs)
 
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
+        mock_stk.SessionConfiguration.assert_called_once_with(timeout=timeout, max_retries=retries)
+        session_configuration_instance = mock_stk.SessionConfiguration.return_value
+        mock_stk.SessionBuilder.assert_called_once_with(
+            expected_url, session_configuration=session_configuration_instance
         )
-        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_credentials.assert_called_once_with(
-            username=USERNAME,
-            password=PASSWORD,
-        )
-
-        assert _scripting_toolkit_logged(debug_caplog.text)
-        assert "Using Basic authentication." in debug_caplog.text
-
-    def test_oidc_https(self, timeout, retries, oidc_https, debug_caplog):
-        _reset_mocks()
-        kwargs = self._kwargs(timeout, retries)
-        _ = oidc_https.dataflow_integration.get_scripting_toolkit_session(**kwargs)
-
-        SessionConfiguration.assert_called_once_with(
-            timeout=timeout,
-            max_retries=retries,
-        )
-        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_oidc.assert_called_once()
-        OIDCSessionBuilder.with_access_token.assert_called_once_with(token=access_token)
+        builder_instance = mock_stk.SessionBuilder.return_value
+        builder_instance.with_oidc.assert_called_once()
+        oidc_builder_instance = builder_instance.with_oidc.return_value
+        oidc_builder_instance.with_access_token.assert_called_once_with(token=access_token)
 
         assert _scripting_toolkit_logged(debug_caplog.text)
         assert "Using OIDC authentication." in debug_caplog.text
@@ -144,67 +127,30 @@ class TestScriptingToolkitSession:
 class TestDeprecatedScriptingToolkit:
     warning_message = r"This method is deprecated\. Use 'get_scripting_toolkit_session\(\)' instead\."
 
-    def test_windows_https_deprecated_property(self, windows_https, debug_caplog):
-        _reset_mocks()
-        with pytest.warns(match=self.warning_message):
-            _ = windows_https.dataflow_integration.mi_session
+    @pytest.mark.parametrize(
+        ["test_case_name", "expected_url"],
+        [
+            ("windows_https", HTTPS_SL_URL),
+            ("windows_http", HTTP_SL_URL),
+            ("basic_https", HTTPS_SL_URL),
+            ("basic_http", HTTP_SL_URL),
+            ("oidc_https", HTTPS_SL_URL),
+        ],
+    )
+    def test_deprecated_property(
+        self, windows_https, debug_caplog, mock_stk, request, test_case_name, expected_url, monkeypatch
+    ):
+        test_case = request.getfixturevalue(test_case_name)
 
-        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_autologon.assert_called_once()
-
-        assert _scripting_toolkit_logged(debug_caplog.text)
-        assert "Using Windows authentication." in debug_caplog.text
-
-    def test_windows_http(self, windows_http, debug_caplog):
-        _reset_mocks()
-        with pytest.warns(match=self.warning_message):
-            _ = windows_http.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_autologon.assert_called_once()
-
-        assert _scripting_toolkit_logged(debug_caplog.text)
-        assert "Using Windows authentication." in debug_caplog.text
-
-    def test_basic_https(self, basic_https, debug_caplog):
-        _reset_mocks()
-        with pytest.warns(match=self.warning_message):
-            _ = basic_https.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_credentials.assert_called_once_with(
-            username=USERNAME,
-            password=PASSWORD,
+        mock_v5_method = Mock()
+        monkeypatch.setattr(
+            MIDataflowIntegration, "_start_stk_session_from_dataflow_credentials_with_session_builder", mock_v5_method
         )
 
-        assert _scripting_toolkit_logged(debug_caplog.text)
-        assert "Using Basic authentication." in debug_caplog.text
-
-    def test_basic_http(self, basic_http, debug_caplog):
-        _reset_mocks()
         with pytest.warns(match=self.warning_message):
-            _ = basic_http.dataflow_integration.mi_session
+            _ = test_case.dataflow_integration.mi_session
 
-        SessionBuilder.assert_called_once_with(HTTP_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_credentials.assert_called_once_with(
-            username=USERNAME,
-            password=PASSWORD,
-        )
-
-        assert _scripting_toolkit_logged(debug_caplog.text)
-        assert "Using Basic authentication." in debug_caplog.text
-
-    def test_oidc_https(self, oidc_https, debug_caplog):
-        _reset_mocks()
-        with pytest.warns(match=self.warning_message):
-            _ = oidc_https.dataflow_integration.mi_session
-
-        SessionBuilder.assert_called_once_with(HTTPS_SL_URL, session_configuration=ANY)
-        _SessionBuilder.with_oidc.assert_called_once()
-        OIDCSessionBuilder.with_access_token.assert_called_once_with(token=access_token)
-
-        assert _scripting_toolkit_logged(debug_caplog.text)
-        assert "Using OIDC authentication." in debug_caplog.text
+        mock_v5_method.assert_called_once_with(timeout=None, max_retries=None)
 
 
 def _scripting_toolkit_logged(log):

@@ -42,9 +42,7 @@ import pytest
 # This import must happen before dataflow_extensions is imported to correctly mock these libraries
 from mocks import record_lists  # isort:skip  # noqa: F401
 
-if SCRIPTING_TOOLKIT_CONFIG.requires_version("latest"):
-    from mocks import scripting_toolkit  # isort:skip  # noqa: F401
-elif SCRIPTING_TOOLKIT_CONFIG.requires_version("4.x"):
+if SCRIPTING_TOOLKIT_CONFIG.requires_version("4.x"):
     from mocks import scripting_toolkit_4_x  # isort:skip  # noqa: F401
 
 from ansys.grantami.dataflow_extensions import MIDataflowIntegration

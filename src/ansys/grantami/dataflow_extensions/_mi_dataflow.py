@@ -55,7 +55,7 @@ except ImportError:
     try:
         from GRANTA_MIScriptingToolkit import granta as mpy  # type: ignore
     except ImportError:
-        pass
+        mpy = None
 
 from ._logger import logger
 
