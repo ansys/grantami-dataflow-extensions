@@ -27,7 +27,7 @@ from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 import pytest
 
 from ansys.grantami.dataflow_extensions import MIDataflowIntegration
-from tests.mocks import scripting_toolkit_4_x
+from mocks import scripting_toolkit_4_x
 
 
 @pytest.fixture
