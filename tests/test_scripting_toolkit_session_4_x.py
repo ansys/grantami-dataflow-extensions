@@ -24,10 +24,10 @@
 from unittest.mock import Mock, create_autospec
 
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
+from mocks import scripting_toolkit_4_x
 import pytest
 
 from ansys.grantami.dataflow_extensions import MIDataflowIntegration
-from mocks import scripting_toolkit_4_x
 
 
 @pytest.fixture
