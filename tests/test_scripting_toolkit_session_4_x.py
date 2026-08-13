@@ -21,23 +21,33 @@
 # SOFTWARE.
 
 
-from unittest.mock import Mock
+from unittest.mock import Mock, create_autospec
 
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 import pytest
 
 from ansys.grantami.dataflow_extensions import MIDataflowIntegration
+from tests.mocks import scripting_toolkit_4_x
 
 
 @pytest.fixture
 def mock_stk(monkeypatch):
-    mock_module = Mock()
-    mock_module.__version__ = "4.0.0"
+    mock_module = create_autospec(
+        spec=scripting_toolkit_4_x.module.granta,
+        spec_set=True,
+    )
+    # __version__ isn't supported by MagicMock, patch it again
+    mock_module.__version__ = scripting_toolkit_4_x.VERSION
     monkeypatch.setattr("ansys.grantami.dataflow_extensions._mi_dataflow.mpy", mock_module)
     return mock_module
 
 
-pytestmark = pytest.mark.scripting_toolkit_version("4.x")
+def test_strict_interface_usage(mock_stk):
+    with pytest.raises(Exception):
+        mock_stk.non_existent()
+
+    with pytest.raises(Exception):
+        mock_stk.connect(non_existent="value")
 
 
 @pytest.mark.parametrize("timeout", [None, 1_000_000])

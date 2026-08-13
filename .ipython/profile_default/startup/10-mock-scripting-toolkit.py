@@ -1,15 +1,14 @@
-from types import ModuleType
+from pathlib import Path
+import sys
 
 from ansys.grantami.dataflow_extensions import _mi_dataflow
 
-mpy = ModuleType("ansys.grantami.core")
-mpy.__version__ = "5.1.0"
+tests_path = Path(__file__).parents[3] / "tests"
+sys.path.insert(1, str(tests_path))
+from mocks import scripting_toolkit  # noqa: E402 F401  # isort: skip
 
-
-class SessionConfiguration:
-    def __init__(self, timeout=300000, max_retries=0, **kwargs):
-        self.timeout = timeout
-        self.max_retries = max_retries
+# Get STK interface from tests
+mpy = scripting_toolkit.module
 
 
 ATTRIBUTE_NAME = "Additional Processing Notes"
@@ -41,17 +40,13 @@ class Session:
         pass
 
 
-class SessionBuilder:
-    def __init__(self, service_layer_url, session_configuration=None):
-        self._service_layer_url = service_layer_url
-        self._session_configuration = session_configuration
-
+class SessionBuilder(scripting_toolkit.module.SessionBuilder):
+    # Override interface to return a hardcoded session
     def with_autologon(self):
         return Session()
 
 
-# Attach to module
-mpy.SessionConfiguration = SessionConfiguration
+# Override module to use concrete SessionBuilder
 mpy.SessionBuilder = SessionBuilder
 
 # Patch import

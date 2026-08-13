@@ -20,23 +20,63 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-from unittest.mock import Mock
+from unittest.mock import Mock, create_autospec
 
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 import pytest
 
 from ansys.grantami.dataflow_extensions import MIDataflowIntegration
-
-pytestmark = pytest.mark.scripting_toolkit_version("latest")
+from tests.mocks import scripting_toolkit
 
 
 @pytest.fixture
 def mock_stk(monkeypatch):
-    mock_module = Mock()
-    mock_module.__version__ = "5.1.0"
+    # Using create_autospec ensures instances of class mocks have the expected interface and that methods of the
+    # instance have the expected signature
+    mock_module = create_autospec(
+        spec=scripting_toolkit.module,
+        spec_set=True,
+    )
+    # Autospec does not work recursively. Ensure OIDCSessionBuilder is also compliant with the interface
+    mock_oidc_session_builder_kls = create_autospec(spec=scripting_toolkit.OIDCSessionBuilder, spec_set=True)
+    mock_oidc_session_builder = mock_oidc_session_builder_kls.return_value
+    mock_module.SessionBuilder.return_value.with_oidc.return_value = mock_oidc_session_builder
+    # __version__ isn't supported by MagicMock, patch it again
+    mock_module.__version__ = scripting_toolkit.VERSION
     monkeypatch.setattr("ansys.grantami.dataflow_extensions._mi_dataflow.mpy", mock_module)
     return mock_module
+
+
+def test_mock_module_has_strict_interface(mock_stk):
+    assert mock_stk.__version__ == "5.1.0"
+
+    builder_kls = mock_stk.SessionBuilder
+    with pytest.raises(Exception):
+        _ = builder_kls()
+
+    builder = builder_kls(service_layer_url="bla")
+    builder_kls.assert_called_once_with(service_layer_url="bla")
+
+    _ = builder.with_autologon()
+    builder.with_autologon.assert_called_once_with()
+
+    with pytest.raises(Exception):
+        _ = builder.with_credentials()
+    _ = builder.with_credentials("a", "b")
+    builder.with_credentials.assert_called_once_with("a", "b")
+
+    with pytest.raises(Exception):
+        _ = builder.non_existent_method()
+
+    # OIDCSessionBuilder is one-level deeper
+    oidc_builder = builder.with_oidc()
+    with pytest.raises(Exception):
+        _ = oidc_builder.non_existent()
+    with pytest.raises(Exception):
+        _ = oidc_builder.with_access_token()
+
+    _ = oidc_builder.with_access_token(token="str")
+    oidc_builder.with_access_token.assert_called_once_with("str")
 
 
 @pytest.mark.parametrize("timeout", [None, 1_000_000])
