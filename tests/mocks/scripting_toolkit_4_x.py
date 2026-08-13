@@ -46,6 +46,7 @@ def connect(
 ):
     pass
 
+
 granta_module.connect = connect
 
 # Attach to module (only types used directly by dataflow-extensions)
