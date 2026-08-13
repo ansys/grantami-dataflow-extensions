@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from unittest.mock import Mock, create_autospec
+from unittest.mock import Mock, NonCallableMagicMock, create_autospec
 
 from common import HTTP_SL_URL, HTTPS_SL_URL, PASSWORD, USERNAME, access_token
 from mocks import scripting_toolkit
@@ -94,8 +94,9 @@ class TestScriptingToolkitSession:
         test_case = request.getfixturevalue(test_case_name)
         _ = test_case.dataflow_integration.get_scripting_toolkit_session(**kwargs)
 
-        mock_stk.SessionConfiguration.assert_called_once_with(timeout=timeout, max_retries=retries)
+        mock_stk.SessionConfiguration.assert_called_once_with()
         session_configuration_instance = mock_stk.SessionConfiguration.return_value
+        self.check_session_config(session_configuration_instance, timeout, retries)
         mock_stk.SessionBuilder.assert_called_once_with(
             expected_url, session_configuration=session_configuration_instance
         )
@@ -117,8 +118,9 @@ class TestScriptingToolkitSession:
         kwargs = self._kwargs(timeout, retries)
         _ = test_case.dataflow_integration.get_scripting_toolkit_session(**kwargs)
 
-        mock_stk.SessionConfiguration.assert_called_once_with(timeout=timeout, max_retries=retries)
+        mock_stk.SessionConfiguration.assert_called_once_with()
         session_configuration_instance = mock_stk.SessionConfiguration.return_value
+        self.check_session_config(session_configuration_instance, timeout, retries)
         mock_stk.SessionBuilder.assert_called_once_with(
             expected_url, session_configuration=session_configuration_instance
         )
@@ -142,8 +144,9 @@ class TestScriptingToolkitSession:
         kwargs = self._kwargs(timeout, retries)
         _ = test_case.dataflow_integration.get_scripting_toolkit_session(**kwargs)
 
-        mock_stk.SessionConfiguration.assert_called_once_with(timeout=timeout, max_retries=retries)
+        mock_stk.SessionConfiguration.assert_called_once_with()
         session_configuration_instance = mock_stk.SessionConfiguration.return_value
+        self.check_session_config(session_configuration_instance, timeout, retries)
         mock_stk.SessionBuilder.assert_called_once_with(
             expected_url, session_configuration=session_configuration_instance
         )
@@ -162,6 +165,18 @@ class TestScriptingToolkitSession:
         if retries is not None:
             kwargs["max_retries"] = retries
         return kwargs
+
+    def check_session_config(self, session_config, timeout: int | None, retries: int | None):
+        if timeout is not None:
+            assert session_config.timeout == timeout
+        else:
+            # Exists on the mock SessionConfiguration but nothing verifiable about it, i.e. is the default value
+            # implemented in the class
+            assert isinstance(session_config.timeout, NonCallableMagicMock)
+        if retries is not None:
+            assert session_config.max_retries == retries
+        else:
+            assert isinstance(session_config.max_retries, NonCallableMagicMock)
 
 
 class TestDeprecatedScriptingToolkit:

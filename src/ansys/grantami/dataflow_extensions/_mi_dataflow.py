@@ -712,7 +712,12 @@ class MIDataflowIntegration:
         """
         logger.debug("Creating MI Scripting Toolkit session.")
 
-        session_configuration = mpy.SessionConfiguration(timeout=timeout, max_retries=max_retries)
+        session_configuration = mpy.SessionConfiguration()
+        if timeout is not None:
+            session_configuration.timeout = timeout
+        if max_retries is not None:
+            session_configuration.max_retries = max_retries
+
         session_builder = mpy.SessionBuilder(self.service_layer_url, session_configuration=session_configuration)
 
         if self._authentication_mode == _AuthenticationMode.BASIC_AUTHENTICATION:
