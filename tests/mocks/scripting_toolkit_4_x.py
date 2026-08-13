@@ -20,23 +20,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import sys
 from types import ModuleType
-from unittest.mock import Mock
 
-from .common import create_mock_session
+VERSION = "4.0.0"
+module = ModuleType("GRANTA_MIScriptingToolkit")
+module.__version__ = VERSION
 
-scripting_toolkit_4_x = ModuleType("GRANTA_MIScriptingToolkit")
-
-mpy = Mock()
-mpy.__version__ = "4.0.0"
-
-
-def connect(*args, **kwargs):
-    return create_mock_session()
+granta_module = ModuleType("granta")
+granta_module.__version__ = VERSION
 
 
-mpy.connect = Mock(wraps=connect)
-scripting_toolkit_4_x.granta = mpy
+def connect(
+    service_layer_url: str,
+    user_name: str = None,
+    password: str = None,
+    domain: str = None,
+    autologon: bool = None,
+    timeout: int = 300000,
+    oidc: bool = False,
+    auth_token: str = None,
+    store_password: bool = False,
+    max_retries: int = 0,
+    *args,
+    **kwargs,
+):
+    pass
 
-sys.modules["GRANTA_MIScriptingToolkit"] = scripting_toolkit_4_x
+
+granta_module.connect = connect
+
+# Attach to module (only types used directly by dataflow-extensions)
+module.granta = granta_module

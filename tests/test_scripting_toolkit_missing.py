@@ -20,35 +20,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Common mock utilities shared across Scripting Toolkit version mocks."""
+import pytest
 
-from unittest.mock import Mock
-
-
-def create_mock_record():
-    """Create a mock Record object."""
-    record = Mock()
-    record.attributes = {}
-
-    attribute = Mock()
-    attribute.name = "Additional Processing Notes"
-    attribute.value = ""
-    record.attributes["Additional Processing Notes"] = attribute
-
-    record.set_attributes = Mock()
-    return record
+from ansys.grantami.dataflow_extensions import MissingClientModuleException
 
 
-def create_mock_database():
-    """Create a mock Database object with get_record_by_id method."""
-    db = Mock()
-    db.get_record_by_id = Mock(side_effect=lambda *args, **kwargs: create_mock_record())
-    return db
+@pytest.mark.parametrize(
+    "test_case_name",
+    [
+        "windows_https",
+        "windows_http",
+        "basic_https",
+        "basic_http",
+        "oidc_https",
+    ],
+)
+def test_error_raised_on_missing_toolkit(request, test_case_name):
+    test_case = request.getfixturevalue(test_case_name)
+    with pytest.raises(MissingClientModuleException, match="Could not find Scripting Toolkit"):
+        _ = test_case.dataflow_integration.get_scripting_toolkit_session()
 
 
-def create_mock_session():
-    """Create a mock Session object with get_db and update methods."""
-    session = Mock()
-    session.get_db = Mock(side_effect=lambda *args, **kwargs: create_mock_database())
-    session.update = Mock()
-    return session
+@pytest.mark.parametrize(
+    "test_case_name",
+    [
+        "windows_https",
+        "windows_http",
+        "basic_https",
+        "basic_http",
+        "oidc_https",
+    ],
+)
+def test_error_raised_on_missing_toolkit_with_deprecated_property(request, test_case_name):
+    test_case = request.getfixturevalue(test_case_name)
+    with (
+        pytest.raises(MissingClientModuleException, match="Could not find Scripting Toolkit"),
+        pytest.warns(UserWarning, match="This method is deprecated"),
+    ):
+        _ = test_case.dataflow_integration.mi_session
