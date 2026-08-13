@@ -28,9 +28,12 @@ module.__version__ = VERSION
 
 
 class SessionConfiguration:
-    def __init__(self, timeout=300000, max_retries=0, **kwargs):
-        self.timeout = timeout
-        self.max_retries = max_retries
+    # unittest.mock.create_autospec can only mock attributes that exist on the class, and not attributes created during
+    # instantiation in __init__. Adding defaults as class attributes to work around this limitation.
+    timeout: int = 300000
+    max_retries: int = 0
+
+    def __init__(self, timeout=None, max_retries=None, **kwargs): ...
 
 
 class OIDCSessionBuilder:
