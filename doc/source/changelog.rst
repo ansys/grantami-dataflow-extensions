@@ -9,6 +9,233 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.3.1 <https://github.com/ansys/grantami-dataflow-extensions/releases/tag/v0.3.1>`_ - August 26, 2026
+======================================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix issue with \`get_scripting_toolkit_session\` called without args with Scripting Toolkit 5.0
+          - `#298 <https://github.com/ansys/grantami-dataflow-extensions/pull/298>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix docs build failure caused by Sphinx - LaTeX2e incompatibility
+          - `#265 <https://github.com/ansys/grantami-dataflow-extensions/pull/265>`_
+
+
+  .. tab-item:: Dependencies
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore(deps): bump ansys/actions from 10.2.5 to 10.2.7 in the actions group
+          - `#226 <https://github.com/ansys/grantami-dataflow-extensions/pull/226>`_
+
+        * - Chore(deps): bump tornado from 6.5.4 to 6.5.5
+          - `#228 <https://github.com/ansys/grantami-dataflow-extensions/pull/228>`_
+
+        * - Chore(deps-dev): bump sphinx-autoapi from 3.7.0 to 3.8.0 in the doc-deps group
+          - `#229 <https://github.com/ansys/grantami-dataflow-extensions/pull/229>`_
+
+        * - Chore(deps-dev): bump ansys-grantami-recordlists from 2.0.1 to 2.1.0 in the dev-deps group
+          - `#230 <https://github.com/ansys/grantami-dataflow-extensions/pull/230>`_
+
+        * - Chore(deps): bump ansys-openapi-common from 2.3.2 to 2.4.0 in the src-deps group
+          - `#231 <https://github.com/ansys/grantami-dataflow-extensions/pull/231>`_
+
+        * - Chore(deps): bump actions/download-artifact from 8.0.0 to 8.0.1 in the actions group
+          - `#232 <https://github.com/ansys/grantami-dataflow-extensions/pull/232>`_
+
+        * - Chore(deps-dev): bump ansys-grantami-recordlists from 2.1.0 to 2.1.1 in the dev-deps group
+          - `#233 <https://github.com/ansys/grantami-dataflow-extensions/pull/233>`_
+
+        * - Chore(deps-dev): bump the dev-deps group across 1 directory with 2 updates
+          - `#239 <https://github.com/ansys/grantami-dataflow-extensions/pull/239>`_
+
+        * - Chore(deps): bump requests from 2.32.5 to 2.33.1 in the src-deps group
+          - `#240 <https://github.com/ansys/grantami-dataflow-extensions/pull/240>`_
+
+        * - Chore(deps): bump cryptography from 46.0.5 to 46.0.7
+          - `#241 <https://github.com/ansys/grantami-dataflow-extensions/pull/241>`_
+
+        * - Chore(deps): bump pygments from 2.19.2 to 2.20.0
+          - `#242 <https://github.com/ansys/grantami-dataflow-extensions/pull/242>`_
+
+        * - Chore(deps): bump ansys/actions from 10.2.7 to 10.2.12 in the actions group across 1 directory
+          - `#243 <https://github.com/ansys/grantami-dataflow-extensions/pull/243>`_
+
+        * - Chore(deps): bump pillow from 12.1.1 to 12.2.0
+          - `#244 <https://github.com/ansys/grantami-dataflow-extensions/pull/244>`_
+
+        * - Chore(deps-dev): bump pytest from 9.0.2 to 9.0.3
+          - `#245 <https://github.com/ansys/grantami-dataflow-extensions/pull/245>`_
+
+        * - Chore(deps): bump pypa/gh-action-pypi-publish from 1.13.0 to 1.14.0 in the actions group
+          - `#246 <https://github.com/ansys/grantami-dataflow-extensions/pull/246>`_
+
+        * - Chore(deps-dev): bump mypy from 1.20.0 to 1.20.1 in the dev-deps group
+          - `#247 <https://github.com/ansys/grantami-dataflow-extensions/pull/247>`_
+
+        * - Chore(deps): bump nbconvert from 7.17.0 to 7.17.1
+          - `#248 <https://github.com/ansys/grantami-dataflow-extensions/pull/248>`_
+
+        * - Chore(deps-dev): bump the dev-deps group with 2 updates
+          - `#249 <https://github.com/ansys/grantami-dataflow-extensions/pull/249>`_
+
+        * - Chore(deps): bump mistune from 3.2.0 to 3.2.1
+          - `#250 <https://github.com/ansys/grantami-dataflow-extensions/pull/250>`_
+
+        * - Chore(deps): bump urllib3 from 2.6.3 to 2.7.0
+          - `#251 <https://github.com/ansys/grantami-dataflow-extensions/pull/251>`_
+
+        * - Chore(deps): bump the actions group with 2 updates
+          - `#252 <https://github.com/ansys/grantami-dataflow-extensions/pull/252>`_
+
+        * - Chore(deps): bump ansys/actions from 10.3.0 to 10.3.1 in the actions group
+          - `#253 <https://github.com/ansys/grantami-dataflow-extensions/pull/253>`_
+
+        * - Chore(deps-dev): bump jupytext from 1.19.1 to 1.19.2 in the doc-deps group
+          - `#254 <https://github.com/ansys/grantami-dataflow-extensions/pull/254>`_
+
+        * - Chore(deps-dev): bump mypy from 1.20.2 to 2.1.0 in the dev-deps group
+          - `#255 <https://github.com/ansys/grantami-dataflow-extensions/pull/255>`_
+
+        * - Chore(deps): bump requests from 2.33.1 to 2.34.0 in the src-deps group across 1 directory
+          - `#256 <https://github.com/ansys/grantami-dataflow-extensions/pull/256>`_
+
+        * - Chore(deps): bump idna from 3.11 to 3.15
+          - `#257 <https://github.com/ansys/grantami-dataflow-extensions/pull/257>`_
+
+        * - Chore(deps-dev): bump the doc-deps group with 2 updates
+          - `#259 <https://github.com/ansys/grantami-dataflow-extensions/pull/259>`_, `#261 <https://github.com/ansys/grantami-dataflow-extensions/pull/261>`_, `#274 <https://github.com/ansys/grantami-dataflow-extensions/pull/274>`_
+
+        * - Chore(deps): bump requests from 2.34.0 to 2.34.2 in the src-deps group
+          - `#260 <https://github.com/ansys/grantami-dataflow-extensions/pull/260>`_
+
+        * - Chore(deps): bump ansys/actions from 10.3.1 to 10.3.2 in the actions group
+          - `#262 <https://github.com/ansys/grantami-dataflow-extensions/pull/262>`_
+
+        * - Chore(deps): bump actions/checkout from 6.0.2 to 6.0.3 in the actions group across 1 directory
+          - `#263 <https://github.com/ansys/grantami-dataflow-extensions/pull/263>`_
+
+        * - Chore(deps): bump tornado from 6.5.5 to 6.5.7
+          - `#264 <https://github.com/ansys/grantami-dataflow-extensions/pull/264>`_
+
+        * - Chore(deps): bump msgpack from 1.1.2 to 1.2.1
+          - `#266 <https://github.com/ansys/grantami-dataflow-extensions/pull/266>`_
+
+        * - Chore(deps): bump cryptography from 46.0.7 to 48.0.1
+          - `#267 <https://github.com/ansys/grantami-dataflow-extensions/pull/267>`_
+
+        * - Chore(deps): bump bleach from 6.3.0 to 6.4.0
+          - `#268 <https://github.com/ansys/grantami-dataflow-extensions/pull/268>`_
+
+        * - Chore(deps-dev): bump ipykernel from 7.2.0 to 7.3.0 in the doc-deps group
+          - `#270 <https://github.com/ansys/grantami-dataflow-extensions/pull/270>`_
+
+        * - Chore(deps-dev): bump pytest from 9.0.3 to 9.1.0 in the dev-deps group
+          - `#271 <https://github.com/ansys/grantami-dataflow-extensions/pull/271>`_
+
+        * - Chore(deps): bump actions/checkout from 6.0.3 to 7.0.0 in the actions group
+          - `#273 <https://github.com/ansys/grantami-dataflow-extensions/pull/273>`_
+
+        * - Chore(deps-dev): bump pytest from 9.1.0 to 9.1.1 in the dev-deps group
+          - `#275 <https://github.com/ansys/grantami-dataflow-extensions/pull/275>`_
+
+        * - Chore(deps): bump the actions group with 13 updates
+          - `#277 <https://github.com/ansys/grantami-dataflow-extensions/pull/277>`_, `#284 <https://github.com/ansys/grantami-dataflow-extensions/pull/284>`_, `#301 <https://github.com/ansys/grantami-dataflow-extensions/pull/301>`_, `#305 <https://github.com/ansys/grantami-dataflow-extensions/pull/305>`_
+
+        * - Chore(deps): bump soupsieve from 2.8.3 to 2.8.4
+          - `#278 <https://github.com/ansys/grantami-dataflow-extensions/pull/278>`_
+
+        * - Chore(deps): bump mistune from 3.2.1 to 3.3.0
+          - `#279 <https://github.com/ansys/grantami-dataflow-extensions/pull/279>`_
+
+        * - Chore(deps): bump actions/labeler from 6.1.0 to 6.2.0 in the actions group
+          - `#281 <https://github.com/ansys/grantami-dataflow-extensions/pull/281>`_
+
+        * - Chore(deps): bump pillow from 12.2.0 to 12.3.0
+          - `#283 <https://github.com/ansys/grantami-dataflow-extensions/pull/283>`_
+
+        * - Chore(deps-dev): bump mypy from 2.1.0 to 2.3.0 in the dev-deps group
+          - `#285 <https://github.com/ansys/grantami-dataflow-extensions/pull/285>`_
+
+        * - Chore(deps-dev): bump jupytext from 1.19.4 to 1.19.5 in the doc-deps group
+          - `#287 <https://github.com/ansys/grantami-dataflow-extensions/pull/287>`_
+
+        * - Chore(deps): bump the actions group with 16 updates
+          - `#288 <https://github.com/ansys/grantami-dataflow-extensions/pull/288>`_
+
+        * - Chore(deps-dev): bump pre-commit from 4.6.0 to 4.6.1 in the dev-deps group
+          - `#289 <https://github.com/ansys/grantami-dataflow-extensions/pull/289>`_
+
+        * - Chore(deps-dev): bump sphinx-toolbox from 4.2.0 to 4.3.0 in the doc-deps group
+          - `#293 <https://github.com/ansys/grantami-dataflow-extensions/pull/293>`_
+
+        * - Chore(deps): bump cryptography from 48.0.1 to 50.0.0
+          - `#294 <https://github.com/ansys/grantami-dataflow-extensions/pull/294>`_
+
+        * - Chore(deps): bump pypa/gh-action-pypi-publish from 1.14.1 to 1.14.2 in the actions group
+          - `#296 <https://github.com/ansys/grantami-dataflow-extensions/pull/296>`_
+
+        * - Chore(deps-dev): bump pre-commit from 4.6.1 to 4.6.2 in the dev-deps group
+          - `#302 <https://github.com/ansys/grantami-dataflow-extensions/pull/302>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: Update missing or outdated files
+          - `#269 <https://github.com/ansys/grantami-dataflow-extensions/pull/269>`_, `#276 <https://github.com/ansys/grantami-dataflow-extensions/pull/276>`_, `#290 <https://github.com/ansys/grantami-dataflow-extensions/pull/290>`_
+
+        * - Update ansys actions to 10.3.6
+          - `#291 <https://github.com/ansys/grantami-dataflow-extensions/pull/291>`_
+
+        * - Clean up module versioning and session factories tests
+          - `#299 <https://github.com/ansys/grantami-dataflow-extensions/pull/299>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: update CHANGELOG for v0.3.0
+          - `#221 <https://github.com/ansys/grantami-dataflow-extensions/pull/221>`_
+
+        * - Chore(deps-dev): bump sphinx-autoapi from 3.6.1 to 3.7.0 in the doc-deps group
+          - `#222 <https://github.com/ansys/grantami-dataflow-extensions/pull/222>`_
+
+        * - Chore(deps): bump actions/download-artifact from 7.0.0 to 8.0.0 in the actions group
+          - `#225 <https://github.com/ansys/grantami-dataflow-extensions/pull/225>`_
+
+        * - Chore(deps-dev): bump ansys-sphinx-theme from 1.7.0 to 1.7.2 in the doc-deps group
+          - `#227 <https://github.com/ansys/grantami-dataflow-extensions/pull/227>`_
+
+        * - Align MI Dataflow requests usage with requests 2.34 inline types
+          - `#258 <https://github.com/ansys/grantami-dataflow-extensions/pull/258>`_
+
+        * - [pre-commit.ci] pre-commit autoupdate
+          - `#272 <https://github.com/ansys/grantami-dataflow-extensions/pull/272>`_, `#280 <https://github.com/ansys/grantami-dataflow-extensions/pull/280>`_, `#282 <https://github.com/ansys/grantami-dataflow-extensions/pull/282>`_, `#286 <https://github.com/ansys/grantami-dataflow-extensions/pull/286>`_, `#292 <https://github.com/ansys/grantami-dataflow-extensions/pull/292>`_, `#295 <https://github.com/ansys/grantami-dataflow-extensions/pull/295>`_, `#300 <https://github.com/ansys/grantami-dataflow-extensions/pull/300>`_, `#303 <https://github.com/ansys/grantami-dataflow-extensions/pull/303>`_
+
+
 `0.3.0 <https://github.com/ansys/grantami-dataflow-extensions/releases/tag/v0.3.0>`_ - February 20, 2026
 ========================================================================================================
 
