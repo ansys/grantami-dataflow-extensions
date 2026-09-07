@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  MAIN_PYTHON_VERSION: '3.10'
+  MAIN_PYTHON_VERSION: '3.12'
   DOCUMENTATION_CNAME: 'dataflow-extensions.grantami.docs.pyansys.com'
   LIBRARY_NAME: 'ansys-grantami-dataflow-extensions'
   LIBRARY_NAMESPACE: 'ansys.grantami.dataflow-extensions'
@@ -95,7 +95,7 @@ jobs:
       id-token: write  # Required for Sigstore
     strategy:
        matrix:
-           python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+           python-version: ['3.12', '3.13', '3.14']
     steps:
       - uses: ansys/actions/build-wheelhouse@7e89e00c5619374a1da8c2e876309d8b15ff0559  # v11.0.3
         with:
@@ -110,7 +110,7 @@ jobs:
     needs: code-style
     strategy:
        matrix:
-           python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+           python-version: ['3.12', '3.13', '3.14']
     steps:
       - uses: ansys/actions/tests-pytest@7e89e00c5619374a1da8c2e876309d8b15ff0559  # v11.0.3
         with:
