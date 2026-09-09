@@ -50,7 +50,6 @@ extensions = [
     "sphinx_jinja",
     "nbsphinx",
     "sphinx_design",
-    "enum_tools.autoenum",
 ]
 
 nitpick_ignore_regex = {
