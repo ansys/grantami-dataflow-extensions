@@ -11,10 +11,10 @@ version = "0.4.0.dev0"
 description = "Productivity package for use with Granta MI Dataflow."
 license = "MIT"
 authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"}
+    {name = "Synopsys, Inc. and ANSYS, Inc.", email = "pyansys-core@synopsys.com"}
 ]
 maintainers = [
-    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"}
+    {name = "Synopsys, Inc. and ANSYS, Inc.", email = "pyansys-core@synopsys.com"}
 ]
 readme = "README.rst"
 repository = "https://github.com/ansys/grantami-dataflow-extensions"
