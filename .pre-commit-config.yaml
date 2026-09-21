@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.16.7
+  rev: v0.16.8
   hooks:
     - id: ruff
     - id: ruff-format
@@ -35,7 +35,7 @@ repos:
       files: '(src|tests)/.*\.(py)'
 
 - repo: https://github.com/numpy/numpydoc
-  rev: v1.11.0rc0
+  rev: v1.11.0
   hooks:
   - id: numpydoc-validation
     exclude: "^(tests/)|^(.github/)|^(examples/)|^(.ipython/)|^(doc)"
