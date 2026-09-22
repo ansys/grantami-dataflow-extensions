@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- managed-by: ansys/actions/_doc-gen-sitemap -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/</loc>
+    <lastmod>2026-09-22T23:32:12+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/getting_started/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/examples/3_RecordLists.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/examples/1_Standalone.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/examples/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/examples/2_Scripting_Toolkit.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/api/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/user_guide/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/changelog.html</loc>
+  </url>
+  <url>
+    <loc>https://dataflow-extensions.grantami.docs.pyansys.com/version/stable/contributing.html</loc>
+  </url>
+</urlset>
