@@ -65,6 +65,7 @@ jobs:
       contents: write  # to allow the Action to push to the PR branch
       pull-requests: write  # to allow the Action to update the target PR
     runs-on: ubuntu-latest
+    if: ${{ !startsWith( github.event.pull_request.head.ref, 'dependabot/') && !(startsWith(github.event.pull_request.head.ref, 'pre-commit-ci-update-config')) }}
     steps:
       - uses: ansys/actions/doc-changelog@a5c8d0d92928e144130a3c64aa7200b9547785de  # v11.1.3
         if: ${{ github.event_name == 'pull_request' }}
