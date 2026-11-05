@@ -1,0 +1,471 @@
+[
+    {
+        "objectID": "examples/1_Standalone",
+        "href": "examples/1_Standalone.html#standalone-example",
+        "title": "Standalone example",
+        "section": "Standalone example",
+        "text": "Standalone example"
+    },
+    {
+        "objectID": "examples/1_Standalone",
+        "href": "examples/1_Standalone.html#introduction",
+        "title": "Standalone example > Introduction",
+        "section": "Introduction",
+        "text": "An example that uses the PyGranta Data Flow Extensions package to interact with a resource that isn’t part of a standard Granta MI system.\nThis example script logs the record identifying information, which is received from MI Data Flow. This could be replaced with any other business logic which can make use of the data provided by MI Data Flow. To perform operations that rely on additional information from a Granta MI system, see the other examples in this package.\nIntroduction"
+    },
+    {
+        "objectID": "examples/1_Standalone",
+        "href": "examples/1_Standalone.html#useful-links",
+        "title": "Standalone example > Useful links",
+        "section": "Useful links",
+        "text": "Recommended script structure\nBusiness logic development best practice\nWarning:\nThe step_logic() function generates the dataflow payload, and explicitly calls the get_payload_as_str() method with include_credentials=False to avoid logging credentials. If you are using Basic or OIDC Authentication and require these credentials for your business logic, inject these credentials into the dataflow_payload[\"AuthorizationHeader\"] value in the testing() function directly, for example via an environment variable.\nUseful links\nstep_logic()\nget_payload_as_str()\ninclude_credentials=False\ndataflow_payload[\"AuthorizationHeader\"]\ntesting()"
+    },
+    {
+        "objectID": "examples/1_Standalone",
+        "href": "examples/1_Standalone.html#example-script",
+        "title": "Standalone example > Example script",
+        "section": "Example script",
+        "text": "Example script"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#contribute",
+        "title": "Contribute",
+        "section": "Contribute",
+        "text": "Contribute"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#general-guidelines",
+        "title": "Contribute > General guidelines",
+        "section": "General guidelines",
+        "text": "Overall guidance on contributing to a PyAnsys library appears in the\nContributing topic\nin the PyAnsys developer’s guide. Ensure that you are thoroughly familiar\nwith this guide before attempting to contribute to PyGranta Data Flow Extensions.\nThe following contribution information is specific to PyGranta Data Flow Extensions.\nGeneral guidelines"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#developer-environment-setup",
+        "title": "Contribute > Developer environment setup",
+        "section": "Developer environment setup",
+        "text": "PyGranta Data Flow Extensions uses Poetry for packaging and dependency management.\nInstallation information is available in the Poetry documentation.\nInstalling PyGranta Data Flow Extensions in developer mode allows you to modify and\nenhance the source.\nDeveloper environment setup"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#clone-the-source-repository",
+        "title": "Contribute > Clone the source repository",
+        "section": "Clone the source repository",
+        "text": "Run the following commands to clone and install the latest version of PyGranta Data Flow\nExtensions in editable mode, which ensures changes to the code are immediately visible in the\nenvironment. Running these commands also installs the required development dependencies to\nrun the tests, build the documentation, and build the package.\nClone the source repository"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#additional-tools",
+        "title": "Contribute > Additional tools",
+        "section": "Additional tools",
+        "text": "Additional tools"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#pre-commit",
+        "title": "Contribute > Pre-commit",
+        "section": "Pre-commit",
+        "text": "The style checks take advantage of pre-commit. Developers are not forced but\nencouraged to install this tool with this command:\nPre-commit"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#code-formatting-and-styling",
+        "title": "Contribute > Code formatting and styling",
+        "section": "Code formatting and styling",
+        "text": "This project adheres to PyAnsys styling and formatting recommendations. The easiest way to\nvalidate changes are compliant is to run this command:\nCode formatting and styling"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#documenting",
+        "title": "Contribute > Documenting",
+        "section": "Documenting",
+        "text": "As per PyAnsys guidelines, the documentation is generated using Sphinx.\nFor building documentation, use the Sphinx Makefile:\nIf any changes have been made to the documentation, you should run\nSphinx directly with the following extra arguments:\nThe extra arguments ensure that all references are valid and turn warnings\ninto errors. CI uses the same configuration, so you should resolve any\nwarnings and errors locally before pushing changes.\nDocumenting"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#example-notebooks",
+        "title": "Contribute > Example notebooks",
+        "section": "Example notebooks",
+        "text": "Examples are included in the documentation to give you more context around\nthe core capabilities described in ref_grantami_dataflow_extensions_api_reference.\nAdditional examples are welcomed, especially if they cover a key use case of the\npackage that has not yet been covered.\nThe example scripts are placed in the examples directory and are included\nin the documentation build if the environment variable BUILD_EXAMPLES is set\nto True. Otherwise, a different set of examples is run to validate the process.\nExamples are checked in as scripts using the light format. For more information,\nsee the Jupytext documentation. As part of the documentation-building\nprocess, the Python files are converted back into Jupyter notebooks and the output\ncells are populated by running the notebooks against a Granta MI™ instance.\nThis conversion between Jupyter notebooks and Python files is performed by\nnb-convert. Installation information is available in the nb-convert documentation.\nExample notebooks\nexamples\nBUILD_EXAMPLES\nTrue\nlight\nnb-convert"
+    },
+    {
+        "objectID": "contributing",
+        "href": "contributing.html#post-issues",
+        "title": "Contribute > Post issues",
+        "section": "Post issues",
+        "text": "Use the PyGranta Data Flow Extensions Issues\npage to report bugs and request new features. When possible, use the issue templates provided. If\nyour issue does not fit into one of these templates, click the link for opening a blank issue.\nIf you have general questions about the PyAnsys ecosystem, email pyansys.core@ansys.com.\nIf your question is specific to PyGranta Data Flow Extensions, ask your question in an issue as described in\nthe previous paragraph.\nPost issues"
+    },
+    {
+        "objectID": "index",
+        "href": "index.html#pygranta-data-flow-extensions-010",
+        "title": "PyGranta Data Flow Extensions 0.1.0",
+        "section": "PyGranta Data Flow Extensions 0.1.0",
+        "text": "PyGranta Data Flow Extensions provides easy interoperability between Granta MI\nData Flow and Python scripts that implement custom business logic. This\npackage streamlines the interaction with Granta MI using other PyGranta packages\nand with Granta MI Scripting Toolkit.\nLearn how to install PyGranta Data Flow Extensions in user mode and quickly\nbegin using it.\nUnderstand key concepts for using PyGranta Data Flow Extensions.\nUnderstand how to use Python to interact programmatically with\nPyGranta Data Flow Extensions.\nExplore examples that show how to use PyGranta Data Flow Extensions to\nperform many different types of operations.\nLearn how to contribute to the PyGranta Data Flow Extensions codebase or\ndocumentation.\nHistory of changes to the project.\nPyGranta Data Flow Extensions 0.1.0"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#getting-started",
+        "title": "Getting started",
+        "section": "Getting started",
+        "text": "Getting started"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#software-requirements",
+        "title": "Getting started > Software requirements",
+        "section": "Software requirements",
+        "text": "To use the PyGranta Data Flow Extensions package, you need access to a deployment of Granta MI 2023 R2 or later with an\nMI Data Flow Advanced edition license.\nPython must be installed system-wide, as opposed to a per-user installation. This option is available during Python\ninstallation, and can only be modified by uninstalling and reinstalling Python.\nSoftware requirements"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#installation",
+        "title": "Getting started > Installation",
+        "section": "Installation",
+        "text": "Installation"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#system-wide",
+        "title": "Getting started > System-wide",
+        "section": "System-wide",
+        "text": "Install the package system-wide on the Granta MI application server for production use or for integration testing.\nTo install the latest release as a system-wide package,\nrun this command as an administrator:\nTo install packages into the system-wide Python installation directly, you must run the preceding command with\nadministrator rights. Otherwise, pip install will install the package for the current user only and will\ndisplay the warning:\nDefaulting to user installation because normal site-packages is not writeable\nA common symptom of this issue is a script that works when testing outside of Data Flow, but fails with an import\nerror when running from within Data Flow.\nThere are three options to address this issue:\nRe-run the command above as a user with administrator privileges. This will ensure the package is installed\nsystem-wide.\nRe-run the command as the same user that runs MI Data Flow. This will install the package such that the Data Flow\nuser can access it, and will suppress the user installation warning.\nFollow the instructions in the Virtual environment to use a Virtual environment.\nSystem-wide\npip install"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#virtual-environment",
+        "title": "Getting started > Virtual environment",
+        "section": "Virtual environment",
+        "text": "Install the package in a virtual environment:\nOn a local development environment, for script development and debugging\nOn the Granta MI application server, when it is not possible to install system-wide packages\nTo install the package in a virtual environment, first create a new virtual environment:\nWhere C:\\path\\to\\my\\venv is the path to the location where you would like the venv to be located. This should be a\nlocation that all users can access.\nThen activate the virtual environment and install the packages:\nIf installing in a virtual environment on the Granta MI application server, Data Flow must be configured with details of\nthe virtual environment to be used:\nCreate a backup copy of the web.config file. By default, this file is located at\nC:\\inetpub\\wwwroot\\mi_dataflow.\nOpen the web.config file in a text editor, and find the line <add key=\"PythonPath\" value=\"python.exe\" />\nReplace the string python.exe with C:\\path\\to\\my\\venv\\Scripts\\python.exe, where C:\\path\\to\\my\\venv is the\npath to the virtual environment specified above.\nSave the modified web.config file. If you see a permissions error, you may need to open the text editor with\nadministrator privileges.\nReload the Data Flow worker process in IIS Manager. Warning: This stops any running Workflow processes.\nVirtual environment\nC:\\path\\to\\my\\venv\nweb.config\nC:\\inetpub\\wwwroot\\mi_dataflow\nweb.config\n<add key=\"PythonPath\" value=\"python.exe\" />\npython.exe\nC:\\path\\to\\my\\venv\\Scripts\\python.exe\nC:\\path\\to\\my\\venv\nweb.config"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#installing-a-development-version",
+        "title": "Getting started > Installing a development version",
+        "section": "Installing a development version",
+        "text": "To install the latest release from the\nPyGranta Data Flow Extensions repository, run this command:\nTo install a local development version with Git and Poetry, run these commands:\nThe preceding commands install the package in development mode so that you can modify\nit locally. Your changes are reflected in your Python setup after restarting the Python kernel.\nThis option should only be used when making changes to this package, and should not be used\nwhen developing code based on this package.\nInstalling a development version"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#verify-your-installation",
+        "title": "Getting started > Verify your installation",
+        "section": "Verify your installation",
+        "text": "To verify that your installation has been successful, run this code:\nIf you see a version number, your PyGranta Data Flow Extensions is installed.\nVerify your installation"
+    },
+    {
+        "objectID": "getting_started/index",
+        "href": "getting_started/index.html#useful-links",
+        "title": "Getting started > Useful links",
+        "section": "Useful links",
+        "text": "For best practice around developing scripts that interact with Data Flow, see the ref_user_guide.\nFor examples, see the ref_grantami_dataflow_extensions_examples.\nFor comprehensive information on the API, see ref_grantami_dataflow_extensions_api_reference.\nUseful links"
+    },
+    {
+        "objectID": "examples/2_Scripting_Toolkit",
+        "href": "examples/2_Scripting_Toolkit.html#granta-mi-scripting-toolkit-example",
+        "title": "Granta MI Scripting Toolkit example",
+        "section": "Granta MI Scripting Toolkit example",
+        "text": "Granta MI Scripting Toolkit example"
+    },
+    {
+        "objectID": "examples/2_Scripting_Toolkit",
+        "href": "examples/2_Scripting_Toolkit.html#introduction",
+        "title": "Granta MI Scripting Toolkit example > Introduction",
+        "section": "Introduction",
+        "text": "An example that uses the PyGranta Data Flow Extensions package to interact with a Granta MI system via the Granta MI Scripting Toolkit. This example uploads the data payload received by MI Data Flow to the workflow record. This could be replaced with any other business logic which requires access to Granta MI resources.\nIntroduction"
+    },
+    {
+        "objectID": "examples/2_Scripting_Toolkit",
+        "href": "examples/2_Scripting_Toolkit.html#useful-links",
+        "title": "Granta MI Scripting Toolkit example > Useful links",
+        "section": "Useful links",
+        "text": "Recommended script structure\nBusiness logic development best practice\nWarning:\nThe step_logic() function generates the dataflow payload, and explicitly calls the get_payload_as_str() method with include_credentials=False to avoid writing credentials to the Granta MI database. If you are using Basic or OIDC Authentication and require these credentials for your business logic, inject these credentials into the dataflow_payload[\"AuthorizationHeader\"] value in the testing() function directly, for example via an environment variable.\nUseful links\nstep_logic()\nget_payload_as_str()\ninclude_credentials=False\ndataflow_payload[\"AuthorizationHeader\"]\ntesting()"
+    },
+    {
+        "objectID": "examples/2_Scripting_Toolkit",
+        "href": "examples/2_Scripting_Toolkit.html#pre-requisites",
+        "title": "Granta MI Scripting Toolkit example > Pre-requisites",
+        "section": "Pre-requisites",
+        "text": "This example assumes the workflow has been configured with the ‘Metals Pedigree’ table in the MI Training database, but includes guidance for how to adjust the Python code to work with a different database schema.\nInfo:\nRunning this notebook requires the Granta MI Scripting Toolkit package. If you do not have access to the Granta MI Scripting Toolkit, contact your System Administrator.\nPre-requisites"
+    },
+    {
+        "objectID": "examples/2_Scripting_Toolkit",
+        "href": "examples/2_Scripting_Toolkit.html#example-script",
+        "title": "Granta MI Scripting Toolkit example > Example script",
+        "section": "Example script",
+        "text": "Example script"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#api-reference",
+        "title": "API reference",
+        "section": "API reference",
+        "text": "Represents a MI Data Flow step at the point at which the Python script is triggered.\nWhen this class is instantiated, it parses the data provided by MI Data Flow, enabling Granta MI API client sessions\nto be created.\nWhether to use HTTPS if supported by the Granta MI application server.\nWhether to verify the SSL certificate CA. Has no effect if use_https is set to False.\nThe CA certificate file, provided as either a string or pathlib.Path object. This paraemter can be provided\nin the following ways:\nThe filename of the certificate provided as a string. In this case, the certificate must be added to the\nworkflow definition as a supporting file.\nThe filename or relative path of the certificate provided as a pathlib.Path object. In this case,\nthe certificate must be added to the workflow definition as a supporting file.\nThe absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it\nis recommended to store it in a location that will not be modified between workflows.\nNone. In this case, the certifi public CA store will be used.\nIf specified, the certificate will be used to verify PyGranta and MI Data Flow requests. Has no effect if\nuse_https or verify_ssl are set to False.\nIf the string read from stdin is invalid JSON.\nIf the JSON read from stdin does not conform to the correct data structure.\nIf use_https is set to True and the server does not support HTTPS.\nWhen a workflow is configured to call a Python script, the workflow execution will be suspended whilst the Python\nscript executes. To enable the workflow to continue, call the resume_bookmark method.\nIf HTTPS is not configured on the server, disable HTTPS.\nIf HTTPS is configured on the server with an internal certificate and the private CA certificate\nis not available, either disable HTTPS or disable certificate verification.\nIf HTTPS is configured on the server with an internal certificate and the private CA certificate is\navailable, provide the private CA certificate to use this certificate for verification. If the filename only is\nprovided, then the certificate must be added to the workflow definition file in Data Flow Designer.\nIf the certificate is stored somewhere else on disk, it can be specified by using a pathlib.Path object. In\nthis case, the certificate should not be added to the workflow definition file in Data Flow Designer.\nIf HTTPS is configured on the server with a public certificate, use the default configuration to enable\nHTTPS and certificate verification against public CAs.\nInstantiate an MIDataflowIntegration object with a static payload provided as a Python dictionary.\nCan be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.\nSee get_payload_as_dict() for information on generating a suitable payload.\nA Python dictionary containing a copy of a Data Flow data payload used for testing purposes.\nAdditional keyword arguments are passed to the MIDataflowIntegration constructor.\nThe instantiated class.\nAdditional parameters are passed through to the MIDataflowIntegration constructor\nInstantiate an MIDataflowIntegration object with a static payload.\nprovided as a JSON formatted string.\nCan be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.\nSee get_payload_as_string() for information on generating a suitable payload.\nA JSON-formatted static copy of a Data Flow\ndata payload used for testing purposes.\nAdditional keyword arguments are passed to the MIDataflowIntegration constructor.\nThe instantiated class.\nIf the dataflow_payload argument is not valid JSON.\nAdditional parameters are passed through to the MIDataflowIntegration constructor\nGet the payload used to instantiate this class as a Python dictionary.\nThis can be stored and provided to the from_dict_payload() method to test\nindependently of MI Data Flow.\nWhether to include the Basic or OIDC token header in the result.\nA static copy of a Data Flow data payload used for testing purposes.\nBy default the basic and OIDC authentication header AuthorizationHeader is replaced with the string\n\"<HeaderRemoved>\" to avoid leaking credentials. To construct the appropriate header manually:\nFor basic authentication, combine the username and password with a colon (:), Base64 encode the resulting\nstring, and then prepend the result with “Basic “. For example, for the username Alice and password\ns3cr3t, these are combined to give \"Alice:s3cr3t\" and Base64 encoded to \"QWxpY2U6czNjcjN0\", which\ngives the final AuthorizationHeader value of \"Basic QWxpY2U6czNjcjN0\".\nFor OIDC authentication, generate a valid access token and prepend with \"Bearer \". For example, for the\ntoken gaUDsgUrOiJSUzI, the final AuthorizationHeader value would be \"Bearer gaUDsgUrOiJSUzI\".\nAlternatively, you can invoke this method with include_credentials=True, however you must ensure that\nthe result is stored securely to avoid leaking credentials.\nGet the payload used to instantiate this class and serialize to a JSON string.\nThis can be stored and provided to the from_string_payload() method to test\nindependently of MI Data Flow.\nThis method uses the MIDataflowIntegration.get_payload_as_dict() method to prepare the dictionary. See\nthe MIDataflowIntegration.get_payload_as_dict() documentation for more details and additional keyword\narguments.\nWhether to indent the JSON representation of the payload. Useful if displaying the result.\nAdditional keyword arguments are passed to the MIDataflowIntegration.get_payload_as_dict() method.\nA static copy of a Data Flow data payload used for testing purposes.\nThe URL to the Granta MI service layer.\nThe URL scheme is set to https if both the server supports HTTPS and use_https = True was specified in\nthe constructor. Otherwise, the URL scheme is set to http.\nURL to the service layer.\nAn MI Scripting Toolkit session which can be used to interact with Granta MI.\nRequires a supported version of MI Scripting Toolkit to be installed.\nMI Scripting Toolkit session.\nIf Scripting Toolkit cannot be imported.\nThe directory containing the supporting files added to the workflow definition.\nWill always include the script executed by the workflow, but may contain additional scripts,\nCA certificates, and any other files as required by the business logic.\nThe directory containing supporting files added to the workflow definition.\nConfigure a PyGranta connection object with credentials provided by Data Flow.\nThe Connection class to use to create the client object. Must be a class, not an\ninstance of a class. Must be a PyGranta connection class, which is defined as a subclass\nof the base ApiClientFactory class.\nA configured Connection object corresponding to the provided class. Call the .connect()\nmethod to finalize the connection.\nIf the class provided to this method is not a subclass of\nSessionConfiguration.\nIf the Granta MI server is configured with OIDC authentication.\nThis method does not currently support OIDC. A workaround is to create the client manually and\nauthenticate with a stored OIDC refresh token. See OIDCSessionBuilder\nfor more details.\nCall the Data Flow API to allow the MI Data Flow step to continue.\nAn exit code to inform Data Flow of success or otherwise of the business logic script.\nRaised when a client API module is expected but could not be imported.\nAPI reference\nTrue\nTrue\nuse_https\nFalse\npython:str\npathlib.Path\npython:None\nNone\npathlib.Path\nNone\nuse_https\nverify_ssl\nFalse\njson.JSONDecodeError\nKeyError\nUserWarning\nuse_https\nTrue\nresume_bookmark\npathlib.Path\nMIDataflowIntegration\nget_payload_as_dict()\nDict\npython:str\nAny\nMIDataflowIntegration\nMIDataflowIntegration\nMIDataflowIntegration\nMIDataflowIntegration\nget_payload_as_string()\npython:str\nMIDataflowIntegration\nMIDataflowIntegration\nValueError\ndataflow_payload\nMIDataflowIntegration\nfrom_dict_payload()\nFalse\npython:str\nAuthorizationHeader\n\"<HeaderRemoved>\"\n:\nAlice\ns3cr3t\n\"Alice:s3cr3t\"\n\"QWxpY2U6czNjcjN0\"\nAuthorizationHeader\n\"Basic QWxpY2U6czNjcjN0\"\n\"Bearer \"\ngaUDsgUrOiJSUzI\nAuthorizationHeader\n\"Bearer gaUDsgUrOiJSUzI\"\ninclude_credentials=True\nfrom_string_payload()\nMIDataflowIntegration.get_payload_as_dict()\nMIDataflowIntegration.get_payload_as_dict()\nFalse\nMIDataflowIntegration.get_payload_as_dict()\npython:str\nhttps\nuse_https = True\nhttp\npython:str\nmpy.Session\nMissingClientModuleException\npathlib.Path\nType\nPyGranta_Connection_Class\nApiClientFactory\nPyGranta_Connection_Class\n.connect()\nTypeError\nSessionConfiguration\nNotImplementedError\nOIDCSessionBuilder\npython:str\npython:int"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration",
+        "title": "API reference > API reference > MIDataflowIntegration",
+        "section": "API reference > MIDataflowIntegration",
+        "text": "class MIDataflowIntegration(use_https=True, verify_ssl=True, certificate_file=None)\n\nRepresents a MI Data Flow step at the point at which the Python script is triggered.\n\nWhen this class is instantiated, it parses the data provided by MI Data Flow, enabling Granta MI API client sessions\nto be created.\n\nParameters\n\nuse_https\n\nbool, default True\n\nWhether to use HTTPS if supported by the Granta MI application server.\n\nverify_ssl\n\nbool, default True\n\nWhether to verify the SSL certificate CA. Has no effect if use_https is set to False.\n\ncertificate_file\n\npython:str | pathlib.Path | python:None, default None\n\nThe CA certificate file, provided as either a string or pathlib.Path object. This paraemter can be provided\nin the following ways:\n\nThe filename of the certificate provided as a string. In this case, the certificate must be added to the\nworkflow definition as a supporting file.\n\nThe filename or relative path of the certificate provided as a pathlib.Path object. In this case,\nthe certificate must be added to the workflow definition as a supporting file.\n\nThe absolute path to the certificate. In this case, the certificate can be stored anywhere on disk, but it\nis recommended to store it in a location that will not be modified between workflows.\n\nNone. In this case, the certifi public CA store will be used.\n\nIf specified, the certificate will be used to verify PyGranta and MI Data Flow requests. Has no effect if\nuse_https or verify_ssl are set to False.\n\nRaises\n\njson.JSONDecodeError\n\nIf the string read from stdin is invalid JSON.\n\nKeyError\n\nIf the JSON read from stdin does not conform to the correct data structure.\n\nWarns\n\nUserWarning\n\nIf use_https is set to True and the server does not support HTTPS.\n\nNotes\n\nWhen a workflow is configured to call a Python script, the workflow execution will be suspended whilst the Python\nscript executes. To enable the workflow to continue, call the resume_bookmark method.\n\nExamples\n\nIf HTTPS is not configured on the server, disable HTTPS.\n\n>>> data_flow = MIDataflowIntegration(use_https=False)\n\nIf HTTPS is configured on the server with an internal certificate and the private CA certificate\nis not available, either disable HTTPS or disable certificate verification.\n\n>>> data_flow = MIDataflowIntegration(use_https=False)\n>>> data_flow = MIDataflowIntegration(use_https=True, verify_ssl=False)\n\nIf HTTPS is configured on the server with an internal certificate and the private CA certificate is\navailable, provide the private CA certificate to use this certificate for verification. If the filename only is\nprovided, then the certificate must be added to the workflow definition file in Data Flow Designer.\n\n>>> data_flow = MIDataflowIntegration(certificate_file=\"my_cert.crt\")\n\nIf the certificate is stored somewhere else on disk, it can be specified by using a pathlib.Path object. In\nthis case, the certificate should not be added to the workflow definition file in Data Flow Designer.\n\n>>> cert = pathlib.Path(r\"C:\\dataflow_files\\certificates\\my_cert.crt\")\n>>> data_flow = MIDataflowIntegration(certificate_file=cert)\n\nIf HTTPS is configured on the server with a public certificate, use the default configuration to enable\nHTTPS and certificate verification against public CAs.\n\n>>> data_flow = MIDataflowIntegration()\n\n!! processed by numpydoc !!\n\n\n\nclassmethod from_dict_payload(dataflow_payload, **kwargs)\n\nInstantiate an MIDataflowIntegration object with a static payload provided as a Python dictionary.\n\nCan be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.\nSee get_payload_as_dict() for information on generating a suitable payload.\n\nParameters\n\ndataflow_payload\n\nDict[python:str, Any]\n\nA Python dictionary containing a copy of a Data Flow data payload used for testing purposes.\n\n**kwargs\n\nAdditional keyword arguments are passed to the MIDataflowIntegration constructor.\n\nReturns\n\nMIDataflowIntegration\n\nThe instantiated class.\n\nExamples\n\n>>> dataflow_payload = {\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}\n>>> df = MIDataflowIntegration.from_dict_payload(dataflow_payload)\n\nAdditional parameters are passed through to the MIDataflowIntegration constructor\n\n>>> dataflow_payload = {\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}\n>>> df = MIDataflowIntegration.from_dict_payload(dataflow_payload, verify_ssl=False)\n\n!! processed by numpydoc !!\n\n\n\nclassmethod from_string_payload(dataflow_payload, **kwargs)\n\nInstantiate an MIDataflowIntegration object with a static payload.\n\nprovided as a JSON formatted string.\n\nCan be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.\nSee get_payload_as_string() for information on generating a suitable payload.\n\nParameters\n\ndataflow_payload\n\npython:str\n\nA JSON-formatted static copy of a Data Flow\ndata payload used for testing purposes.\n\n**kwargs\n\nAdditional keyword arguments are passed to the MIDataflowIntegration constructor.\n\nReturns\n\nMIDataflowIntegration\n\nThe instantiated class.\n\nRaises\n\nValueError\n\nIf the dataflow_payload argument is not valid JSON.\n\nExamples\n\n>>> dataflow_payload = '{\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}'\n>>> df = MIDataflowIntegration.from_string_payload(dataflow_payload)\n\nAdditional parameters are passed through to the MIDataflowIntegration constructor\n\n>>> dataflow_payload = '{\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}'\n>>> df = MIDataflowIntegration.from_string_payload(dataflow_payload, verify_ssl=False)\n\n!! processed by numpydoc !!\n\n\n\nget_payload_as_dict(include_credentials=False)\n\nGet the payload used to instantiate this class as a Python dictionary.\n\nThis can be stored and provided to the from_dict_payload() method to test\nindependently of MI Data Flow.\n\nParameters\n\ninclude_credentials\n\nbool, default False\n\nWhether to include the Basic or OIDC token header in the result.\n\nReturns\n\npython:str\n\nA static copy of a Data Flow data payload used for testing purposes.\n\nNotes\n\nBy default the basic and OIDC authentication header AuthorizationHeader is replaced with the string\n\"<HeaderRemoved>\" to avoid leaking credentials. To construct the appropriate header manually:\n\nFor basic authentication, combine the username and password with a colon (:), Base64 encode the resulting\nstring, and then prepend the result with “Basic “. For example, for the username Alice and password\ns3cr3t, these are combined to give \"Alice:s3cr3t\" and Base64 encoded to \"QWxpY2U6czNjcjN0\", which\ngives the final AuthorizationHeader value of \"Basic QWxpY2U6czNjcjN0\".\n\nFor OIDC authentication, generate a valid access token and prepend with \"Bearer \". For example, for the\ntoken gaUDsgUrOiJSUzI, the final AuthorizationHeader value would be \"Bearer gaUDsgUrOiJSUzI\".\n\nAlternatively, you can invoke this method with include_credentials=True, however you must ensure that\nthe result is stored securely to avoid leaking credentials.\n\n!! processed by numpydoc !!\n\n\n\nget_payload_as_string(indent=False, **kwargs)\n\nGet the payload used to instantiate this class and serialize to a JSON string.\n\nThis can be stored and provided to the from_string_payload() method to test\nindependently of MI Data Flow.\n\nThis method uses the MIDataflowIntegration.get_payload_as_dict() method to prepare the dictionary. See\nthe MIDataflowIntegration.get_payload_as_dict() documentation for more details and additional keyword\narguments.\n\nParameters\n\nindent\n\nbool, default False\n\nWhether to indent the JSON representation of the payload. Useful if displaying the result.\n\n**kwargs\n\nAdditional keyword arguments are passed to the MIDataflowIntegration.get_payload_as_dict() method.\n\nReturns\n\npython:str\n\nA static copy of a Data Flow data payload used for testing purposes.\n\n!! processed by numpydoc !!\n\n\n\nproperty service_layer_url: str\n\nThe URL to the Granta MI service layer.\n\nThe URL scheme is set to https if both the server supports HTTPS and use_https = True was specified in\nthe constructor. Otherwise, the URL scheme is set to http.\n\nReturns\n\npython:str\n\nURL to the service layer.\n\n!! processed by numpydoc !!\n\n\n\nproperty mi_session: mpy.Session\n\nAn MI Scripting Toolkit session which can be used to interact with Granta MI.\n\nRequires a supported version of MI Scripting Toolkit to be installed.\n\nReturns\n\nmpy.Session\n\nMI Scripting Toolkit session.\n\nRaises\n\nMissingClientModuleException\n\nIf Scripting Toolkit cannot be imported.\n\n!! processed by numpydoc !!\n\n\n\nproperty supporting_files_dir: Path\n\nThe directory containing the supporting files added to the workflow definition.\n\nWill always include the script executed by the workflow, but may contain additional scripts,\nCA certificates, and any other files as required by the business logic.\n\nReturns\n\npathlib.Path\n\nThe directory containing supporting files added to the workflow definition.\n\n!! processed by numpydoc !!\n\n\n\nconfigure_pygranta_connection(pygranta_connection_class)\n\nConfigure a PyGranta connection object with credentials provided by Data Flow.\n\nParameters\n\npygranta_connection_class\n\nType[PyGranta_Connection_Class]\n\nThe Connection class to use to create the client object. Must be a class, not an\ninstance of a class. Must be a PyGranta connection class, which is defined as a subclass\nof the base ApiClientFactory class.\n\nReturns\n\nPyGranta_Connection_Class\n\nA configured Connection object corresponding to the provided class. Call the .connect()\nmethod to finalize the connection.\n\nRaises\n\nTypeError\n\nIf the class provided to this method is not a subclass of\nSessionConfiguration.\n\nNotImplementedError\n\nIf the Granta MI server is configured with OIDC authentication.\n\nThis method does not currently support OIDC. A workaround is to create the client manually and\nauthenticate with a stored OIDC refresh token. See OIDCSessionBuilder\nfor more details.\n\nExamples\n\n>>> from ansys.grantami.jobqueue import Connection\n>>> data_flow = MIDataflowIntegration()\n>>> connection = data_flow.configure_pygranta_connection(Connection)\n>>> client = connection.connect()\n>>> client\n<JobQueueApiClient: url: http://my_mi_server/mi_servicelayer>\n\n!! processed by numpydoc !!\n\n\n\nresume_bookmark(exit_code)\n\nCall the Data Flow API to allow the MI Data Flow step to continue.\n\nParameters\n\nexit_code\n\npython:str | python:int\n\nAn exit code to inform Data Flow of success or otherwise of the business logic script.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.from_dict_payload",
+        "title": "API reference > API reference > from_dict_payload",
+        "section": "API reference > from_dict_payload",
+        "text": "classmethod from_dict_payload(dataflow_payload, **kwargs)\n\nInstantiate an MIDataflowIntegration object with a static payload provided as a Python dictionary.\n\nCan be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.\nSee get_payload_as_dict() for information on generating a suitable payload.\n\nParameters\n\ndataflow_payload\n\nDict[python:str, Any]\n\nA Python dictionary containing a copy of a Data Flow data payload used for testing purposes.\n\n**kwargs\n\nAdditional keyword arguments are passed to the MIDataflowIntegration constructor.\n\nReturns\n\nMIDataflowIntegration\n\nThe instantiated class.\n\nExamples\n\n>>> dataflow_payload = {\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}\n>>> df = MIDataflowIntegration.from_dict_payload(dataflow_payload)\n\nAdditional parameters are passed through to the MIDataflowIntegration constructor\n\n>>> dataflow_payload = {\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}\n>>> df = MIDataflowIntegration.from_dict_payload(dataflow_payload, verify_ssl=False)\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.from_string_payload",
+        "title": "API reference > API reference > from_string_payload",
+        "section": "API reference > from_string_payload",
+        "text": "classmethod from_string_payload(dataflow_payload, **kwargs)\n\nInstantiate an MIDataflowIntegration object with a static payload.\n\nprovided as a JSON formatted string.\n\nCan be used for testing purposes to avoid needing to trigger the Python script from within Data Flow.\nSee get_payload_as_string() for information on generating a suitable payload.\n\nParameters\n\ndataflow_payload\n\npython:str\n\nA JSON-formatted static copy of a Data Flow\ndata payload used for testing purposes.\n\n**kwargs\n\nAdditional keyword arguments are passed to the MIDataflowIntegration constructor.\n\nReturns\n\nMIDataflowIntegration\n\nThe instantiated class.\n\nRaises\n\nValueError\n\nIf the dataflow_payload argument is not valid JSON.\n\nExamples\n\n>>> dataflow_payload = '{\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}'\n>>> df = MIDataflowIntegration.from_string_payload(dataflow_payload)\n\nAdditional parameters are passed through to the MIDataflowIntegration constructor\n\n>>> dataflow_payload = '{\"WorkflowId\": \"67eb55ff-363a-42c7-9793-df363f1ecc83\", ...: ...}'\n>>> df = MIDataflowIntegration.from_string_payload(dataflow_payload, verify_ssl=False)\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_payload_as_dict",
+        "title": "API reference > API reference > get_payload_as_dict",
+        "section": "API reference > get_payload_as_dict",
+        "text": "get_payload_as_dict(include_credentials=False)\n\nGet the payload used to instantiate this class as a Python dictionary.\n\nThis can be stored and provided to the from_dict_payload() method to test\nindependently of MI Data Flow.\n\nParameters\n\ninclude_credentials\n\nbool, default False\n\nWhether to include the Basic or OIDC token header in the result.\n\nReturns\n\npython:str\n\nA static copy of a Data Flow data payload used for testing purposes.\n\nNotes\n\nBy default the basic and OIDC authentication header AuthorizationHeader is replaced with the string\n\"<HeaderRemoved>\" to avoid leaking credentials. To construct the appropriate header manually:\n\nFor basic authentication, combine the username and password with a colon (:), Base64 encode the resulting\nstring, and then prepend the result with “Basic “. For example, for the username Alice and password\ns3cr3t, these are combined to give \"Alice:s3cr3t\" and Base64 encoded to \"QWxpY2U6czNjcjN0\", which\ngives the final AuthorizationHeader value of \"Basic QWxpY2U6czNjcjN0\".\n\nFor OIDC authentication, generate a valid access token and prepend with \"Bearer \". For example, for the\ntoken gaUDsgUrOiJSUzI, the final AuthorizationHeader value would be \"Bearer gaUDsgUrOiJSUzI\".\n\nAlternatively, you can invoke this method with include_credentials=True, however you must ensure that\nthe result is stored securely to avoid leaking credentials.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.get_payload_as_string",
+        "title": "API reference > API reference > get_payload_as_string",
+        "section": "API reference > get_payload_as_string",
+        "text": "get_payload_as_string(indent=False, **kwargs)\n\nGet the payload used to instantiate this class and serialize to a JSON string.\n\nThis can be stored and provided to the from_string_payload() method to test\nindependently of MI Data Flow.\n\nThis method uses the MIDataflowIntegration.get_payload_as_dict() method to prepare the dictionary. See\nthe MIDataflowIntegration.get_payload_as_dict() documentation for more details and additional keyword\narguments.\n\nParameters\n\nindent\n\nbool, default False\n\nWhether to indent the JSON representation of the payload. Useful if displaying the result.\n\n**kwargs\n\nAdditional keyword arguments are passed to the MIDataflowIntegration.get_payload_as_dict() method.\n\nReturns\n\npython:str\n\nA static copy of a Data Flow data payload used for testing purposes.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.service_layer_url",
+        "title": "API reference > API reference > service_layer_url",
+        "section": "API reference > service_layer_url",
+        "text": "property service_layer_url: str\n\nThe URL to the Granta MI service layer.\n\nThe URL scheme is set to https if both the server supports HTTPS and use_https = True was specified in\nthe constructor. Otherwise, the URL scheme is set to http.\n\nReturns\n\npython:str\n\nURL to the service layer.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.mi_session",
+        "title": "API reference > API reference > mi_session",
+        "section": "API reference > mi_session",
+        "text": "property mi_session: mpy.Session\n\nAn MI Scripting Toolkit session which can be used to interact with Granta MI.\n\nRequires a supported version of MI Scripting Toolkit to be installed.\n\nReturns\n\nmpy.Session\n\nMI Scripting Toolkit session.\n\nRaises\n\nMissingClientModuleException\n\nIf Scripting Toolkit cannot be imported.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.supporting_files_dir",
+        "title": "API reference > API reference > supporting_files_dir",
+        "section": "API reference > supporting_files_dir",
+        "text": "property supporting_files_dir: Path\n\nThe directory containing the supporting files added to the workflow definition.\n\nWill always include the script executed by the workflow, but may contain additional scripts,\nCA certificates, and any other files as required by the business logic.\n\nReturns\n\npathlib.Path\n\nThe directory containing supporting files added to the workflow definition.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.configure_pygranta_connection",
+        "title": "API reference > API reference > configure_pygranta_connection",
+        "section": "API reference > configure_pygranta_connection",
+        "text": "configure_pygranta_connection(pygranta_connection_class)\n\nConfigure a PyGranta connection object with credentials provided by Data Flow.\n\nParameters\n\npygranta_connection_class\n\nType[PyGranta_Connection_Class]\n\nThe Connection class to use to create the client object. Must be a class, not an\ninstance of a class. Must be a PyGranta connection class, which is defined as a subclass\nof the base ApiClientFactory class.\n\nReturns\n\nPyGranta_Connection_Class\n\nA configured Connection object corresponding to the provided class. Call the .connect()\nmethod to finalize the connection.\n\nRaises\n\nTypeError\n\nIf the class provided to this method is not a subclass of\nSessionConfiguration.\n\nNotImplementedError\n\nIf the Granta MI server is configured with OIDC authentication.\n\nThis method does not currently support OIDC. A workaround is to create the client manually and\nauthenticate with a stored OIDC refresh token. See OIDCSessionBuilder\nfor more details.\n\nExamples\n\n>>> from ansys.grantami.jobqueue import Connection\n>>> data_flow = MIDataflowIntegration()\n>>> connection = data_flow.configure_pygranta_connection(Connection)\n>>> client = connection.connect()\n>>> client\n<JobQueueApiClient: url: http://my_mi_server/mi_servicelayer>\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MIDataflowIntegration.resume_bookmark",
+        "title": "API reference > API reference > resume_bookmark",
+        "section": "API reference > resume_bookmark",
+        "text": "resume_bookmark(exit_code)\n\nCall the Data Flow API to allow the MI Data Flow step to continue.\n\nParameters\n\nexit_code\n\npython:str | python:int\n\nAn exit code to inform Data Flow of success or otherwise of the business logic script.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#ansys.grantami.dataflow_extensions.MissingClientModuleException",
+        "title": "API reference > API reference > MissingClientModuleException",
+        "section": "API reference > MissingClientModuleException",
+        "text": "class MissingClientModuleException\n\nRaised when a client API module is expected but could not be imported.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "examples/3_RecordLists",
+        "href": "examples/3_RecordLists.html#pygranta-recordlists-example",
+        "title": "PyGranta RecordLists example",
+        "section": "PyGranta RecordLists example",
+        "text": "PyGranta RecordLists example"
+    },
+    {
+        "objectID": "examples/3_RecordLists",
+        "href": "examples/3_RecordLists.html#introduction",
+        "title": "PyGranta RecordLists example > Introduction",
+        "section": "Introduction",
+        "text": "An example that uses the PyGranta Data Flow Extensions package to interact with a Granta MI Record List as part of a Data Flow step. The code below shows how to add the workflow record to a record list. However, the principles shown here can be applied to any PyGranta package.\nIntroduction"
+    },
+    {
+        "objectID": "examples/3_RecordLists",
+        "href": "examples/3_RecordLists.html#useful-links",
+        "title": "PyGranta RecordLists example > Useful links",
+        "section": "Useful links",
+        "text": "Recommended script structure\nBusiness logic development best practice\nUseful links"
+    },
+    {
+        "objectID": "examples/3_RecordLists",
+        "href": "examples/3_RecordLists.html#pre-requisites",
+        "title": "PyGranta RecordLists example > Pre-requisites",
+        "section": "Pre-requisites",
+        "text": "This example requires ansys-grantami-recordlists. Install with pip install ansys-grantami-recordlists, or consult the Getting started guide for more details.\nPre-requisites\nansys-grantami-recordlists\npip install ansys-grantami-recordlists"
+    },
+    {
+        "objectID": "examples/3_RecordLists",
+        "href": "examples/3_RecordLists.html#example-script",
+        "title": "PyGranta RecordLists example > Example script",
+        "section": "Example script",
+        "text": "Example script"
+    },
+    {
+        "objectID": "examples/index",
+        "href": "examples/index.html#examples",
+        "title": "Examples",
+        "section": "Examples",
+        "text": "The following examples demonstrate key aspects of the Granta MI Data Flow Extensions package.\nTo run these examples, install dependencies with this command:\nExamples"
+    },
+    {
+        "objectID": "changelog",
+        "href": "changelog.html#release-notes",
+        "title": "Release notes",
+        "section": "Release notes",
+        "text": "This document contains the release notes for the project.\nRelease notes"
+    },
+    {
+        "objectID": "changelog",
+        "href": "changelog.html#010---april-28-2025",
+        "title": "Release notes > 0.1.0 - April 28, 2025",
+        "section": "0.1.0 - April 28, 2025",
+        "text": "Feat: tech review\n#74\nTech review fixes\n#78\nMake mi_dataflow.py private\n#110\nFix CI for release with actions@v9\n#115\nBump ansys-sphinx-theme from 1.2.2 to 1.2.6\n#80\nchore(deps-dev): bump pre-commit from 4.0.1 to 4.1.0\n#81\nchore(deps-dev): bump mypy from 1.13.0 to 1.14.1\n#82\nchore(deps-dev): bump nbsphinx from 0.9.5 to 0.9.6\n#83\nchore(deps-dev): bump jinja2 from 3.1.4 to 3.1.5\n#84\nchore(deps-dev): bump mypy from 1.14.1 to 1.15.0\n#88\nchore(deps-dev): bump jupytext from 1.16.6 to 1.16.7\n#89\nchore(deps-dev): bump sphinx-toolbox from 3.8.1 to 3.8.3\n#91\nchore(deps-dev): bump ansys-sphinx-theme from 1.2.6 to 1.3.2\n#92\nchore(deps-dev): bump sphinx-autoapi from 3.4.0 to 3.6.0\n#93\nchore(deps): bump cryptography from 44.0.0 to 44.0.1\n#94\nchore(deps-dev): bump pytest from 8.3.4 to 8.3.5\n#96\nchore(deps-dev): bump sphinx-toolbox from 3.8.3 to 3.9.0\n#97\nchore(deps-dev): bump nbsphinx from 0.9.6 to 0.9.7\n#98\nchore(deps-dev): bump ansys-sphinx-theme from 1.3.2 to 1.3.3\n#99\nchore(deps-dev): bump jinja2 from 3.1.5 to 3.1.6\n#101\nchore(deps-dev): bump pre-commit from 4.1.0 to 4.2.0\n#102\nchore(deps): bump ansys-openapi-common from 2.2.0 to 2.2.2\n#103\nchore(deps-dev): bump ansys-sphinx-theme from 1.3.3 to 1.4.2 in the doc-deps group\n#105\nchore(deps-dev): bump pytest-cov from 6.0.0 to 6.1.1 in the dev-deps group\n#106\nchore(deps): bump ansys/actions from 8 to 9 in the actions group\n#107\nchore(deps-dev): bump enum-tools from 0.12.0 to 0.13.0 in the doc-deps group\n#109\nDocumentation review\n#85\nApply Vale suggestions\n#95\nAdd changelog page to documentation\n#100\nFix Dependabot Configuration for Private PyPI\n#104\nUpdate release job to use gh-action-pypi-publish\n#108\nPrepare 0.1.0 release\n#116\n0.1.0 - April 28, 2025"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#user-guide",
+        "title": "User guide",
+        "section": "User guide",
+        "text": "User guide"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#introduction",
+        "title": "User guide > Introduction",
+        "section": "Introduction",
+        "text": "Granta MI Data Flow can trigger Python scripts at the beginning or end of a workflow step. These Python scripts can\nexecute custom business logic, including interacting with Granta MI systems using the Python Scripting Toolkit or\nPyGranta suite of packages. Some typical use cases include:\nPopulating attributes with values computed within the Python script\nAnalyzing data\nGenerating links to other records\nInteracting with external systems\nThe dataflow-extensions package includes the code required to process the state information from Data Flow, to pass\nlog information back to Data Flow, and to return execution to Data Flow once the script is complete.\nIt also includes examples which demonstrate use of the library.\nThese examples can be extended to incorporate business logic for specific use cases. In particular, the\n../examples/1_Standalone gives a detailed description of the core components of a typical dataflow-extensions\nscript.\nThe rest of this user guide provides more detail around specific aspects of the interaction with Data Flow.\nIntroduction\ndataflow-extensions\ndataflow-extensions"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#integration-with-mi-data-flow",
+        "title": "User guide > Integration with MI Data Flow",
+        "section": "Integration with MI Data Flow",
+        "text": "This package is designed to be used with Granta MI Data Flow. The integration works as follows:\nAt a defined point in a workflow MI Data Flow triggers a Python script and pauses the workflow until the script\nresumes the workflow.\nThe Python script executes, potentially utilizing additional Ansys or third-party Python packages.\nAt a defined point in the Python script (generally the end), the Python script instructs MI Data Flow to resume the\nworkflow.\nThe Python script ends.\nIntegration with MI Data Flow"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#mi-data-flow-payload",
+        "title": "User guide > MI Data Flow payload",
+        "section": "MI Data Flow payload",
+        "text": "When MI Data Flow triggers a Python script, it provides context about the current state of the workflow as a JSON-\nformatted string. This string is referred to as the ‘MI Data Flow payload’, and an example is given below:\nThis payload includes the following information:\nInternal data flow identifiers, including:\nWorkflow ID\nWorkflow definition ID\nTransition name\nWorkflow record reference and table name\nMI Data flow web server URL\nServer authorization information\nCustom values defined in the workflow definition\nIf MI Data Flow is configured in Basic or OIDC authentication mode, the server authorization information contains an\nobfuscated username and password or an OIDC refresh token respectively. In these configurations, the payload should\nbe treated as confidential.\nWhen a dataflow-extensions-based Python script is launched by MI Data Flow, the MIDataflowIntegration\nconstructor automatically parses the payload from stdin. However, when developing and debugging a\ndataflow-extensions-based script, it is recommended to run and debug the script separate to Data Flow by first\ngenerating a Data Flow payload, and then using it to instantiate the MIDataflowIntegration class. These steps\nare described in Business logic development best practice.\nMI Data Flow payload\ndataflow-extensions\nMIDataflowIntegration\nstdin\ndataflow-extensions\nMIDataflowIntegration"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#recommended-script-structure",
+        "title": "User guide > Recommended script structure",
+        "section": "Recommended script structure",
+        "text": "These are the recommended components of a script that makes use of dataflow-extensions:\nRecommended script structure\ndataflow-extensions"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#logging",
+        "title": "User guide > Logging",
+        "section": "Logging",
+        "text": "Use the built-in Python logging module to create a logger and write to stderr, which is collected by MI Data Flow\nand logged centrally on the Granta MI server:\nLogging\nstderr"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#main",
+        "title": "User guide > main()",
+        "section": "main()",
+        "text": "Instantiates the MIDataflowIntegration class directly, which parses the data passed into this script via\nstdin by MI Data Flow. Executes the business logic in step_logic(), and resumes the workflow once the business\nlogic has completed:\nmain()\nmain()\nMIDataflowIntegration\nstdin\nstep_logic()"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#testing",
+        "title": "User guide > testing()",
+        "section": "testing()",
+        "text": "Instantiates the MIDataflowIntegration class from a static payload defined within the function. Executes the\nbusiness logic in step_logic():\ntesting()\ntesting()\nMIDataflowIntegration\nstep_logic()"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#step_logic",
+        "title": "User guide > step_logic()",
+        "section": "step_logic()",
+        "text": "Contains the actual business logic for the step. In the initial example, the business logic just logs the payload:\nEither main() or testing() should be executed when running the script. Python best practice is to use an\nif __name__ == \"main\" block, such as:\nIn this state, the script runs the testing() function for testing separately to MI Data Flow. To switch the code to run\nthe main() function, un-comment the main() line and comment the testing() line:\nThis code now expects the payload to be provided via stdin.\nTo see all these script components together as a single example, see ../examples/1_Standalone.\nstep_logic()\nstep_logic()\nmain()\ntesting()\nif __name__ == \"main\"\ntesting()\nmain()\nmain()\ntesting()\nstdin"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#business-logic-development-best-practice",
+        "title": "User guide > Business logic development best practice",
+        "section": "Business logic development best practice",
+        "text": "The steps below assume you are proficient in the use of MI Data Flow Designer and MI Data Flow Manager, and already have\na workflow fully defined with all required features apart from Python script execution. For more information on working\nwith MI Data Flow Designer, see the Granta MI Data Flow Designer documentation.\nBusiness logic development best practice"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#obtaining-an-mi-data-flow-payload-for-a-workflow-step",
+        "title": "User guide > Obtaining an MI Data Flow payload for a workflow step",
+        "section": "Obtaining an MI Data Flow payload for a workflow step",
+        "text": "Copy one of the example scripts and using it to obtain a JSON-formatted Data Flow payload,\nwhich makes development much more straightforward. The steps to obtain the payload are described below:\nCopy the code block from the ../examples/1_Standalone or ../examples/2_Scripting_Toolkit to a local\n.py file.\nIf you are starting from the Scripting Toolkit example, you must make sure that Scripting Toolkit is installed.\nIf you plan to develop PyGranta-based business logic, start from the Standalone example.\nSwitch the script to ‘main’ mode by commenting testing() in the if __name__ == \"__main__\": block and\nun-commenting main():\nUpload the script into MI Data Flow Designer, and add it to the Start or End Script sections for the relevant step.\nRun the workflow step once in MI Data Flow Manager.\nObtain the payload:\nIf you started from the Standalone example, obtain the payload from the Data Flow log. See\nref_user_guide_logging for log file locations.\nIf you started from the Scripting Toolkit example, obtain the payload from the Additional Processing Notes\nattribute.\nYou should now have a JSON-formatted string which contains information specific to your deployment of Granta MI,\nincluding the Data Flow web server URL and internal workflow identifiers.\nObtaining an MI Data Flow payload for a workflow step\n.py\ntesting()\nif __name__ == \"__main__\":\nmain()\nAdditional Processing Notes"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#developing-business-logic",
+        "title": "User guide > Developing business logic",
+        "section": "Developing business logic",
+        "text": "Now the MI Data Flow payload has been obtained, it can be used to test your custom business logic separate to the\nworkflow. This makes it much faster to re-run the script, and allows running and debugging the script in an IDE. The\nsteps to use this payload to develop your custom business logic are described below:\nOptional: If you are planning to develop a PyGranta-based script, replace the code you copied previously with the\n../examples/3_RecordLists, and modify the PyGranta library as required.\nPaste the payload JSON into the testing() function:\nSee the documentation for the get_payload_as_string() and\nget_payload_as_dict() methods for more information, including how to handle Basic and\nOIDC authentication.\nSwitch back to ‘testing’ mode by commenting main() in the if __name__ == \"__main__\": block and\nun-commenting testing():\nAdd your specific logic to the step_logic function and test locally.\nOnce the business logic is implemented, switch back to main() in the in the if __name__ == \"__main__\":\nblock, re-upload the file into MI Data Flow Designer, and re-add it to the Start or End Script sections.\nUpdate the workflow and test from within MI Data Flow Manager.\nRepeat steps 3 to 6 as required.\nDeveloping business logic\ntesting()\nget_payload_as_string()\nget_payload_as_dict()\nmain()\nif __name__ == \"__main__\":\ntesting()\nstep_logic\nmain()\nif __name__ == \"__main__\":"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#logging-and-debugging",
+        "title": "User guide > Logging and debugging",
+        "section": "Logging and debugging",
+        "text": "It is generally required to log outputs from scripts to help with debugging and to understand the inner state of the\nscript. These use cases apply to this package as well, but because the script is executed as part of MI Data Flow, the\nrecommended best practices are different to those of a conventional Python script.\nA very simple approach to logging the output of a script is to use the print() function to write text to the\nterminal. This approach can be used with this package, and any printed messages are visible in the central Data Flow\nlog, available at http://my.server.name/mi_dataflow/api/logs.\nHowever, using the print() function offers limited control around log format and message filtering. Instead, the\nrecommended approach is to use the Python logging module. For more information, see the Python documentation:\nlogging API documentation\nLogging HOWTO.\nThe internal operations of this package are logged to a logger with the name ansys.grantami.dataflow_extensions. By\ndefault, these messages are not output. To output the messages generated by this package and to add your own log\nmessages, you should:\nCreate a logger for your script.\nAttach a handler to the logger.\nThe following sub-sections provide simple best practice for logging with this package.\nLogging and debugging\nprint()\nhttp://my.server.name/mi_dataflow/api/logs\nprint()\nansys.grantami.dataflow_extensions"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#create-a-logger",
+        "title": "User guide > Create a logger",
+        "section": "Create a logger",
+        "text": "Python logger objects are hierarchical, and messages are passed from lower level logger objects to higher level\nones. The root of the logger hierarchy is the root logger, and contains all messages logged by all loggers in a Python\ninstance.\nFor single-module scripts generally used with this script, it is recommended to use the root logger directly to ensure\nthat all log messages are included in the output. To create an instance of the root logger and have it capture log\nmessages of logging.DEBUG level and higher, use the following code:\nYou can then add log statements to the logger at a certain log level as follows:\nUntil a log handler is attached, no log messages are emitted.\nCreate a logger\nlogger\nlogger\nlogging.DEBUG"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#attach-a-handler",
+        "title": "User guide > Attach a handler",
+        "section": "Attach a handler",
+        "text": "There are two main types of handlers provided by the Python logging library: FileHandler handlers and\nStreamHandler handlers. A FileHandler is used to write log messages to a file on disk, and a\nStreamHandler is used to write log messages to stderr or stdout.\nFor code using this package, it is best practice to log to stderr, which is collected by dataflow-extensions and\nincluded in the central Data Flow log. To add a StreamHandler handler to the root logger from the previous\nsection, use the following code:\nIt is possible to also log files to disk by using a FileHandler. The following example shows creating a\nFileHandler handler with a filename based on the current timestamp with 1 second precision:\nIf you use a FileHandler you must ensure that each instance of the script writes the logs to different\nfile or you may encounter a PermissionError. In certain authentication modes the script executes as the active\nData Flow user, and so either multiple users could run the same script concurrently, or a user may try to append to a\nfile created by a different user.\nAttach a handler\nFileHandler\nStreamHandler\nFileHandler\nStreamHandler\nstderr\nstdout\nstderr\ndataflow-extensions\nStreamHandler\nFileHandler\nFileHandler\nFileHandler\nPermissionError"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#additional-debugging",
+        "title": "User guide > Additional debugging",
+        "section": "Additional debugging",
+        "text": "MI Data Flow creates a working directory on the server in %WINDIR%\\TEMP\\{workflow id}_{8.3}, where\n{workflow_id} is the workflow ID provided in MI Data Flow Designer when uploading the workflow, and {8.3} is a\nrandom set of 8 alphanumeric characters, a period, and 3 alphanumeric characters. This can be found by right-clicking\nthe active workflow in MI Data Flow Manager and selecting ‘View Log’.\nThis directory includes the two files __stderr__ and __stdout__, which contain the Python stdout and stderr\nstreams and are useful when investigating Python failures during workflow execution before the logger has been\ninitialized.\nYou can create a FileHandler to create a log file in this directory. To access this directory,\nuse the following code:\nWhen the workflow resumes, this folder and all its contents are deleted. They are only persisted if the workflow is\nmanually cancelled.\nAdditional debugging\n%WINDIR%\\TEMP\\{workflow id}_{8.3}\n{workflow_id}\n{8.3}\n__stderr__\n__stdout__\nFileHandler"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#supporting-files",
+        "title": "User guide > Supporting files",
+        "section": "Supporting files",
+        "text": "It is common for Python scripts to depend on additional supporting files, for example:\nAdditional Python submodules\nData files, such as JSON or CSV files\nCertificate Authority (CA) certificate files\nThese files can either be stored in a known location on disk and referred to explicitly via an absolute path, or they\ncan be added to the workflow definition in MI Data Flow Designer:\nSupporting files"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#storing-files-externally",
+        "title": "User guide > Storing files externally",
+        "section": "Storing files externally",
+        "text": "If the file is stored externally (for example in a folder C:\\DataflowFiles), then you should use the Path\nclass to ensure you are using an absolute path, which is independent of the Python working directory. For example:\nOr in the case of providing a custom CA certificate to the MIDataflowIntegration constructor:\nThe advantage of this approach is that files can easily be shared across workflow definitions, and do not need to be\nuploaded to each one separately.\nThe disadvantage is that the files are stored outside of the workflow definition, and do not get automatically\nuploaded or downloaded from the server when using MI Data Flow Manager.\nStoring files externally\nC:\\DataflowFiles\nPath\nMIDataflowIntegration"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#storing-files-within-the-workflow-definition",
+        "title": "User guide > Storing files within the workflow definition",
+        "section": "Storing files within the workflow definition",
+        "text": "If the file is stored within the workflow definition, then MI Data Flow makes these files available on disk at\nscript runtime. To access these files, use the supporting_files_dir property. For\nexample, to access a CSV file which was uploaded as a supporting file to MI Data Flow:\nIf you are providing a custom CA certificate to the MIDataflowIntegration constructor, the filename can\nbe provided as a string, and dataflow-extensions automatically looks for the file in this location:\nThe advantage of this approach is that files are managed by MI Data Flow Designer and are automatically included in the\nworkflow definition if it is uploaded or downloaded and transferred to a different system. However, the disadvantage is\nthat each workflow definition tracks the supporting files separately, and so every workflow needs to be modified\nseparately if a commonly used supporting file is changed.\nThis property depends on the use of the sys.path property, specifically that sys.path[0] refers\nto the location of the executing script. If you intend to use supporting files with your Python scripts, you must\nnot prepend additional paths to the sys.path property.\nStoring files within the workflow definition\nsupporting_files_dir\nMIDataflowIntegration\ndataflow-extensions\nsys.path\nsys.path[0]\nsys.path"
+    }
+]
